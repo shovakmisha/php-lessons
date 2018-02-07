@@ -1,0 +1,5 @@
+# .htaccess для админки магазина
+Options -Indexes
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+CharsetDisable on

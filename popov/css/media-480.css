@@ -1,0 +1,25 @@
+@media screen and (max-width:480px) { 	
+	.container{
+		 border: 1px solid green; 
+	}
+	body .view {
+		color: #666666;
+		font-size: 9px;
+	}
+	header{
+		height: 41px;
+	}
+	.g-recaptcha > div > div{
+		width: 230px !important;
+	}
+	.g-recaptcha > div > div > iframe{
+		width: 230px !important;
+	}
+	#c_form {
+		width: 254px;
+	}
+	
+	.vid iframe{
+		height: 180px;
+	}
+}
