@@ -1,0 +1,10 @@
+<HTML>
+<HEAD>
+<TITLE>strrev</TITLE>
+</HEAD>
+<BODY>
+<?
+	print(strrev("abcdefg"));
+?>
+</BODY>
+</HTML>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <chanel>
+    <title>RSS_TITLE</title>
+    <link>RSS_LINK</link>
+    <item>
+      <title>test</title>
+      <description><![CDATA[test]]></description>
+      <link>#</link>
+      <pubDate>Thu, 01 Feb 2018 13:11:35 +0200</pubDate>
+      <category.>Политика</category.>
+    </item>
+    <item>
+      <title>450 Градусов по Фаренгейту</title>
+      <description><![CDATA[вчыф]]></description>
+      <link>#</link>
+      <pubDate>Tue, 30 Jan 2018 02:27:02 +0200</pubDate>
+      <category.>Политика</category.>
+    </item>
+  </chanel>
+</rss>

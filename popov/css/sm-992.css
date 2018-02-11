@@ -1,0 +1,12 @@
+@media screen and (max-width:991px) { 
+
+	.container{
+		
+	}
+	header{
+		height: 80px;
+	}
+	.vid iframe{
+		height: 150px;
+	}
+}	

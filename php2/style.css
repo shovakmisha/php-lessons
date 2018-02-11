@@ -1,0 +1,61 @@
+body{
+	
+}
+/*
+nav{
+	width: 960px;
+	margin: 0 auto;
+}
+.menu{
+	text-align: center;
+	position: relative;	
+}
+.menu__li-level1{
+    display: inline-block;
+    list-style: outside none none;
+    padding: 0 15px;
+}
+.menu__ul-summenu{
+    background: silver none repeat scroll 0 0;
+    list-style: outside none none;
+    padding-left: 0;
+    padding-top: 10px;
+    position: absolute;
+    text-align: left;
+	left: 0;
+	width: 100%;
+	display: none;
+}
+.menu__li-level2{
+	display: inline;
+}
+*/
+#out{
+	float: left;
+	background: #69c;
+	width: 100px;
+	height: 100px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+#in{
+	height: 100px;
+	background: #369;
+	margin: 30% 0 0;
+}
+#gim{
+	
+}
+.wrapper{
+	cursor: pointer;
+}
+.wrapper .active {
+	color: red;
+	cursor: default;
+}
+.tab_item {
+	display: none;
+}
+.tab_item:first-child{
+	display: block;
+}

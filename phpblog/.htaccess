@@ -1,0 +1,2 @@
+#AddDefaultCharset UTF-8
+#PHP_VALUE default_charset windows-1251
