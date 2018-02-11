@@ -7,7 +7,24 @@
     <bookmark url="file://$PROJECT_DIR$/php3/news/NewsDB.class2.php" line="48" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c396fa-94be-4f76-b917-6335d55e4103" name="Default" comment="" />
+    <list default="true" id="00c396fa-94be-4f76-b917-6335d55e4103" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/koterov-doc/php7/funcarr/new.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/classes/call.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/classes/call.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/classes/call1.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/classes/call1.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/date/gm.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/date/gm.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/forms/checkbox.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/forms/checkbox.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/forms/lock.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/forms/lock.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/fpm/sites-available/example.com" afterPath="$PROJECT_DIR$/koterov-doc/php7/fpm/sites-available/example.com" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/func/global.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/func/global.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_answer.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_answer.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_index.js" afterPath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_index.js" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_index.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/funcarr/json_index.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/funcarr/uksort.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/funcarr/uksort.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/instruct/dowhile.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/instruct/dowhile.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/math/mt_srand.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/math/mt_srand.php" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/nginx/sites-available/example.com" afterPath="$PROJECT_DIR$/koterov-doc/php7/nginx/sites-available/example.com" />
+      <change beforePath="$PROJECT_DIR$/koterov-doc/php7/string/htmlspecialchars.php" afterPath="$PROJECT_DIR$/koterov-doc/php7/string/htmlspecialchars.php" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +125,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewsDB.class.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NewsDB.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/php4/news/NewsDB.class.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="557">
@@ -125,6 +142,16 @@
                 <marker date="1518134653989" expanded="true" signature="2500:2704" ph="SELECT msgs.... msgs" />
                 <marker date="1518134653989" expanded="true" signature="2989:3017" ph="DELETE FROM msgs... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="19-fixedArray.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/php4/demo/spl/19-fixedArray.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -422,15 +449,16 @@
       <workItem from="1518125041732" duration="49000" />
       <workItem from="1518125180189" duration="7792000" />
       <workItem from="1518285289578" duration="30000" />
-      <workItem from="1518386665983" duration="262000" />
+      <workItem from="1518386665983" duration="655000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="287160000" />
+    <option name="totallyTimeSpent" value="287553000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-70" y="-4" width="1303" height="780" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24701196" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -440,7 +468,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24940239" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.90357697" sideWeight="0.49402392" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4214619" sideWeight="0.49402392" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -483,13 +511,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/php3-4xml/rss_reader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="33" column="13" lean-forward="false" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/php4/mvc/data/users.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -866,6 +887,14 @@
             <marker date="1518134653989" expanded="true" signature="2500:2704" ph="SELECT msgs.... msgs" />
             <marker date="1518134653989" expanded="true" signature="2989:3017" ph="DELETE FROM msgs... " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/spl/19-fixedArray.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
