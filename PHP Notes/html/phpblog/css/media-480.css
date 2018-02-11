@@ -1,0 +1,10 @@
+@media screen and (max-width:480px) { 
+	
+	.container{
+		/* border: 1px solid green; */
+	}
+	body .view {
+		color: #666666;
+		font-size: 9px;
+	}
+}

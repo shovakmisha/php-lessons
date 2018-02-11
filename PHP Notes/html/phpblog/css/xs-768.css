@@ -1,0 +1,37 @@
+@media screen and (max-width:768px) { 
+
+	.container{
+	/* border: 1px solid #7FD4F5; */
+}
+.ik{
+	text-align: right;
+	display: block;
+}
+.red{
+    bottom: 0;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    width: 210px;
+    z-index: 1;
+	left: -210px;
+	
+}
+.pvote{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.pvote label{
+	margin: 10px 7px; 
+}
+.pvote span{
+	display: block;
+}
+.pvote input[type='submit']{
+    display: block;
+    margin: 0 auto;
+    width: 85px;
+}
+
+
+}
