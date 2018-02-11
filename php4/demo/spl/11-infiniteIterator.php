@@ -11,6 +11,7 @@ class MyObject{
     return $ret;
   }
 }
+
 $object1 = new MyObject();
 $object2 = new MyObject();
 $arrayIterator1 = new ArrayIterator( [$object1, $object2] );

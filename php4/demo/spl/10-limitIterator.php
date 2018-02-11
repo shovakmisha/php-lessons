@@ -2,6 +2,7 @@
 $page = (int) $_GET['page'] ?: 1;
 $perPage = 3;
 $resultOffset = ($page * $perPage) - $perPage;
+
 $data = [
   'John', 'Mike', 'Joe',
   'Вася', 'Петя', 'Федя',

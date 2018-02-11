@@ -1,4 +1,33 @@
 <?php
+
+/*
+// простий приклад
+
+	class Work {
+		public function __construct($title) {
+			$this->title = $title;
+		}
+		public function doIt(){
+			return $this->title;
+		}
+	}
+
+	$work1 = new Work("Сходить в магазин");
+	$work2 = new Work("Прочитать книгу");
+	$work3 = new Work("Тупить в телевизор");
+
+	$queue = new SplPriorityQueue();
+
+	$queue -> insert($work1, 1);
+	$queue -> insert($work2, 2);
+	$queue -> insert($work3, 3);
+
+	foreach ($queue as $work){
+		echo $work -> doIt();
+	}
+​
+*/
+
 class Client{
   public $name;
   public $priority;
@@ -40,25 +69,31 @@ $clients = ["Пупкин", "Сумкин", "Корзинкина", "Морко�
 shuffle($clients);
 
 foreach($clients as $p => $client){
-  $bank->insert(new Client($client, $p+1), $p+1);
+  $bank->insert( new Client($client, $p+1), $p+1 );
 }
 
+echo '<pre>';
 print($bank->toString());
+echo '</pre>';
 
 $current = $bank->extract();
 
-print("Обслуживается: " . $current->name . "\n");
+print("Обслуживается: " . $current->name . "<br>");
 print("Ожидают очереди:\n");
 print($bank->toString());
 
 exit;
 
 $current = $bank->extract();
-print("Обслуживается: " . $current->name . "\n");
+print("Обслуживается: " . $current->name . "<br>");
 print("Ожидают очереди:\n");
 print($bank->toString());
 
 $current = $bank->extract();
-print("Обслуживается: " . $current->name . "\n");
+print("Обслуживается: " . $current->name . "<br>");
 print("Ожидают очереди:\n");
 print($bank->toString());
+
+
+
+?>

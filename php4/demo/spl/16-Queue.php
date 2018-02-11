@@ -1,36 +1,72 @@
 <?php
-class Queue extends SplQueue{
-  protected $dataStore = [];
-  
-  public function enqueue($element) {
-    array_push($this->dataStore, $element);
-    parent::enqueue($element);
-  }
-  public function dequeue() {
-    array_shift($this->dataStore);
-    return parent::dequeue();
-  }
-  public function toString() {
-    $retStr = "";
-    $cnt = count($this->dataStore);
-    for ($i = 0; $i < $cnt; ++$i) {
-      $retStr .= $this->dataStore[$i] . "\n";
-    }
-    return $retStr . "\n";
-  }
-}
 
-$users = ["Вася", "Петя", "Федя", "Саша", "Зина", "Маша"];
+	class Queue extends SplQueue{
 
-$q = new Queue();
+	  protected $dataStore = [];
 
-foreach($users as $user)
-  $q->enqueue($user);  
+	  public function enqueue($element) {
+	    array_push($this->dataStore, $element);
+	    parent::enqueue($element);
+	  }
 
-echo "Кто в очереди:\n" . $q->toString();
+	  public function dequeue() {
+	    array_shift($this->dataStore);
+	    return parent::dequeue();
+	  }
 
-echo $q->dequeue() . " вышел\n";
-echo "Кто в очереди:\n" . $q->toString();
+	  public function toString() {
+	    $retStr = "";
+	    $cnt = count($this->dataStore);
+	    for ($i = 0; $i < $cnt; ++$i) {
+	      $retStr .= $this->dataStore[$i] . "\n";
+	    }
+	    return $retStr . "\n";
+	  }
 
-echo "Кто первый: " . $q->bottom() . "\n";
-echo "Кто последний: " . $q->top() . "\n";
+	}
+
+	$users = ["Вася", "Петя", "Федя", "Саша", "Зина", "Маша"];
+
+	$q = new Queue();
+
+	foreach($users as $user)
+	  $q->enqueue($user);
+
+	echo "Кто в очереди:\n" . $q->toString();
+
+	echo '<br>';
+
+	echo $q->dequeue() . " вышел\n";
+	echo "Кто в очереди:\n" . $q->toString();
+
+	echo "Кто первый: " . $q->bottom() . "\n";
+	echo "Кто последний: " . $q->top() . "\n";
+
+	echo '<hr>';
+/*
+	class Work {
+		public function __construct($title) {
+			$this->title = $title;
+		}
+		public function doIt(){
+			return $this->title;
+		}
+	}
+
+	$work1 = new Work("Сходить в магазин");
+	$work2 = new Work("Прочитать книгу");
+	$work3 = new Work("Тупить в телевизор");
+
+	$queue = new SplQueue();
+
+	$queue -> enqueue($work1);
+	$queue -> enqueue($work2);
+	$queue -> enqueue($work3);
+
+	while ($queue -> count() > 0){
+		echo $queue -> dequeue() -> doIt();
+	}
+*/
+
+
+?>
