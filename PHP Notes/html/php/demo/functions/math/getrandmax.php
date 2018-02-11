@@ -1,0 +1,10 @@
+<HTML>
+<HEAD>
+<TITLE>getrandmax</TITLE>
+</HEAD>
+<BODY>
+<?
+	print(getrandmax());
+?>
+</BODY>
+</HTML>
