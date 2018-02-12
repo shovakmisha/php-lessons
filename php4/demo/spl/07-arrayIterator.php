@@ -1,15 +1,15 @@
 <?php
+
 $array = ['Вася', 'Петя', 'Иван', 'Маша', 'Джон', 'Даша', 'Наташа', 'Света'];
 
 try {
-    $object = new ArrayIterator($array);
-    foreach($object as $key=>$value){
-        echo "$key => $value\n";
-    }
+  $object = new ArrayIterator($array);
+  foreach($object as $key=>$value){
+    echo "$key => $value\n";
+  }
 }catch (Exception $e){
-    echo $e->getMessage();
+  echo $e->getMessage();
 }
-
 
 
 /*
@@ -39,4 +39,5 @@ try {
 }catch (Exception $e){
   echo $e->getMessage();
 }
+
 */

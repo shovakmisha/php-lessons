@@ -19,6 +19,6 @@ class FileExtensionFinder extends FilterIterator {
 $it = new FileExtensionFinder('.','php');
 
 foreach($it as $entry) {
-	echo $entry . "\n";
+	echo $entry . "<br>";
 }
 ?>

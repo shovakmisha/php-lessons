@@ -1,4 +1,5 @@
 <?php
+
 class Queue extends SplQueue{
   protected $dataStore = [];
   
@@ -18,6 +19,7 @@ class Queue extends SplQueue{
     }
     return $retStr . "\n";
   }
+
 }
 
 $users = ["Вася", "Петя", "Федя", "Саша", "Зина", "Маша"];
@@ -25,12 +27,39 @@ $users = ["Вася", "Петя", "Федя", "Саша", "Зина", "Маша"
 $q = new Queue();
 
 foreach($users as $user)
-  $q->enqueue($user);  
+  $q->enqueue($user);
 
+echo $q->dequeue() . " вышел <br>";
 echo "Кто в очереди:\n" . $q->toString();
 
-echo $q->dequeue() . " вышел\n";
-echo "Кто в очереди:\n" . $q->toString();
+echo "Кто первый: " . $q->bottom() . "<br>";
+echo "Кто последний: " . $q->top() . "<br>";
 
-echo "Кто первый: " . $q->bottom() . "\n";
-echo "Кто последний: " . $q->top() . "\n";
+
+/*
+	class Work {
+		public function __construct($title) {
+			$this->title = $title;
+		}
+		public function doIt(){
+			return $this->title;
+		}
+	}
+
+	$work1 = new Work("Сходить в магазин");
+	$work2 = new Work("Прочитать книгу");
+	$work3 = new Work("Тупить в телевизор");
+
+	$queue = new SplQueue();
+
+	$queue -> enqueue($work1);
+	$queue -> enqueue($work2);
+	$queue -> enqueue($work3);
+
+	while ($queue -> count() > 0){
+		echo $queue -> dequeue() -> doIt();
+	}
+*/
+
+
+?>

@@ -8,5 +8,5 @@ $tree = new RecursiveTreeIterator($rdi);
 //$tree->setPrefixPart(RecursiveTreeIterator::PREFIX_RIGHT, "||");
 
 foreach ($tree as $item) {
-  echo $item."\n";
+  echo $item."<br>";
 }

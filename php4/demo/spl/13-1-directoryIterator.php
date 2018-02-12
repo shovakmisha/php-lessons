@@ -27,7 +27,7 @@ class DirectoryReader extends DirectoryIterator{
 try{
   $it = new DirectoryReader('..');
   while($it->valid()){
-    echo $it->current()."\n";
+    echo $it->current()."<br>";
     $it->next();
   }
 }catch(Exception $e){

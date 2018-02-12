@@ -39,7 +39,6 @@ if($errMsg)
 
 </select>
 
-
 <br />
 Текст новости:<br />
 <textarea name="description" cols="50" rows="5"></textarea><br />

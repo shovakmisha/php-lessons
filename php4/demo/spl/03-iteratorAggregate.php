@@ -87,20 +87,21 @@ class MathIterator implements IteratorAggregate {
      */
 }
 
-//$obj = new MathIterator(3, 7, 'pow');
-//foreach ($obj as $key => $value){
-//  print "Квадрат числа $key = $value<br>";
-//}
+$obj = new MathIterator(3, 7, 'pow');
+foreach ($obj as $key => $value){
+  print "Квадрат числа $key = $value<br>";
+}
 
 /**
  * Це я дописав свій варіант, щоб можна було викликати ф-цією
  *
  * function improveIterator($start, $end, $action){
-$objecte = new MathIterator($start, $end, $action);
-foreach ($objecte as $key => $value){
-print "Квадрат числа $key = $value<br>";
-}
-}
+ *
+ *   $objecte = new MathIterator($start, $end, $action);
+ *       foreach ($objecte as $key => $value){
+ *           print "Квадрат числа $key = $value<br>";
+ *       }
+ *   }
  *
  * improveIterator(1,7,'pow');
  */

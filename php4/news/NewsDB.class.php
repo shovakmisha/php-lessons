@@ -1,5 +1,6 @@
 <?php
 include "INewsDB.class.php";
+
 class NewsDB implements INewsDB, IteratorAggregate{
   const DB_NAME = 'news.db';
   protected $_db;
@@ -26,9 +27,6 @@ class NewsDB implements INewsDB, IteratorAggregate{
     }
 
   function __construct(){
-
-
-
     if(is_file(self::DB_NAME)){
       $this->_db = new SQLite3(self::DB_NAME);
     }else{
@@ -55,7 +53,6 @@ class NewsDB implements INewsDB, IteratorAggregate{
     }
 
     $this->getCategories();
-
 
   }
   function __destruct(){
@@ -103,7 +100,7 @@ class NewsDB implements INewsDB, IteratorAggregate{
     }
   }
   function clearData($data){
-      return $this->_db->escapeString($data); 
+      return $this->_db->escapeString($data);
   }
 
 }

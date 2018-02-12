@@ -36,6 +36,7 @@ class MyIterator implements Iterator{
     echo "valid: {$var}\n";
     return $var;
   }
+
 }
 
 $values = [1, 2, 3];

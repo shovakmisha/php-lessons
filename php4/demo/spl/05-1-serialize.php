@@ -1,5 +1,7 @@
 <?php
+
 error_reporting(E_ALL);
+
 class A {
   private $varA;
   
@@ -10,6 +12,7 @@ class A {
     return $this->varA; 
   }
 }
+
 class B extends A {
   private $varB;
   
@@ -23,8 +26,15 @@ class B extends A {
   }
 
 }
+
     $obj = new B();
     $serialized = serialize($obj);
     echo $serialized . "<br>";
+
     $restored = unserialize($serialized);
     echo $restored->varB;
+
+    echo $obj->getA();
+
+//$restored->show_one();
+//echo $restored;

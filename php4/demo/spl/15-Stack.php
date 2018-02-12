@@ -6,7 +6,7 @@ function isPalindrome($word) {
   for ($i = 0; $i < $cnt; ++$i) {
     $stack->push( $word[$i] );
   }
-  
+
   $rword = "";
   while ($stack->count() > 0) {
     $rword .= $stack->pop();
@@ -15,6 +15,7 @@ function isPalindrome($word) {
 }
 
 $word = "hello";
+
 if (isPalindrome($word)) {
   print($word . " is a palindrome.\n");
 } else {

@@ -1,5 +1,6 @@
 <?php
 class Db{
+
     private $_db;
     function __construct(){
         $this->_db = new SQLite3("users.db");
@@ -42,6 +43,9 @@ class UserMap implements ArrayAccess {
         $this->_db->removeUser($name);
     }
 }
+
+
+
 $users = new UserMap(new Db());
 if(isset($users["Вася Пупкин"]))
     print "ИНН пользователя Вася Пупкин - " . $users["Вася Пупкин"];
@@ -49,3 +53,5 @@ if(!isset($users["Федя Сумкин"]))
     $users["Вася Пупкин"] = 1234567890;
 if(isset($users["Коля Романов"]))
     unset($users["Коля Романов"]);
+
+

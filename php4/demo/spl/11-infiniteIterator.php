@@ -11,6 +11,7 @@ class MyObject{
     return $ret;
   }
 }
+
 $object1 = new MyObject();
 $object2 = new MyObject();
 $arrayIterator1 = new ArrayIterator( [$object1, $object2] );
@@ -24,6 +25,7 @@ $arrayIterator->append($arrayIterator1);
 $arrayIterator->append($arrayIterator2);
 
 $it = new InfiniteIterator($arrayIterator);
+
 foreach($it as $object){
   $result = $object->action();
   if(!$result) break;

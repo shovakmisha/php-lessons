@@ -11,6 +11,7 @@ $menu = [
                         'Support'
                       ]
         ];
+
 // Наследуем RecursiveIteratorIterator
 class MyMenu extends RecursiveIteratorIterator{
   public function beginChildren(){
@@ -20,6 +21,8 @@ class MyMenu extends RecursiveIteratorIterator{
     echo "</ul></li>\n";
   }
 }
+
+
 // Рекурсивная итерация
 $rit = new MyMenu(new RecursiveArrayIterator($menu), 
                      RecursiveIteratorIterator::SELF_FIRST);
@@ -32,3 +35,9 @@ foreach($rit as $key => $value) {
   echo "<li>$value</li>\n";
 }
 echo "</ul>\n";
+
+
+//echo '<pre>';
+//	print_r( iterator_to_array($rit) ); // виведе не так як я хочу. тільки якщо поміняти RecursiveIteratorIterator::SELF_FIRST буде добре
+//echo '</pre>';
+

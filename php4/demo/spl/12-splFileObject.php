@@ -1,19 +1,21 @@
 <?php
-$file = new SplFileObject('data.csv');
-while($array = $file->fgetcsv()) {
-  var_export($array);
-}
-exit;
+
+ // $file = new SplFileObject('data.csv');
+ // while($array = $file->fgetcsv()) {
+ //   var_export($array);
+ //   echo '<br>';
+ // }
+ // exit;
 
 // Кастомизируем чтение csv файла
-class CSVFileObject extends SPLFileInfo 
+class CSVFileObject extends SPLFileInfo
                     implements Iterator, SeekableIterator {
   protected $map, $fp, $currentLine;
-  
-  public function __construct( $filename, $mode = 'r', $inc = false, $ctx = null ){
+
+  public function __construct( $filename, $mode = 'r', $inc = false, $context = null ){
     parent::__construct($filename);
     if(isset($context)) {
-      $this->fp = fopen( $filename, $mode, $inc, $ctx );
+      $this->fp = fopen( $filename, $mode, $inc, $context );
     } else {
       $this->fp = fopen($filename, $mode, $inc);
     }
@@ -24,7 +26,10 @@ class CSVFileObject extends SPLFileInfo
     $this->map = $this->fgetcsv();
     $this->currentLine = 0;
   }
-	
+
+
+
+
   function fgetcsv($delimiter = ',', $enclosure = '"') {
     return fgetcsv($this->fp, 0, $delimiter, $enclosure);
   }
@@ -65,5 +70,27 @@ class CSVFileObject extends SPLFileInfo
     }
   }
 }
+
 $it = new CSVFileObject('data.csv');
-var_export(iterator_to_array($it));
+
+echo '<pre>';
+    var_export(iterator_to_array($it));
+echo '</pre>';
+
+echo '<br>';
+
+/*
+while($array = $it->fgetcsv()) {
+
+  //var_export($array);
+   echo '<br> 333';
+
+   //print_r($array);
+   //var_export(iterator_to_array($array));
+
+}
+*/
+
+// echo '<br>';
+// var_export(iterator_to_array($it));
+// echo '</br>';

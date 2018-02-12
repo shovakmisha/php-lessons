@@ -44,34 +44,34 @@ foreach ( numbers() as $value ){
 
 	$logger = echoLogger();
 
-	print_r($logger);
+
+// print_r($logger);
 
 	$logger->send('Foo111');
 	$logger->send('Bar');
 
+
+
 // Комбинируем возврат и приём значений
 
-   // function numbers() {
-   //     $i = 0;
-   //
-   //     while (true) {
-   //         $cmd = (yield $i);
-   //         ++$i;
-   //         echo $cmd;
-   //         if ($cmd == 'stop')
-   //             return; // Выход из цикла
-   //     }
-   //
-   // }
-   // $gen = numbers();
-   // foreach ($gen as $v) {
-   //     if ($v == 3)
-   //         $gen->send('stop');
-   //     //echo $v;
-   // }
-​
+	function numbers() {
+		$i = 0;
 
+		while (true) {
+			$cmd = (yield $i);
+			++$i;
+			echo $cmd;
+			if ($cmd == 'stop')
+				return; // Выход из цикла
+		}
 
+	}
+	$gen = numbers();
+	foreach ($gen as $v) {
+		if ($v == 3)
+			$gen->send('stop');
+		//echo $v;
+	}
 
 
 /* Итератор для чтения данных из файла */
@@ -124,4 +124,3 @@ foreach ( numbers() as $value ){
 //   echo "$line\n";
 
 ?>
-
