@@ -30,6 +30,8 @@ printf(
         $method->getEndline()
 );
 
+    echo $method->getExtension();
+
 // Вывод статических переменных, если они есть
 if ($statics= $method->getStaticVariables()) {
   printf("---> Статическая переменная: %s\n", var_export($statics, 1));

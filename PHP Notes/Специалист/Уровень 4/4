@@ -1,1 +1,129 @@
-1) Reflection - здатність програми аналізувати саму себе. interface Reflector; class Reflection; Від них усі наслідуються
+1) Reflection - здатність програми аналізувати саму себе. Типу прооаналізувати ф-цію або ще шось
+	- interface Reflector; class Reflection; Від них усі наслідуються
+
+ReflectionFunction
+	 Константы
+		○ int IS_DEPRECATE
+	 Свойства
+		○ public $name
+	 Методы
+		○ abstract void __toString ( )
+		○ static string export ( string $name [, string $return ] ) - типу var_dumpt але прикольніше, інформативніше. Reflection::export(...)
+		○ mixed invoke ([ mixed $parameter [, mixed $... ]] ) - Викликати ф-цію. $func = new ReflectionFunction('sayHello'); $func->invoke($arg1, $arg2, ...)
+		○ string __toString ( )
+
+ - function sayHello(){...}
+// Создание экземпляра класса ReflectionFunction
+    $func = new ReflectionFunction('sayHello');
+
+Свойства
+	○ public $name // "sayHello"
+ Методы
+	○ int getStartLine ( ) - з якої строки вона починається в коді
+	○ int getEndLine ( ) - у якій строці її код закінчується
+	○ string getExtensionName ( ) - імя розширення у якому знаходиться ф-ція
+	○ string getFileName ( ) - файл у якому ця ф-ція
+	○ string getName ( ) - імя ф-ції
+	○ int getNumberOfParameters ( ) - к-сть аргументів
+	○ int getNumberOfRequiredParameters ( ) - к-сть обовязкових аргументів. Якщо у аргумента є значення за замовчуванням - він не обовязковий
+	○ array getParameters ( ) - свойства(параметри(змінні)) які є у ф-ції. вроді ф-ції не покаже, хоча ф-ція в ф-ції це дивно
+	○ array getStaticVariables ( ) - поверне статичні змінні ф-ції
+	○ bool isInternal ( ) - скаже чи це встроєна ф-ція (echo,pow,is_string,...). Якщо так, то вона знаходиться у якомусь розширенні. Тут можна використати getExtensionName(), і вже має повернутись не імя розширення, а розширення, оброблене рефлекшном до якого будуть доступні усі ці ф-ції
+	○ bool isUserDefined ( ) скаже чи це мною описана ф-ція
+	○ ReflectionExtension getExtension ( )
+	○ string getNamespaceName ( ) - неймспейс
+	○ bool isClosure ( ) чи наслідується від обєкта Closure
+	○ bool isDeprecated ( ) - isDeprecated?
+	○ string getDocComment ( )
+	○ abstract void __toString ()
+
+----- Є ще декілька класів, які буде наслідувати фінальний обєкт, який буде обробляти ф-цію. Я опишу їх нижче. Тобто у всіх будуть цей ф-ціонал 
+
+Я не буду записувати всі, краще загуглити
+ 2) ReflectionParameter - для роботи з аргументами
+	Свойства
+		○ public $name - імя аргумента
+	 Методы
+		○ bool allowsNull ( ) чи може мати значення Null. Типу якщо я написав перед аргуметом клас або тим до якого має відноситись цей аргумент, то він вже не може бути Null
+		○ __construct ( string $function , string $parameter ) - Я записав це для прикладу. Спеціаліст не казав нічого по цьому поводу, але я записав щоб не забувати шо мало б бути можна перезагрузити будь який клас і дати власний функціонал
+		○ ReflectionFunction getDeclaringFunction ( )
+		○ mixed getDefaultValue ( ) - Якщо аргумент має дефолтне значення, то поверне
+		○ string getName ( ) - імя
+		○ int getPosition ( ) - який по щоту аргумент
+		○ bool isArray ( ) - чи аргумент масив
+		○ bool isDefaultValueAvailable ( ) - чи є дефолтне значення
+		○ bool isOptional ( ) - чи він обовязковий
+		○ bool isPassedByReference ( ) - чи стоїть перед ним амперсант
+
+Класс ReflectionClass - Це вже для роботи з класом. Всі ф-ці описувати не буду, по назві понятно
+ Свойства
+	○ public $name
+ Методы
+	○ __construct ( mixed $argument )
+	○ mixed getConstant ( string $name )
+	○ array getConstants ( )
+	○ array getDefaultProperties ( ) - поверне дефолтні свойства класа ( краще уточнити )
+	○ string getDocComment ( )
+	○ int getStartLine ( )
+	○ int getEndLine ( )
+	○ ReflectionExtension getExtension ( )
+	○ string getExtensionName ( )
+	○ string getFileName ( )
+	○ array getInterfaceNames ( ) - масив інтерфейсів, які він реалізовує
+	○ array getInterfaces ( ) - масив обєктів, які унаслідували цей клас
+	○ object getMethod ( string $name імя метода який я хочу)
+	○ array getMethods ( тут буде масив )
+	○ string getName ( )
+	○ string getNamespaceName ( )
+	○ object getParentClass ( ) якщо цей клас від когось заекстенжений, він його поверне вже зарефлекшений. Мабуть коли я працюю через рефлекшн, то завжди коли я вибираю елемент через нього, елемент буде зарефлекшений, як у jqueru
+	○ array getProperties ( )
+	○ ReflectionProperty getProperty ( string $name )
+	○ array getStaticProperties ( )
+	○ mixed getStaticPropertyValue ( string $name [,string $default ] )
+	○ bool hasConstant ( string $name )
+	○ bool hasMethod ( string $name )
+	○ bool hasProperty ( string $name )
+	○ bool implementsInterface ( string $interface )
+	○ bool isAbstract ( )
+	○ bool isFinal ( )
+	○ bool isInstance ( object $object ) чи цей клас є екземплярор класа $object
+	○ bool isInstantiable ( ) - чи можна в ньому створювати обєкти. Типу якщо абстрактний, або інтерфейс то з них не можна
+	○ bool isInterface ( )
+	○ bool isInternal ( )
+	○ bool isUserDefined ( )
+	○ object newInstance ( mixed $args [, mixed $... ] ) - зразу зробити обєкт з нього
+	○ void setStaticPropertyValue ( string $name , string $value )
+	○ string __toString ( )
+
+Класс ReflectionMethod - схожий функціонал як для ф-ції, але трохи розширений 
+// Создание экземпляра класса ReflectionMethod
+$method = new ReflectionMethod('Class', 'method'); - треба вкаказувати і клас у якому цей метод. Мабуть не обовязково клас, може бути і обєкт 
+ Константы
+	○ int IS_STATIC
+	○ int IS_PUBLIC
+	○ int IS_PROTECTED
+	○ int IS_PRIVATE
+	○ int IS_ABSTRACT
+	○ int IS_FINAL
+ Свойства
+	○ public $name
+	○ public $class
+ Методы
+	○ ReflectionClass getDeclaringClass ( )
+	○ mixed invoke ( object $object [, mixed
+$parameter [, mixed $... ]] )
+	○ bool isAbstract ( )
+	○ bool isConstructor ( )
+	○ bool isDestructor ( )
+	○ bool isFinal ( )
+	○ bool isPrivate ( )
+	○ bool isProtected ( )
+	○ bool isPublic ( )
+	○ bool isStatic ( )
+
+
+
+
+
+	У класі можна написати і так class Counter { Counter::method }
+

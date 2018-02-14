@@ -6,8 +6,8 @@ function sayHello($name, $h){
 }
 
 // Обзор функции
-    // Reflection::export(new ReflectionFunction('sayHello'));
-    // exit;
+     //Reflection::export(new ReflectionFunction('sayHello'));
+     //exit;
 
 
 // Создание экземпляра класса ReflectionFunction
@@ -37,6 +37,8 @@ printf(
     printf("<p>---> Результат вызова: ");
     $result = $func->invoke("John","1");
     echo $result;
+
+    var_dump( $func->getParameters() );
 
 ?>
 </pre>
