@@ -8,9 +8,8 @@ function foo4() { }
 // Создание экземпляра класса ReflectionFunction
 $reflect = new ReflectionFunction("foo1");
 
-echo $reflect;
-exit;
-
+    // echo $reflect;
+    // exit;
 
 foreach ($reflect->getParameters() as $i => $param) {
     printf(
