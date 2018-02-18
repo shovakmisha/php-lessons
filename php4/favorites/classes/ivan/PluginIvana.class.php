@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'classes/IPlugin.class.php';
 class PluginIvana implements IPlugin{
   
@@ -36,4 +36,3 @@ class PluginIvana implements IPlugin{
     return self::$apps;
   }	
 }
-?>

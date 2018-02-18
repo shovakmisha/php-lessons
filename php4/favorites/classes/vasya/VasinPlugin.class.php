@@ -1,6 +1,6 @@
 <?php
 
-require_once '../IPlugin.class.php';
+require_once 'classes/IPlugin.class.php';
 
 class VasinPlugin implements IPlugin{
   
@@ -25,4 +25,3 @@ class VasinPlugin implements IPlugin{
     return $this->apps;
   }	
 }
-?>

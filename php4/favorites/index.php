@@ -1,10 +1,11 @@
 <?php
     require_once  'classes/Favorites.class.php';
 
+    $fav = new Favorites;
+
     $links = $fav->getFavorites('getLinksItems');
     $arts = $fav->getFavorites('getArticlesItems');
     $apps = $fav->getFavorites('getAppsItems');
-
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +44,6 @@
               foreach ($link as $item)
                   echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
           }
-
       ?>
     </ul>
   </div>
@@ -53,7 +53,7 @@
       <?php
       /* Список приложений */
 
-        foreach ($arts as $art){
+        foreach ($apps as $app){
             foreach ($app as $item)
                 echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
         }
@@ -66,8 +66,8 @@
     <ul>
       <?php /* Список статей */
 
-        foreach ($apps as $app){
-            foreach ($app as $item)
+        foreach ($arts as $art){
+            foreach ($art as $item)
                 echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
         }
 

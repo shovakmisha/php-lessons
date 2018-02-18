@@ -91,7 +91,7 @@ ReflectionFunction
 	○ bool isInterface ( )
 	○ bool isInternal ( )
 	○ bool isUserDefined ( )
-	○ object newInstance ( mixed $args [, mixed $... ] ) - зразу зробити обєкт з нього
+	○ object newInstance ( mixed $args [, mixed $... ] ) - зразу зробити обєкт з нього. Зручно коли треба зробити пустишку на ходу, щоб не створювати окремо обєкт, присвоювати змінній...
 	○ void setStaticPropertyValue ( string $name , string $value )
 	○ string __toString ( )
 
@@ -110,7 +110,7 @@ $method = new ReflectionMethod('Class', 'method'); - треба вкаказув
 	○ public $class
  Методы
 	○ ReflectionClass getDeclaringClass ( )
-	○ mixed invoke ( object $object [, mixed $parameter [, mixed $... ]] ) - Викликає цей метод в контексті $object. 
+	○ mixed invoke ( object $object [, mixed $parameter [, mixed $... ]] ) - Викликає цей метод в контексті $object. Але статичне свойство, викликається з класа а не з обєкта, тож указувати обєкт для нього нема сенсу, спеціаліст писав у дужках null  
 	○ bool isAbstract ( )
 	○ bool isConstructor ( )
 	○ bool isDestructor ( )

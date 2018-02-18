@@ -1,6 +1,6 @@
 <?php
 
-require_once '../IPlugin.class.php';
+require_once 'classes/IPlugin.class.php';
 
 class PetinPlugin implements IPlugin{
   
@@ -26,4 +26,3 @@ class PetinPlugin implements IPlugin{
     return self::$articles;
   }	
 }
-?>
