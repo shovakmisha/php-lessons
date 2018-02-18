@@ -1,9 +1,11 @@
 <pre>
 <?php
+/*
 class Counter{
   private static $c = 0;
 
   final public static function increment(){
+      static $name = 'Vasya';
     return ++self::$c;
   }
 }
@@ -30,18 +32,48 @@ printf(
         $method->getEndline()
 );
 
-    echo $method->getExtension();
+    //echo $method->getExtension();
+
+    echo '<br>';
+    echo 4444;
 
 // Вывод статических переменных, если они есть
 if ($statics= $method->getStaticVariables()) {
   printf("---> Статическая переменная: %s\n", var_export($statics, 1));
 }
-exit;
+    // exit;
 
+
+echo '<br>';
+echo '<br>';
 
 // Вызов метода
 printf("---> Результат вызова: ");
 $result = $method->invoke(null);
 echo $result;
+
+*/
+
+
+// Це вже я своє допишу
+
+    class MyClass
+    {
+
+        public function foo(){
+            echo 'foo';
+        }
+
+    }
+
+    $muObj = new MyClass;
+
+    $reflectionMethod = new ReflectionMethod('MyClass', 'foo');
+
+    $result2 = $reflectionMethod->invoke( new MyClass() );
+
+
+
+
 ?>
 </pre>

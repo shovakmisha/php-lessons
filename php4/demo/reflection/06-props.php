@@ -1,40 +1,60 @@
 <pre>
+
 <?php
-class String{
-  public $length  = 5;
+
+/**
+ *  Class Stringe my own class
+ *
+ * @author MykhayloShovak <mysho@mail.com>
+ * @license google http://google.com
+ *
+ */
+
+class Stringe
+{
+    public $length = 5;
 }
 
-// Создание экземпляра класса ReflectionProperty
-$prop = new ReflectionProperty('String', 'length');
+
+/*
+ * Создание экземпляра класса ReflectionProperty
+*/
+
+$prop = new ReflectionProperty('Stringe', 'length');
 
 // Вывод основной информации о свойстве класса
-printf(
-    "===> %s%s%s%s свойство '%s' (которое было %s)\n" .
-    "     имеет модификаторы %s\n",
-        $prop->isPublic() ? ' public' : '',
-        $prop->isPrivate() ? ' private' : '',
-        $prop->isProtected() ? ' protected' : '',
-        $prop->isStatic() ? ' static' : '',
-        $prop->getName(),
-        $prop->isDefault() ? 'объявлено во время компиляции' : 'создано во время выполнения',
-        var_export(Reflection::getModifierNames($prop->getModifiers()), 1)
-);
-exit;
+//printf(
+//	"===> %s%s%s%s свойство '%s' (которое было %s)\n" .
+//	"     имеет модификаторы %s\n",
+//	$prop->isPublic() ? ' public' : '',
+//	$prop->isPrivate() ? ' private' : '',
+//	$prop->isProtected() ? ' protected' : '',
+//	$prop->isStatic() ? ' static' : '',
+//	$prop->getName(),
+//	$prop->isDefault() ? 'объявлено во время компиляции' : 'создано во время выполнения',
+//	var_export(Reflection::getModifierNames($prop->getModifiers()), 1)
+//);
 
 
-// Создание экземпляра String
-$obj= new String();
+// exit;
 
-// Получение текущего значения
-printf("---> Значение: ");
-var_dump($prop->getValue($obj));
 
-// Изменение значения
-$prop->setValue($obj, 10);
-printf("---> Установка значения 10, новое значение равно: ");
-var_dump($prop->getValue($obj));
+ // Создание экземпляра String
+ $obj= new Stringe();
 
-// Дамп объекта
-var_dump($obj);
+$obj2 = new Stringe();
+$obj2->length=7;
+
+ // Получение текущего значения
+ printf("---> Значение: ");
+ var_dump($prop->getValue($obj2));
+
+ // Изменение значения
+ $prop->setValue($obj, 10);
+ printf("---> Установка значения 10, новое значение равно: ");
+ var_dump($prop->getValue($obj));
+
+ // Дамп объекта
+ var_dump($obj);
 ?>
 </pre>

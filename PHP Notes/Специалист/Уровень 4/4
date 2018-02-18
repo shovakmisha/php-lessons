@@ -96,7 +96,7 @@ ReflectionFunction
 	○ string __toString ( )
 
 Класс ReflectionMethod - схожий функціонал як для ф-ції, але трохи розширений 
-// Создание экземпляра класса ReflectionMethod
+// Создание экземпляра класса ReflectionMethod 
 $method = new ReflectionMethod('Class', 'method'); - треба вкаказувати і клас у якому цей метод. Мабуть не обовязково клас, може бути і обєкт 
  Константы
 	○ int IS_STATIC
@@ -110,8 +110,7 @@ $method = new ReflectionMethod('Class', 'method'); - треба вкаказув
 	○ public $class
  Методы
 	○ ReflectionClass getDeclaringClass ( )
-	○ mixed invoke ( object $object [, mixed
-$parameter [, mixed $... ]] )
+	○ mixed invoke ( object $object [, mixed $parameter [, mixed $... ]] ) - Викликає цей метод в контексті $object. 
 	○ bool isAbstract ( )
 	○ bool isConstructor ( )
 	○ bool isDestructor ( )
@@ -121,9 +120,118 @@ $parameter [, mixed $... ]] )
 	○ bool isPublic ( )
 	○ bool isStatic ( )
 
+Класс ReflectionExtension - це для розширень. Спеціаліст для цього наводив приклад стартних ф-цій php ( count, pow ) // $ext = new ReflectionExtension('standard'); - тут будуть даны про пхп
+ Свойства
+	○ public $name
+ Методы
+	○ __construct ( string $name )
+	○ array getClasses ( ) - класи, які використовує це розширення
+	○ array getClassNames ( )
+	○ array getConstants ( )
+	○ array getDependencies ( )
+	○ array getFunctions ( )
+	○ array getINIEntries ( )
+	○ string getName ( )
+	○ string getVersion ( )
+	○ string __toString ( )
+
+ - ReflectionProperty - це для свойств класа - $prop = new ReflectionProperty('String', 'length'); - дані про свойство length у типа String
+	$prop->getValue($obj) - поверне значення свойства length в контексті $obj
+	$prop->setValue($obj, 10) - установить  значення 10 для length в контексті $obj
+
+ - Короче і свойст і методів і самих рефлекшнів є більше. Я записав тільки самі популярні. І уточнити, можливо робота з статичними і звичайними методами відрізняються один від одного
+
+
+Reflection API: примеры
+// Получаем экземпляр класса ReflectionClass
+	$rc = new ReflectionClass('Имя_класса');
+​
+// Наследует ли класс тот или иной интерфейс?
+	$rc->implementsInterface('Имя_интерфейса');
+​
+// Имеет ли класс тот или иной метод?
+	$rc->hasMethod('Имя_метода');
+​
+// Получаем экземпляр класса ReflectionMethod
+	$rm = $rc->getMethod('Имя_метода');
+​
+// Является ли метод статическим?
+	$rm->isStatic();
+​
+// Выполнение статического метода
+	$result = $rm->invoke(null);
+​
+// Выполнение обычного метода
+	$instance = $rc->newInstance();
+	$result = $rm->invoke($instance);
+
+
+
+ 3) Комент /** придуманий для того, щоб пхп його бачив і з ним можна було працювати. Дефолтні значення для роботи з ними я не знаю, але в рефлекшні щоб його побачити, є метод getDocComment ( ) майже у всіх елементів щоб побачити цей комент
+
+ composer install - робиться 1, всі інші рази, коли мені треба оновити пакунки - composer update
+
+ 
 
 
 
 
+
+
+
+
+
+
+
+	pathinfo() — Возвращает информацию о пути к файлу, розбиваючи його на масив
 	У класі можна написати і так class Counter { Counter::method }
+
+Камень первый — статической переменной присваивать можно только константы или константные выражения. Вот такой код:
+static $a = bar();
+
+с неизбежностью приведет к ошибке парсера. К счастью, начиная с версии 5.6 стало допустимым присвоение не только констант, но и константных выражений (например — «1+2» или "[1, 2, 3]"), то есть таких выражений, которые не зависят от другого кода и могут быть вычислены на этапе компиляции
+
+
+Камень второй — методы существуют в единственном экземпляре. 
+class A {
+  public function foo() { - метод будет существовать лишь в одном экземпляре, просто при каждом вызове в него будет пробрасываться разный $this. 
+    static $x = 0;
+    echo ++$x;
+  }
+}
+
+$a1 = new A;
+$a2 = new A;
+
+$a1->foo(); // 1
+$a2->foo(); // 2
+$a1->foo(); // 3
+$a2->foo(); // 4
+
+наследование класса (и метода) приводит к тому, что всё-таки создается новый метод:
+
+
+class A {
+  public function foo() {
+    static $x = 0;
+    echo ++$x;
+  }
+}
+
+class B extends A {
+}
+
+$a1 = new A;
+$b1 = new B;
+
+$a1->foo(); // 1
+$b1->foo(); // 1
+$a1->foo(); // 2
+$b1->foo(); // 2
+
+Вывод: динамические методы в PHP существуют в контексте классов, а не объектов. И только лишь в рантайме происходит подстановка "$this = текущий_объект"
+
+ ----------------------
+static в класі буде означати що змінна принадлежить класу а на екземпляру обєкта. У статичних свойств і методів немає $this. Тобто у класі запис $this->name = '...'; або $this->method();
+
 

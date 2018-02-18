@@ -1,5 +1,11 @@
-<?php 
-  include_once 'classes/Favorites.class.php'; 
+<?php
+    require_once  'classes/Favorites.class.php';
+
+    $links = $fav->getFavorites('getLinksItems');
+    $arts = $fav->getFavorites('getArticlesItems');
+    $apps = $fav->getFavorites('getAppsItems');
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,19 +37,41 @@
   <div id='a'>
     <h2>Полезные сайты</h2>
     <ul>
-      <? /* Список сайтов */ ?>
+      <?php /* Список сайтов */
+
+          foreach ($links as $link){
+              foreach ($link as $item)
+                  echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
+          }
+
+      ?>
     </ul>
   </div>
   <div id='b'>
     <h2>Полезные приложения</h2>
     <ul>
-      <? /* Список приложений */ ?>
+      <?php
+      /* Список приложений */
+
+        foreach ($arts as $art){
+            foreach ($app as $item)
+                echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
+        }
+
+      ?>
     </ul>
   </div>
   <div id='c'>
     <h2>Полезные статьи</h2>
     <ul>
-      <? /* Список статей */ ?>
+      <?php /* Список статей */
+
+        foreach ($apps as $app){
+            foreach ($app as $item)
+                echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>";
+        }
+
+      ?>
     </ul>
   </div>
 </body>

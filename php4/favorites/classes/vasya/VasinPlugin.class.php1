@@ -1,5 +1,7 @@
-<?
-require_once 'classes/IPlugin.class.php';
+<?php
+
+require_once '../IPlugin.class.php';
+
 class VasinPlugin implements IPlugin{
   
   private static $links = [

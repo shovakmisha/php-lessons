@@ -1,5 +1,7 @@
-<?
-require_once 'classes/IPlugin.class.php';
+<?php
+
+require_once '../IPlugin.class.php';
+
 class PetinPlugin implements IPlugin{
   
   private $links = [
