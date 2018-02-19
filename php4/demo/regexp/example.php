@@ -1,18 +1,58 @@
 <?php
 // Пример 1
-$subject = '00:04:23:7c:5d:01';
+//$subject = '00:04:23:7c:5d:01';
+//
+//$pattern = '/^([a-f0-9][a-f0-9]:){5}[a-f0-9][a-f0-9]$/';
+//preg_match($pattern, $subject, $matches);
+//echo $matches[0]; // 00:04:23:7с:5d:01
+//
+//$pattern = '/([a-f0-9]{2}:){5}[a-f0-9]{2}/';
+//preg_match($pattern, $subject, $matches);
+//echo $matches[0]; // 00:04:23:7с:5d:01
+//
+//// Пример 2
+//$subject = 'John Smith <jsmith@site.com>';
+//$pattern = '/([^<]+)<([a-zA-Z0-9_-]+@([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+)>/';
+//preg_match($pattern, $subject, $matches);
+//print_r($matches);
+//// [0]=>John Smith <jsmith@site.com>, [1]=>John Smith, [2]=>jsmith@site.com, [3]=>site.
 
-$pattern = '/^([a-f0-9][a-f0-9]:){5}[a-f0-9][a-f0-9]$/';
-preg_match($pattern, $subject, $matches);
-echo $matches[0]; // 00:04:23:7с:5d:01
 
-$pattern = '/([a-f0-9]{2}:){5}[a-f0-9]{2}/';
-preg_match($pattern, $subject, $matches);
-echo $matches[0]; // 00:04:23:7с:5d:01
+// . Любой символом, кроме символа перевода строки.
 
-// Пример 2
-$subject = 'John Smith <jsmith@site.com>';
-$pattern = '/([^<]+)<([a-zA-Z0-9_-]+@([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+)>/';
-preg_match($pattern, $subject, $matches);
-print_r($matches);
-// [0]=>John Smith <jsmith@site.com>, [1]=>John Smith, [2]=>jsmith@site.com, [3]=>site.
+    preg_match('/./', 'PHP 5', $matches);
+    echo $matches[1]; // Р
+
+echo '<br>';
+
+    preg_match('/PHP.5/', 'PHP 5', $matches);
+    echo $matches[0]; // РHP 5
+
+echo '<br>';
+
+    preg_match('/PHP.5/', 'PHP-5', $matches);
+    echo $matches[0]; // РHP-5
+
+echo '<br>';
+
+    preg_match('/PHP.5/', 'PHP5', $matches);
+    echo $matches[0]; //
+
+// \ Экранирование метасимволов и разделителей
+
+    preg_match('/.com/', 'site.com', $matches);
+    echo $matches[0]; // .com
+
+echo '<br>';
+
+    preg_match('/.com/', 'site-com', $matches);
+    echo $matches[0]; // -com
+
+echo '<br>';
+    preg_match('/\.com/', 'site-com', $matches);
+    echo $matches[0]; //
+
+echo '<br>';
+
+    preg_match('/\.com/', 'site.com', $matches);
+    echo $matches[0]; // .co

@@ -1,0 +1,62 @@
+ 1) В пхп 7 з регулярок видалили POSIX(ereg_), залишилось тільки PCRE(preg_), їх можна оприділити по префіксу preg_ Регулярки працюють стандартно, тобто береться якиїсь шаблон і накладається на строку. Наприклад слово ход у слові 'находити'. Cпочатку 'ход' прикладається до "нах" - не совпало, потім до 'ахо', не совпало, і тд  
+	/./ - крапка це будь який символ крім перевода строки. preg_match('/./', 'PHP 5', $matches); - знайти будь який символ в 'PHP 5' $matches - це масив, у якому будуть дані що совпали. preg_match('/./', 'PHP 5', $matches); echo $matches[1]; // Р
+		- preg_match('/PHP.5/', 'PHP 5', $matches);    echo $matches[0]; // РHP 5
+		- preg_match('/PHP.5/', 'PHP-5', $matches); echo $matches[0]; // РHP 5
+		- preg_match('/PHP.5/', 'PHP5', $matches); echo $matches[0]; // нічого не виведе, не совпало
+// \ Экранирование метасимволов и разделителей
+	- preg_match('/.com/', 'site.com', $matches);	echo $matches[0]; // .com
+	- preg_match('/.com/', 'site-com', $matches);	echo $matches[0]; // -com
+	- preg_match('/\.com/', 'site-com', $matches); echo $matches[0]; //
+	- preg_match('/\.com/', 'site.com', $matches); echo $matches[0]; // .com
+
+ - Повторения
+/*
+{m} точное вхождение
+{m,n} минимум и максимум
+{m,} минимум вказаний, максимум неограничено
+*/
+
+	- preg_match('/tre{1,2}f/', 'trf', $matches); echo $matches[0]; //
+	- preg_match('/trе{1,2}f/', 'tref', $matches); echo $matches[0]; // tref
+	- preg_match('/trе{1,2}f/', 'treef', $matches); echo $matches[0]; // treef
+	- preg_match('/trе{1,2}f/', 'treeef', $matches); echo $matches[0]; //
+	​
+	- preg_match('/fo{2,}ba{2}r/', 'foobaar', $matches); echo $matches[0]; // foobaar
+	- preg_match('/fo{2,}ba{2}r/', 'fooooooobaar', $matches); echo $matches[0]; // fooooooobaar
+	- preg_match('/fo{2,}ba{2}r/', 'fobaar', $matches); echo $matches[0]; //
+
+ - Повторення можна замінити Квантифікаторами
+/* Квантификаторы
+? что и {0,1}
++ что и {1,}
+* что и {0,}
+*/
+
+	- preg_match('/PHP.?5/', 'PHP 5', $matches); echo $matches[0]; // PHP 5
+	- preg_match('/PHP.?5/', 'PHP5', $matches); echo $matches[0]; // PHP5
+	​
+	- preg_match('/a+b/', 'caaabc', $matches); echo $matches[0]; // aaab
+	- preg_match('/a+b/', 'cabc', $matches); echo $matches[0]; // ab
+	- preg_match('/a+b/', 'cbc', $matches); echo $matches[0]; //
+	​
+	- preg_match('/a*b/', 'caaaabc', $matches); echo $matches[0]; // aaaab
+	- preg_match('/a*b/', 'cbc', $matches); echo $matches[0]; // b​
+
+Метасимволы
+ - початок, кінець строки. Якщо помістити регулярку між ^xyz$, то це має совпадати слово повністю
+// ^ Ограничение начала строки
+	- preg_match('/^abc/', 'abcd', $matches);	echo $matches[0]; // abc
+	- preg_match('/^abc/', 'xabcd', $matches); echo $matches[0]; //
+​
+// $ Ограничение конца строки
+	- preg_match('/xyz$/', 'abcdxyz', $matches); echo $matches[0]; // xyz
+	- preg_match('/xyz$/', 'xyza', $matches); echo $matches[0]; //
+
+// [...] Kласс искомых символов.
+	- preg_match('/[0-9]+/', 'PHP is released in 1995',$matches); echo $matches[0]; // 1995
+	- preg_match('/[^0-9]+/', 'PHP is released in 1995',$matches); echo $matches[0]; // PHP is released in -Галочка внутрі квадратних скобок це отріціеіє - знайди те що не включає в себе числа від 0 до 9. ЗВЕРНУТИ УВАГУ, ПРОБІЛ ТЕЖ ШУКАЄТЬСЯ
+	- preg_match('/[a-zA-Z ]+/', 'PHP is released in 1995',$matches);	echo $matches[0]; // PHP is released in
+	- preg_match('/[^a-zA-Z ]+/', 'PHP is released in 1995',$matches); echo $matches[0]; // 1995 -Замість a-z можна вказати будь які букви, можна навіть [abcde...]
+
+
+
