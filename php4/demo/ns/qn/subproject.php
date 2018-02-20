@@ -8,4 +8,6 @@
 	}
 	echo 'Из PROJECT\SUB:<br>';
 	$obj = new Connection;
+
+	echo '<hr>';
 ?>

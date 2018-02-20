@@ -1,11 +1,9 @@
 <?php
 	namespace Project;
-
 	class Connection{
 	  function __construct(){
-	    echo __CLASS__.'<br>';
+	    echo __CLASS__.'<br>'; // Project\Connection
 	  }
 	}
-	echo 'Из PROJECT:<br>';
 	$obj = new Connection;
 ?>
