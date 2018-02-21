@@ -2,6 +2,7 @@
 class IndexController implements IController {
   public function indexAction() {
     $fc = FrontController::getInstance();
+
     /* Инициализация модели */
     $model = new FileModel();
     
