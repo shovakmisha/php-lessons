@@ -1,7 +1,8 @@
 <?php
+
 /* Пути по-умолчанию для поиска файлов */
 	set_include_path(get_include_path()
-						.PATH_SEPARATOR . dirname(__FILE__) . '/application/controllers'
+						.PATH_SEPARATOR . 'application/controllers'
 						.PATH_SEPARATOR . 'application/models'
 						.PATH_SEPARATOR . 'application/views');
 
@@ -12,24 +13,22 @@
 	const USER_ADD_FILE = 'user_add.php';
 
 /* Текстовая база данных пользователей */
-	// define('USER_DB', $_SERVER["DOCUMENT_ROOT"].'/data/users.txt');
+	define('USER_DB', $_SERVER["DOCUMENT_ROOT"].'/data/users.txt');
 
-	/* Автозагрузчик классов */
-	// function __autoload($class){
-	//   require_once($class.'.php');
-	// }
+/* Автозагрузчик классов */
+	function __autoload($class){
+	  require_once($class.'.php');
+	}
 
 /* Инициализация и запуск FrontController */
-	//$front = FrontController::getInstance();
-	//$front->route();
+	$front = FrontController::getInstance();
+	$front->route();
 
 	/* Вывод данных */
-	//echo $front->getBody();
+	echo $front->getBody();
 
-	//if( $front->getController() ){
-	//	echo $front->getController();
-	//}
-
-
+	if( $front->getController() ){
+		echo $front->getController();
+	}
 
 	// phpinfo();
