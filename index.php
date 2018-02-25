@@ -27,8 +27,4 @@
 	/* Вывод данных */
 	echo $front->getBody();
 
-	if( $front->getController() ){
-		echo $front->getController();
-	}
-
 	// phpinfo();
