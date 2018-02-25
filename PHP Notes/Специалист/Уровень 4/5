@@ -206,7 +206,7 @@
  - Наприклад у файл інклюдяться файли з неймспейсами і серед них є неймспейс My\Full\Classname
 	- use My\Full\Classname as Bar; Я дав йому псевдонім Bar і тепер можу працювати з ним $obj = new Bar; // объект класса My\Full\Classname
 	- Якщо в файлі в який інклюдиться неймспейси є цей клас теж, то до нього треба буде звертатись так - $obj = new namespace\Bar; // объект класса Foo\Bar
-	- Можна нанавіть працювати з останнім куском - use My\Full\NSname; // My\Full\NSname as NSname, але то такоє. NSname\subns\func(); // функция My\Full\NSname\subns\func - Типу навіть шлях до ф-ції треба використовувати обратні слеші
+	- Можна нанавіть працювати з останнім куском - use My\Full\NSname; - те саме, що My\Full\NSname as NSname, але то такоє. NSname\subns\func(); // функция My\Full\NSname\subns\func - Типу навіть шлях до ф-ції треба використовувати обратні слеші
 	- щоб не писати кожного разу обратні слеші перед глобальним класом, можна написати use \ArrayObject; // $obj = new ArrayObject(array(1)); // глобальный ArrayObject
 
 
