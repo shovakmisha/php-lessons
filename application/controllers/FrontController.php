@@ -17,7 +17,7 @@ class FrontController {
 //Какой сontroller использовать? власний або той що за замовчуванням
     $this->_controller = !empty($splits[0]) ? ucfirst($splits[0]).'Controller' : 'IndexController';
 
-    //Какой action использовать? власний або той що за замовчуванням
+//Какой action использовать? власний або той що за замовчуванням
     $this->_action = !empty($splits[1]) ? $splits[1].'Action' : 'indexAction';
 
 //Есть ли параметры и их значения?

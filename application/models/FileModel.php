@@ -1,7 +1,7 @@
 <?php
 class FileModel{
   /* Имя пользователя */
-  public $name = '';
+  public $name = '333';
   /* Список пользователей */
   public $list = [];
   /* Текущий пользователь: ассоциативный массив
@@ -16,4 +16,15 @@ class FileModel{
     include($file);
     return ob_get_clean();
   }
+
+  function getUsers($file, $base){
+      $handle = fopen($base, "r");
+      $contents = fread($handle, filesize($base));
+      fclose($handle);
+      $this->list = unserialize($contents);
+      ob_start();
+      include($file);
+      return ob_get_clean();
+  }
+
 }
