@@ -122,4 +122,4 @@ class App
     protected function _registerAutoloader(){
         spl_autoload_register('Autoloader::autoload');
     }
-}
+} 
