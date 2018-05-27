@@ -5,3 +5,6 @@
     echo date("Y.m.d H:i", strtotime($item->pubDate))." ";
     echo $item->title."<br />";
   }
+
+
+
