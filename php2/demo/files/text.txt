@@ -1,0 +1,808 @@
+Add gift card
+New Payment
+You already have a coupon for a discount. The new coupon will delete the old one
+Scan QR code
+OR
+Gift Card number
+Save
+Payments
+You added %1 to your shopping cart.
+Original Price
+Recommended combinations
+Please type the letters below
+Reload captcha
+Reload
+<strong>Attention</strong>: Captcha is case sensitive.
+Visible on desktop
+Visible on mobile
+Compare sort order
+Position of attribute in compare block.
+All
+Desktop full
+Desktop short
+Desktop hidden
+Load More
+We can't find products matching the selection.
+NEW
+HIT
+Sale
+Discount
+Pre-Order
+Add to Cart
+In stock
+Out of stock
+Qty
+label
+Description
+Compare e-readers
+Compare Products
+Product
+Add to Wish List
+Remove
+Show all
+You have no items to compare.
+See details
+You may be interested in
+Related
+Saved for later
+It looks like the current card has already been saved to your account
+Your card has been saved. You can manage it in your Personal Area
+Sorry, but something went wrong. We can't save your card right now.
+Learn More
+ Item(s)
+Sub total: 
+1 Click purchase
+Checkout
+or
+Login and checkout
+Checkout as a guest
+Pay with
+See all
+Pre Order Note
+Writer name
+Save for later
+Electronic books can not be returned
+Dismiss
+Shopping Cart Items
+Continue Shopping
+Clear Shopping Cart
+Update Shopping Cart
+Item
+Price
+See price before order confirmation.
+What's this?
+Subtotal
+See more
+You have no saved items for later.
+CMS block with identifier %1 not exist
+FAQ
+About Us
+Support
+Privacy policy
+Contact Us
+PB Cloud
+More info
+Product with %s not found.
+Product not found
+Libreka product is already exists.
+Missing provider name.
+Device’s QR Code is in the e-reader’s settings
+Insert the device serial number (available under Settings -> Device informations)
+Device serial number
+Device nickname
+Add device
+Personal Area
+Open in Cloud
+Book title
+Author name
+DRM Info
+Open in app
+Download
+Open my Cloud
+Hi 
+Content and Devices
+Books and other contents
+Devices
+Wishlist
+Orders
+Link your account
+Unlink your account
+Buy
+Your message has been successfully sent
+File size must be less than 50Mb!
+Any questions?
+Please fill in the form
+device model
+Name
+Email
+Questions
+Choose a file
+File extensions: JPEG, PNG, GIF.
+Send
+Rechnung
+Lieferadresse
+Rechnungsdatum
+Belegnummer
+%s Stck
+EUR pro Stck
+Lieferschein
+Position %s
+Zwischensumme
+MwSt. von
+Zahlungsbedingung
+Lieferbedingung
+Ihre Kunden-Nr.
+Ansprechpartner
+E-Mail-Adresse
+Anschrift
+Kommunikation
+Bankverbindung
+Geschäftsführer
+Position
+Bezeichnung
+Artikelnummer
+Menge
+Einzelpreis
+Gesamtpreis
+name
+This email address is already subscribed.
+The confirmation request has been sent.
+Thank you for your subscription.
+There was a problem with the subscription: %1
+Something went wrong with the subscription.
+Write Your Own Review
+* Required Fields
+Your Rating
+%1 %2
+Nickname
+Summary
+Review
+Submit Review
+Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>
+Reviews
+Write review
+Customer Care
+Report bad quality/formatting
+Report inappropriate book
+Copyrights violation
+View All
+Order #
+Order status:
+Purchased on:
+Ship to:
+View
+Reorder
+You have placed no orders.
+Items Ordered
+Gift Message
+Close
+From
+To
+SKU
+Ordered
+Shipped
+Canceled
+Refunded
+Subtotal:
+Return Item
+You're reviewing:
+Read in App
+<span class="text-sm">Ordered on</span> %1
+<span class="text-sm">Refundable until</span> %1
+Save Cart
+Delete Cart
+Customer ID
+First Name
+Last Name
+Cart
+Status
+Subject
+Email setting
+Product ID
+Sku
+Your cart is disabled
+The cart has been deleted.
+We can't find a cart to delete.
+This cart not exists.
+Edit Cart
+New Cart
+Prepended Carts
+A total of %1 record(s) have been deleted.
+A total of %1 record(s) have been disable.
+A total of %1 record(s) have been enable.
+A total of %1 record(s) have been send.
+You saved this cart.
+Something went wrong while saving the cart.
+The cart has been sent.
+We can't find a cart to send.
+Not Finished Carts
+Enabled
+Disabled
+Could not save cart: %1!
+Cart with cart id "%1" does not exist!
+Could not delete cart: %1!
+API
+SMTP
+Without template
+Global Unsubscribe
+Edit
+Delete
+Are you sure you want to delete this?
+Upload
+Delete image
+Pay Now
+Go back to product details
+Customize and Add to Cart
+None
+Quantity
+Choose a selection...
+Please type the letters
+Thriller Collection
+Compare Products:
+Related Products
+We found other products you might like!
+More Choices:
+New Products
+Sorty by
+Special Price
+Read a free sample
+You need to install app to read free sample
+Book type: 
+E-book type: 
+Product status: 
+My Cart
+Your order has been placed
+We’ve sent you a confirmation e-mail
+Order placed by mistake?
+Click to undo
+Create an account to access your content
+Create an account to save this order and start reading now.
+Create account
+You are ready to read!
+Purchased contents are syncing to your devices and Pocketbook cloud
+Read online
+Your orders
+Create Account
+Share
+Change
+Contact Information
+Change password
+Newsletters
+You are subscribed to "General Subscription".
+You aren't subscribed to our newsletter.
+Add new address
+Default Addresses
+Default Billing Address
+Modify
+You have no default billing address in your address book.
+Default Shipping Address
+You have no default shipping address in your address book.
+Additional Address Entries
+You have no other address entries in your address book.
+Address
+Street Address
+Street Address %1
+VAT Number
+City
+State/Province/Region
+Please select a region, state or province.
+ZIP
+Country
+It's a default billing address.
+Use as my default billing address
+It's a default shipping address.
+Use as my default shipping address
+Profile
+New Password
+Password Strength
+No Password
+Confirm New Password
+Current Password
+Change Email
+Change Password
+Go back
+Change Email and Password
+Please enter your email address below to receive a password reset link.
+Reset My Password
+Sign in by email
+Password
+Sign In
+Forgot password?
+Subscription option
+General Subscription
+Back
+Register by email
+Address Information
+State/Province
+Zip/Postal Code
+Confirm Password
+I accept and agree to the terms and conditions
+Register
+Already have an account?
+Sign in
+Set a New Password
+Company
+Phone Number
+Newsletter
+Sign Up for Our Newsletter:
+Subscribe
+Recently viewed
+Add to Compare
+My Recent Reviews
+See full
+Rating
+rating,
+ratings,
+review
+reviews
+Be the first to review this product
+Back to 
+Shipping Method
+No shipping information available
+Payment Method
+Shipping Address
+Billing Address
+Print Order
+Download PDF
+Shipping status
+Recent Orders
+Date
+Ship To
+Order Total
+Action
+Actions
+View Order
+Gift Message for This Order
+Search
+Get the hottest news
+Want to get books we think you love?
+Subscribe to newsletter and receive every week the latest news about them
+Language:
+E-readers
+Hi %1
+Items %1 to %2 of %3 total
+%1 Item
+%1 Item(s)
+Page
+First page
+Previous
+Page 
+Next
+Last page
+Show
+per page
+Add new payment
+Select currency
+Full name
+Card Number
+Month
+Year
+Availability
+Remove Item
+This Wish List has no Items
+Last Added Items
+Remove This Item
+Go to Wish List
+You have no items in your wish list.
+Register with a social network
+Login By %1
+matteo.petrani@lorem.ipsum
+apps-send-link
+Send me a link
+No results :(
+Did you mean
+[suggested query]
+Results
+Firmware update
+You haven't devices.
+sample
+Select all
+Unselect all
+Popular categories
+Mystery
+Romance
+Fantasy
+Nonfiction
+Kids
+Biographies
+Business
+Political
+Comics
+Drama
+Petry
+History
+Filters
+Category
+Back to list
+0 results
+Apply
+Search..
+By requesting the deletion of your account, you will have <b>%1 hours</b> to change your mind and cancel your deletion request.
+For legal reasons, your orders can not be deleted before the applicable legal retention period.
+Please enter your password to request the deletion of your account.
+Delete My Account
+You can request for an export of all your personal data in <b>ZIP</b> format.
+Be careful to save the file, you can do an export request only once per <b>%1 hours</b>.
+You have made your last export request at <b>%1</b>.
+You can not request for a new personal data export yet.
+Please enter your password to download a copy of your personal data.
+Download My Personal Data
+Please wait...
+save 
+A short description of the products offered
+Add all to wish list
+ items
+Sub total:
+Add all three to cart
+Chosen
+See Details
+Options Details
+Update
+No Payment method available.
+Oops! We're sorry. 
+Page not found.
+Back to Home
+The PocketBook company ranks fourth in the world among the manufacturers of premium e-book readers based on e-ink ("electronic paper") as well as multimedia readers and tablet computers running the Android operating system.
+Founded in 2007, PocketBook is headquartered in Lugano, Switzerland and sells its products in 32 countries worldwide.
+The well-rehearsed team of PocketBook employees guarantees the high quality and exclusivity of the products, offers perfection down to the smallest detail and always meets all the requirements that customers place on modern reading.
+In an effort to provide customers with the best products, the company has built several business units focused on developing and maintaining the equipment, developing unique reader software, and building an online platform to conveniently search for the best electronic content are.
+The company occupies a leading position in the market and offers excellent customer service. Last but not least, the 130 PocketBook service centers distributed throughout the globe ensure this. Comprehensive warranty commitments beyond the legal requirements, the company understands as part of its corporate philosophy.
+In relation to the clearly defined mission of the company, the company PocketBook - in addition to its core business - is pursuing three ambitious projects aimed at promoting reading. For example, the e-book provider offers "BookLand", a company-owned electronic content store, "ReadRate" a search and referral service, those who enjoy reading, and "KidRead", a unique software for children To inspire reading. At the same time, this program helps the young readership to continuously study and constantly review literary knowledge.
+To date, the company has presented more than 30 models of e-ink readers and multimedia tablets on the world market. The big part The majority of the products can be understood as innovative innovations in the field of electronic readers, which receive regular awards. All in all, the company has so far received 10 globally respected prizes - including the acknowledged international "Red Dot Design Award".
+Pocketbook Readers GmbH
+Phone:
+Service
+free from the German landline
+Press contact in German and French
+E-Mail:
+Press contact in English and Russian
+Fax:
+Managing Director
+Email:
+Information for mass media representatives
+We recommend our
+PPS system
+easyWinArt for your business processes.
+Disclaimer
+Source:
+Internet law by lawyer
+Liability for content
+The contents of our pages were created with great care , However, we can not assume any liability for the accuracy, completeness and timeliness of the content.
+As a service provider we are responsible according to § 7 Abs.1 TMG for own contents on these sides according to the general laws. According to §§ 8 to 10 TMG, however, we as a service provider are not obliged to monitor transmitted or stored external information or to investigate circumstances that indicate an illegal activity. Obligations to remove or block the use of information under general law remain unaffected. A liability in this regard, however, is only possible from the date of knowledge of a specific infringement. If we become aware of such violations, we will remove this content immediately.
+Liability for links
+Our offer contains links to external websites of third parties on whose contents we have no influence. Therefore, we can not assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the contents of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking. However, a permanent content control of the linked pages is not reasonable without concrete evidence of an infringement. Upon notification of violations, we will remove such links immediately.
+Copyright
+The content and works on these pages created by the site operators are subject to German copyright law. The reproduction, processing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator. Downloads and copies of this site are for private, non-commercial use only. As far as the contents on this side were not created by the operator, the copyrights of third parties are considered. In particular contents of third parties are marked as such. If you should still be aware of a copyright infringement, we ask for a note. Upon notification of violations, we will remove such content immediately.
+Data protection
+We point out that the data transmission in the Internet (eg in the communication by E-Mail) can exhibit security gaps. A complete protection of the data from access by third parties is not possible.
+The use of contact data published in the context of the imprint obligation by third parties for sending unsolicited advertising and information materials is hereby expressly excluded. The operators of the pages expressly reserve the right to take legal action in the event of the unsolicited sending of advertising information, such as spam e-mails.
+Place Order
+Email Address
+Forgot Your Password?
+The invoice address is the same as the shipping one
+Cancel
+Save in address book
+You already have an account with us. Sign in or continue as guest.
+Login
+Discard
+Ship to this address
+Shipping address
+Reset your %store_name password
+%name,
+There was recently a request to change the password for your account.
+If you requested this change, set a new password here:
+If you did not make this request, you can ignore this email and your password will remain the same.
+Welcome to %store_name
+Welcome to %store_name.
+To sign in to our site, use these credentials during checkout or on the <a href="%customer_url">My Account</a> page:
+Password:
+Password you set when creating account
+Forgot your account password? Click <a href="%reset_url">here</a> to reset it.
+If you have a trouble, please 
+contact to us
+When you sign in to your account, you will be able to:
+Quick Checkout
+Proceed through checkout faster
+Order Status
+Check the status of orders
+Manage Addresses
+Store alternative addresses
+For shipping to multiple family members and friends
+Order History
+View past orders
+Footer
+Header
+Make Check payable to:
+Send Check to:
+Your %store_name order confirmation
+Thank you for your order, %customer_name!
+Please note: the invoice for your order can be found in the attachment of this e-mail in PDF format. For example, use the free 
+software to open your invoice. There is no separate invoice for the delivery.
+Below we have listed your order again to confirm.
+If you have questions we are always there for you: Just write to 
+We hope you enjoy your order and look forward to your next visit to 
+or a branch in your area.
+Order number <span class="no-link">#%increment_id</span>
+DOWNLOAD YOUR ORDERED FILES HERE.
+Your downloads (eBooks, coupons) can be found after completion of payment (this may take a few minutes) in the 
+My orders
+PAYMENT:
+E-MAIL ADDRESS:
+THE SHIPMENT IS CARRIED OUT BY:
+ADRESSE:
+Apply Discount Code
+Enter discount code
+Apply Discount
+Cancel coupon
+results
+Payment
+Please specify a shipping method.
+Save Address
+Rating:
+%1 finish reading this book
+%1 people wants to read it
+%1 people reading this book
+Serial number does not match to the standard
+Show more
+Show less
+No value matching the search <b>%s</b>.
+Search (%s)
+Bundle Widget
+Bundle for widget
+It's banner in menu?
+Bundle Image Alt
+Alt for bundle image
+Bundle Image Title
+Title for bundle image
+Double Bundle Widget
+First bundle for widget
+Second bundle for widget
+Menu Banners CMS Block
+Menu Products CMS Block
+Connect ReadRate reviews
+Visible on
+Editorial Products
+Sort Products By Category
+Rendering products regarding chosen category
+Products Count
+Set products amount by category to display (show one item if not chosen)
+Editorial Title
+Editorial Description
+Pocketbook Top Slider For Products
+Show First Banner
+Choose to show or not first product slide
+Insert product url for first slide
+Product Background Desktop Image
+Choose background desktop image for first slide
+Bundle Alt
+Alt for background image
+Title for Bundle Image
+1 Show Slide
+Choose to show or not product slide
+1 Slide Product
+Insert product url for slide
+1 Slide Product Title
+Title for product slide
+1 Slide Product Background
+Choose background desktop image for slide
+1 Slide Alt
+Alt for product slide
+1 Slide Image Title
+Title for 1 Slide Image
+2 Show Slide
+2 Slide Product
+2 Slide Product Title
+2 Slide Product Background
+2 Slide Alt
+2 Slide Image Title
+Title for 2 Slide Image
+3 Show Slide
+3 Slide Product
+3 Slide Product Title
+3 Slide Product Background
+3 Slide Alt
+3 Slide Image Title
+Title for 3 Slide Image
+4 Show Slide
+4 Slide Product
+4 Slide Product Title
+4 Slide Product Background
+4 Slide Alt
+4 Slide Image Title
+Title for 4 Slide Image
+5 Show Slide
+5 Slide Product
+5 Slide Product Title
+5 Slide Product Background
+5 Slide Alt
+5 Slide Image Title
+Title for 5 Slide Image
+6 Show Slide
+6 Slide Product
+6 Slide Product Title
+6 Slide Product Background
+6 Slide Alt
+6 Slide Image Title
+Title for 6 Slide Image
+7 Show Slide
+7 Slide Product
+7 Slide Product Title
+7 Slide Product Background
+Choose bundle background desktop image for slides
+7 Slide Alt
+7 Slide Image Title
+Title for 7 Slide Image
+8 Show Slide
+8 Slide Product
+8 Slide Product Title
+8 Slide Product Background
+8 Slide Alt
+8 Slide Image Title
+Title for 8 Slide Image
+9 Show Slide
+9 Slide Product
+9 Slide Product Title
+9 Slide Product Background
+9 Slide Alt
+9 Slide Image Title
+Title for 9 Slide Image
+10 Show Slide
+10 Slide Product
+10 Slide Product Title
+10 Slide Product Background
+10 Slide Alt
+10 Slide Image Title
+Title for 10 Slide Image
+Category Products Slider
+FAQ List
+Question text 1
+Answer text 1
+Question text 2
+Answer text 2
+Question text 3
+Answer text 3
+Question text 4
+Answer text 4
+Question text 5
+Answer text 5
+KNV
+Server Configuration
+FTP Host
+Username
+Directory
+Libreka
+Import Filenames
+Name Of The File With All Books
+Name Of The File With Deleted Books
+Name Of The File With New Books
+Name Of The File With Updated Books
+Manage Payment options
+Read Rate
+BOOKS AND OTHER CONTENT
+Title
+Number of Products to Display
+Cache Lifetime (Seconds)
+86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.
+Category for product listing
+Last item for product listing
+Details
+More Information
+Partners
+Komsa
+FTP Credentials
+Host
+Arrow Link Banner
+Link 1
+Display name
+Link url
+Link 2
+Link 3
+One Img Link Banner
+Banner Image
+Choose image for banner
+Promo Banner
+Banner alt
+Banner image title
+Content
+Follow
+Pocketbook
+SendGrid
+Authentication
+API Key
+Send Method
+Port
+Email Settings
+Default subject
+From Name
+Sending Address
+Reply Address
+Categories
+Template
+Unsubscribe Group
+Statistics Settings
+Add New Cart
+Send Carts
+Are you sure you wan't to send emails to selected items?
+Are you sure you wan't to delete selected items?
+Enable
+Enable Cart
+Are you sure you wan't to enable selected items?
+Disable
+Disable Cart
+Are you sure you wan't to disable selected items?
+ID
+Created
+Modified
+Send Quotes
+Customer
+Items count
+Items Qty
+Custom URL
+Menu Banner
+Banner 1 Image
+Banner 1 Alt
+Alt for banner 1
+Banner 1 Image Title
+Title for banner 1 image
+Banner 1 Link
+Banner Link
+Banner 2 Image
+Banner 2 Alt
+Alt for banner 2
+Banner 2 Image Title
+Title for banner 2 image
+Banner 2 Link
+Thank you
+Addresses
+Add Device
+Forgot Your Password
+Language
+© 2017 Content Management SA. All rights reserved.
+Weak
+Minimum of different classes of characters in password is 3. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.
+Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored.
+Your password reset link has expired.
+Please enter a valid email address (Ex: johndoe@domain.com).
+items'
+items
+
+Help and support
+Contacts
+For partners
+Terms, Conditions and privacy policy
+Return policy
+Oops! We're sorry.
+About PocketBook
+The website
+is an offer from:
+The use of our website is usually possible without providing personal information. As far as on our sides personal data (for example name, address or eMail addresses) are raised, this takes place, as far as possible, always on freiwilliger basis. These data will not be disclosed to third parties without your explicit consent.
+Find shop
+Search a store
+What kind of memory card does the device support?
+The device supports the cards in micro SD format. Maximum storage capacity is 32 GB, optimal speed class is from 2 to 10. Please be careful when inserting the card that the card enters the slot, as shown in the full version of the user manual. Please insert the card when the device is turned off and disconnected from the PC.
+Where can I find the password for TTS packets?
+The installation file for a TTS package must have the PBI extension. The file you downloaded probably has the ZIP format. We recommend downloading this file to PC via Google Chrome or Mozilla Firefox with Windows operating system.
+This is an arrow link 1
+This is an arrow link 2
+This is an arrow link 3
+Test description
+Benefits of linking readrate account to pocketbook go here.
+Activities that you perform on Pocketbooks.com are now synced with your Readrate account.
+Mon. 9.00-17.00 Accessible from the
+German landline (free)
+Attention: no information
+about repair and shipment status
+On selected titles
+Shop the best books on sale now!
+Bestseller of the week
+Christmas gift ideas
+Noir books for you
+Editorial Pick Title
+Descriptive and optional paragraph
+Customer Login
+Create New Customer Account
+Account Dashboard
+Add New Address
+Upload your content
+See all orders
+By Genre
