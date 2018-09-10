@@ -1,0 +1,11 @@
+
+Meeting 2 Exercises covered in this module: ( Завдання які я виконав у цьому модулі )
+===========================================
+
+Rewrite the sales/order model to add the customer group model as an email template variable in the sendNewEmail() method,
+so the group code can be added to the email using {{var customer_group.getCode()}}.
+
+Create an observer that redirects the visitor to the base URL if the CMS home page URL key is accessed directly (i.e. /home -> /)
+
+Create a dinamic rewrite of the payment/data helper only if the version of Magento is older then version 1.4,
+and if ccsave payment option is enabled for the current store.

@@ -1,0 +1,38 @@
+<config>
+    <global>
+        <models>
+            <sales>
+                <rewrite> <!-- це ключове слово для реврайту класа -->
+                    <order>Mcd_Meeting02_Model_Sales_Order</order> <!-- це я заоверайдив цю модельку /app/code/core/Mage/Sales/Model/Order.php Якби мені треба було оверайднути клас який знаходиться не зразу в папці Sales а в підпапці, то тег би називався <order_folder>  і так само я б його викликав Mage::getModel(sales/order_folder) -->
+                </rewrite>
+            </sales>
+            <mcd_meeting02> <!-- Це наскільки я зрозумів - скорочення - цей запис буде до слеша Mage::getModel(mcd_meeting02/...). Тобто щоб не писати Mcd_Meeting02_Model, пишу mcd_meeting02 і замість нього підставиться Mcd_Meeting02_Model -->
+                <class>Mcd_Meeting02_Model</class> <!-- Вова казав що ця секія для того щоб маджента бачила файли по шляху, який я тут вказав. Щоб працювала ця логіка, що йде спочатку нава модуля, потім слеш, назва файла у якому буде клас, який це буде обробляти (назва підпапок буде розділятись андерскорами ('module/folder_subfolder')) -->
+            </mcd_meeting02>
+        </models>
+        <events>
+            <controller_front_init_before>
+                <observers>
+                    <mcd_meeting02>
+                        <type>model</type>
+                        <class>mcd_meeting02/observer</class>
+                        <method>controllerFrontInitBefore</method>
+                    </mcd_meeting02>
+                </observers>
+            </controller_front_init_before>
+        </events>
+    </global>
+    <frontend> <!-- То що тут написано, буде спрацьовувати тільки на фронті. Але в мене нерацюють чомусь у секції фронтенд, працює тільки якщо перенести у глобальну арію -->
+        <events> <!-- Створюю обсервер який буле ловити івент 'controller_action_predispatch'. Цей івент викликається кожний раз при загрузці сторінки -->
+            <controller_action_predispatch_cms_page_view> <!-- назва івента, який я буду ловити. _cms_page_view динамічно створюється коли маджента перебирає роути і підставляє _cms_page_view до 'controller_action_predispatch' -->
+                <observers>
+                    <mcd_meeting02> <!-- Назва обсервера довільна. Рекомендуться називати назвою компанія_модуль щоб не путатись. Тобто тег <mcd_meeting02> буде зустрічатись у цьому файлі всюди, де використовується цей шлях. Наприклад вище я використав цей тег для перезапису моделі, там теж є цей тег <mcd_meeting02>. Якщо буду приписувати конфіги для блока, то теж бажано використовувати цей тег <mcd_meeting02>  -->
+                        <type>model</type> <!-- Тут я вказую, що обсервер буде знаходитись у папці модуя Model. Це не обовязковий параметр.  Замість model тут може бути disabled(тоді обсервер буде відключений), або object. Якщо тип не вказувати, то сформується обєкт сінглтон, а якщо вказати model або object, то завжди буде створюватись чистий обєкт -->
+                        <class>mcd_meeting02/observer</class> <!-- Клас, який буде викликатись. Зерху я вже писав, що mcd_meeting02 - це Mcd_Meeting02_Model. Тобто замість mcd_meeting02, підставиться Mcd_Meeting02_Model і в результаті получиться Mcd_Meeting02_Model_Observer. До цього класу я і буду звертатись -->
+                        <method>controllerActionPredispatchCmsPageView</method> <!-- Метод, який буде викликатись -->
+                    </mcd_meeting02>
+                </observers>
+            </controller_action_predispatch_cms_page_view>
+        </events>
+    </frontend>
+</config>
