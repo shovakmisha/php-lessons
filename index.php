@@ -27,4 +27,5 @@
 	/* Вывод данных */
 	echo $front->getBody();
 
+
 	// phpinfo();
