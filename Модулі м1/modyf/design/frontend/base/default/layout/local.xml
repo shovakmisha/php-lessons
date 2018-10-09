@@ -1,0 +1,9 @@
+<layout version="0.1.0">
+    <helloworld_index_index>
+        <reference name="root">
+            <block type="page/html" name="catalog.customer.name" output="toHtml" template="simple_page.phtml">
+                <block type="customer/form_register" name="customer_form_register" template="customer/form/register.phtml"/>
+            </block>
+        </reference>
+    </helloworld_index_index>
+</layout>

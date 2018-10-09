@@ -1,0 +1,37 @@
+<?php
+
+namespace Training\Shop\Helper;
+
+use Magento\Framework\UrlInterface;
+
+class Url extends \Magento\Framework\App\Helper\AbstractHelper
+{
+
+    /**
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
+     * Url constructor.
+     * @param UrlInterface $urlBuilder
+     */
+    public function __construct(UrlInterface $urlBuilder)
+    {
+        $this->urlBuilder = $urlBuilder;
+    }
+
+
+    public function getShopsUrl() {
+        return $this->urlBuilder->getUrl('shop');
+    }
+
+    /**
+     * @param $code
+     */
+    public function getShopUrl($code) {
+        return $this->urlBuilder->getUrl('shop/index/view', ['code' => $code]);
+    }
+
+}
+

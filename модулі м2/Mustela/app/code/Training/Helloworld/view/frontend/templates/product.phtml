@@ -1,0 +1,10 @@
+<?php
+
+/** @var \Training\Helloworld\Block\Product $this */
+$product = $this->getCurrentProduct();
+
+?>
+
+<p><?= $this->escapeHtml( $product->getId() ); ?>  </p>
+<p><?= $this->escapeHtml( $product->getSku() ); ?> </p>
+<p><?= $this->escapeHtml( $product->getName() ); ?></p>

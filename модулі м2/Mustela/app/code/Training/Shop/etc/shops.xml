@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Training/Shop/etc/shops.xsd">
+    <shop code="sh01" name="Shop 1" city="Kyiv" address="1 Street" state="open" />
+    <shop code="sh02" name="Shop 2" city="Kyiv" address="1 Street" state="closed" />
+</config>

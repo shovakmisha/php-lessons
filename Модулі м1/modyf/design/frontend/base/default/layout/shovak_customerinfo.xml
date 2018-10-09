@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<layout>
+    <catalog_product_view>
+        <reference name="right">
+            <!--block type="core/template" name="catalog.customer_info" before="catalog.compare.sidebar" template="shovak_customerinfo/info.phtml">
+                <block type="core/text" name="catalog.customer_info.name" as="name">
+                    <action method="setText">
+                        <text>NAME!!!</text>
+                    </action>
+                </block>
+            </block Це стандартний type="core/template" Залишу його щоб знати що і з стандартними класами блоків можна працювати і виводити інфу   -->
+
+            <block type="shovak_customerinfo/customer_name" name="catalog.customer_info" before="catalog.compare.sidebar" template="shovak_customerinfo/info.phtml">
+                <block type="core/text" name="catalog.customer_info.name" as="name">
+                    <action method="setText">
+                        <text>NAME!!!</text>
+                    </action>
+                </block>
+            </block>
+
+            <block type="core/text" name="catalog.customer_infon.welcome_msg" as="welcome_msg" before="catalog.compare.sidebar">
+                <action method="setText">
+                    <text helper="shovak_customerinfo/data/getCustomerWelcomeMessage" />
+                </action>
+            </block>
+
+        </reference>
+
+        <reference name="head">
+            <action method="addJs"><script>smile/customerinfo/hello.js</script></action>
+        </reference>
+
+
+
+        <!-- це теж робочий функціонал. Спочатку видалення, потім перезаписування блока remove name="catalog.customer_info" />
+        <reference name="catalog.customer_info">
+            <block type="core/text" name="catalog.customer_info.lastname" as="name">
+                <action method="setText">
+                    <text>NAME!!!</text>
+                </action>
+            </block>
+        </reference-->
+
+    </catalog_product_view>
+    <customer_logged_in>
+        <remove name="catalog.customer_info"/>
+    </customer_logged_in>
+</layout>

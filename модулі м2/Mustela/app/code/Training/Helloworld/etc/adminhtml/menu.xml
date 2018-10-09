@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+
+        <add
+            id="Training_Helloworld::hello"
+            title="Hello"
+            module="Training_Helloworld"
+            resource="Training_Helloworld::hello"
+            sortOrder="10"
+        />
+
+        <add
+                id="Training_Helloworld::hello_world"
+                parent="Training_Helloworld::hello"
+                title="Hello World"
+                module="Training_Helloworld"
+                resource="Training_Helloworld::hello_world"
+                action="training_helloworld/index/index"
+                sortOrder="10"
+        />
+
+    </menu>
+</config>

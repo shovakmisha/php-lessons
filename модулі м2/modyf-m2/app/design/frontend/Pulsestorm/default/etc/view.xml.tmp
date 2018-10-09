@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <image id="bundled_product_customization_page" type="thumbnail">
+                <width>140</width>
+                <height>140</height>
+            </image>
+            <image id="cart_cross_sell_products" type="thumbnail">
+                <width>152</width>
+                <height>188</height>
+            </image>
+            <image id="secondary_image_cross_sell" type="secondary_image">
+                <width>152</width>
+                <height>188</height>
+            </image>
+            <image id="cart_page_product_thumbnail" type="small_image">
+                <width>110</width>
+                <height>160</height>
+            </image>
+            <image id="checkout_success_product_thumbnail" type="small_image">
+                <width>132</width>
+                <height>127</height>
+            </image>
+            <image id="category_page_grid" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="secondary_image_category_page_grid" type="secondary_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="category_page_list" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="secondary_image_category_page_list" type="secondary_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="customer_account_my_tags_tag_view" type="small_image">
+                <width>100</width>
+                <height>100</height>
+            </image>
+            <image id="customer_account_product_review_page" type="image">
+                <width>285</width>
+                <height>285</height>
+            </image>
+            <image id="customer_shared_wishlist" type="small_image">
+                <width>113</width>
+                <height>113</height>
+            </image>
+            <image id="gift_messages_checkout_small_image" type="small_image">
+                <width>75</width>
+                <height>75</height>
+            </image>
+            <image id="gift_messages_checkout_thumbnail" type="thumbnail">
+                <width>100</width>
+                <height>100</height>
+            </image>
+            <image id="mini_cart_product_thumbnail" type="thumbnail">
+                <width>124</width>
+                <height>124</height>
+            </image>
+            <image id="new_products_content_widget_grid" type="small_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="secondary_image_new_products" type="secondary_image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="new_products_content_widget_list" type="small_image">
+                <width>270</width>
+                <height>270</height>
+            </image>
+            <image id="new_products_images_only_widget" type="small_image">
+                <width>78</width>
+                <height>78</height>
+            </image>
+            <image id="product_base_image" type="image">
+                <width>265</width>
+                <height>265</height>
+            </image>
+            <image id="product_comparison_list" type="small_image">
+                <width>140</width>
+                <height>140</height>
+            </image>
+            <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_medium" type="image">
+                <width>440</width>
+                <height>440</height>
+            </image>
+            <image id="product_page_image_small" type="thumbnail">
+                <width>95</width>
+                <height>95</height>
+            </image>
+            <image id="upsell_products_list" type="small_image">
+                <width>300</width>
+                <height>246</height>
+            </image>
+            <image id="secondary_image_upsell" type="secondary_image">
+                <width>300</width>
+                <height>246</height>
+            </image>
+            <image id="related_products_list" type="small_image">
+                <width>300</width>
+                <height>246</height>
+            </image>
+            <image id="secondary_image_related" type="secondary_image">
+                <width>300</width>
+                <height>246</height>
+            </image>
+            <image id="swatch_image" type="image">
+                <width>280</width>
+                <height>280</height>
+            </image>
+        </images>
+    </media>
+    <vars module="Magento_Catalog">
+        <var name="gallery">
+            <var name="navdir">vertical</var>
+            <var name="arrows">false</var>
+            <var name="navarrows">false</var>
+            <var name="maxwidth">440</var>
+            <var name="maxheight">440</var>
+        </var>
+        <var name="breakpoints">
+            <var name="mobile">
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                </var>
+                <var name="options">
+                    <var name="options">
+                        <var name="nav">dots</var>
+                        <var name="arrows">true</var>
+                    </var>
+                </var>
+            </var>
+        </var>
+    </vars>
+    <exclude>
+        <item type="directory">IWD_StoreLocator::js</item>
+    </exclude>
+</view>

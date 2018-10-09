@@ -1,0 +1,10 @@
+<?php
+
+namespace Training\Helloworld\Api\Config;
+
+interface EchoShow
+{
+
+    public function getInf();
+
+}

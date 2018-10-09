@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ *
+ */
+-->
+<config>
+    <modules>
+        <Shovak_Customerinfo>
+            <version>0.1.0</version>
+        </Shovak_Customerinfo>
+    </modules>
+
+    <global>
+        <blocks>
+            <shovak_customerinfo>
+                <class>Shovak_Customerinfo_Block</class>
+            </shovak_customerinfo>
+        </blocks>
+        <helpers>
+            <shovak_customerinfo>
+                <class>Shovak_Customerinfo_Helper</class>
+            </shovak_customerinfo>
+        </helpers>
+    </global>
+
+    <frontend>
+        <layout>
+            <updates>
+                <shovak_customerinfo>
+                    <file>shovak_customerinfo.xml</file>
+                </shovak_customerinfo>
+            </updates>
+        </layout>
+    </frontend>
+</config>

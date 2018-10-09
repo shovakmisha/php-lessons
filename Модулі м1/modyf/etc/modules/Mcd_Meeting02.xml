@@ -1,0 +1,11 @@
+<!--
+    Це мій перший модуль, створений на м1. Цей файл для того щоб активувати модуль. По аналогії з другою маджентою registration.php
+-->
+<config>
+    <modules>
+        <Modyf_Meeting02>
+            <active>false</active>
+            <codepool>local</codepool>
+        </Modyf_Meeting02>
+    </modules>
+</config>

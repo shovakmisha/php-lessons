@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config"> <!-- Тепер тег конфіг у хмл-ці не буде ерорити. Тобто на даний у хмл-ці я можу писати тільки тег <config> і все -->
+        <xs:complexType> <!--  Це говорить про те що цей тег, який буде внутрі тега config, буде тегом комплекного типу - complexType -->
+            <xs:sequence> <!--  Вова сказав що цей тег для того щоб внутрі тега config можна було створювати декілька тегів (shop) -->
+                <xs:element name="shop" type="shopDeclaration" minOccurs="1" maxOccurs="unbounded"/> <!-- Тут я написав, що внутрі тега config, можна створити тег shop.   -->
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueShopCode"> <!-- Це для того щоб атрибут code у кожному у тезі shop мав уныкальні атрибути, але чото не работає. по ходу це так работає, що не буде помилки при одинакових атрибутах, просто візьметься останній -->
+            <xs:selector xpath="shop" />
+            <xs:field xpath="@code" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="shopDeclaration"> <!-- у shop( томму що вiн має трибут shopDeclaration) мають бути обовязковы наступні атрибути -->
+        <xs:attribute name="code" type="xs:string" use="required" /> <!--  -->
+        <xs:attribute name="state" type="stateDeclaration" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="address" type="xs:string" use="required" />
+        <xs:attribute name="city" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="stateDeclaration" final="restriction"> <!-- Значення у атрибута stateDeclaration можуть бути або open or closed. final="restriction" Це схоже на фынальны методи в класі, тобто його не можна змінювати (навіть схемам, які будуть наслідувати цю схему) -->
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="open" />
+            <xs:enumeration value="closed" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

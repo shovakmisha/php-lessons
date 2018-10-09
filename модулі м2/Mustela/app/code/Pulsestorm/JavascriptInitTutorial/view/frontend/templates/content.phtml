@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Здесь мы создаем программу RequireJS с зависимостью одного модуля
+ *
+ * Через рекваєр затягую собі цей файл app/code/Pulsestorm/JavascriptInitTutorial/view/frontend/web/example.js
+ *
+ */
+
+?>
+
+
+<script type="text/javascript">
+    requirejs(['Pulsestorm_JavascriptInitTutorial/example'],function(example){
+        alert("Loaded");
+        console.log(example);
+    });
+</script>

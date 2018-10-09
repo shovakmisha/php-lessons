@@ -1,0 +1,798 @@
+
+mysho93@Smile
+
+Sigipsr+2015
+
+
+
+michael-shovak
+shovakmisha93@gmail.com
+
+sudo docker exec -i swatch_trunk_mysql mysql -uroot -proot swatch_eu < swatch_eu_staging_dump_20170120.sql
+
+svn diff --changelist <changelist_name> >> <diff_name>.txt
+
+diff_591614_1_updatedCustomPageV2
+
+svn diff diff_591614_1_updatedCustomPageV2.txt
+
+update smile_setup_file set status = "finished" where file_id = "33";
+
+php /var/www/mustela/bin/magento smilesetup:execute --file_id=242
+
+
+loftscool - Англійська
+
+066 102 44 07 - вітя
+
+
+https://pr-225-5qq6k2a-kxhik5lcoiuh4.eu.magentosite.cloud/index.php/products.html
+myshoatsmile-fr
+
+ Q34oqcfdEUFAw6E1Hozz - token gitlab
+
+
+https://thehost.ua/wiki/import-dump - експорт, імпорт бд
+mysql -u 50five -p50five 50five < /home/smile/50DEv.sql - імпорт
+mysqldump -umodyf-m2 -p modyf-m2 > /home/smile/modyf-m2.sql - експорт
+php bin/magento indexer:reindex
+
+ - Коли я роблю в контейнері ( хочу перенести базу наприклад ), то фейл файл(базу), треба експортувати в контейнер, тому що він не буде бачити папки, які не в контейнері, так як це окрема система
+
+/etc/init.d/redis-server restart
+/etc/init.d/cron stop
+
+ У файлі group_vars/all  свойство delivery_authorized_smile_users має мами мій логін (mysho)
+
+select * from core_config_data where path like '%base%url%';
+update core_config_data set value="http://50five.lxc" where path="web/unsecure/base_url" and config_id=1; 
+update core_config_data set value="https://50five.lxc" where path="web/secure/base_url" and config_id=2;
+	- update core_config_data set value = 'http://domainname/' where path = 'web/unsecure/base_url';
+	- update core_config_data set value = 'http://domainname/' where path = 'web/secure/base_url';
+
+
+ - https://github.com/azat-io/you-dont-know-js-ru/blob/master/up%20%26%20going/ch2.md
+
+ - Есть четыре правила того, как устанавливается this
+
+<meta http-equiv="X-UA-Compatible" content="IE" />  - загуглити
+
+https://www.youtube.com/watch?v=BJO1IuLmaQw
+https://www.youtube.com/watch?v=1lk8fWNRzi4
+https://www.youtube.com/watch?v=nBTF3QBqlmM
+https://www.youtube.com/watch?v=0toq8HsNKfA
+https://www.youtube.com/watch?v=p-Sdyj9qnmY
+https://www.youtube.com/watch?v=e2zXsRE0ick
+https://www.youtube.com/watch?v=yu-vxQNaXKs
+
+
+ - http://devdocs.magento.com/guides/v2.2/frontend-dev-guide/themes/debug-theme.html - дивити в якому файлі, який модуль
+ - у папці lib переписуються компоненти jquery ui
+
+
+Головна сторінка експлорера - аксесабіліті
+Головна сторінка київстара з ефектами наїзжання сторінки на сторінку аксесабіліті
+
+https://habrahabr.ru/post/311350/ - тут є якась йнфа про корзину в магенті і про транслейти
+https://habrahabr.ru/post/312322/ - інструкція по першій мадженті
+
+
+
+var b = {
+    bar:function(){
+        //...
+    }
+
+}
+UiClass = requirejs('uiClass');
+
+// class NewClass extends uiClass
+var NewClass = UiClass.extend(b);
+
+// class AnotherNewClass extends NewClass
+var AnotherNewClass = NewClass.extend({});
+
+var object = new NewClass;
+object.bar();
+
+
+ sudo service varnish restart - у контейнері під рутом
+ /etc/varnish/projectname.vcl
+ збільши connect_timeout до 15
+
+ | probe
+     timeout до 15
+
+ |
+ /etc/init.d/varmish restart
+
+
+
+sqlite це не сервер, це бібліотека, тим паче 1 файл
+
+
+ smile.ukraine.it+bstack1@smile.fr / 5PhJDHYf7y7zy33H
+ smile.ukraine.it+bstack2@smile.fr / HU3jq9DuB512EBqn
+ 
+
+ https://www.digitalocean.com/community/questions/using-sendmail-in-digitalocean-ubuntu-server
+ https://developernote.com/2017/10/configuring-sendmail-with-gmail-relay-on-ubuntu-16-04/
+ https://neoblogs.net/2013/04/19/bazovaya-ustanovka-i-nastrojka-sendmail-na-ubuntu-server/
+
+
+ в штормі, нажимаєш на лампочку і коментується код
+ Можна перезаписати сторінку, вказавши в контролері xml атрибут brfore"свій контролер"
+ https://sohabr.net/habr/post/180555/
+
+ https://www.youtube.com/watch?v=Q4Bhn9e0yxk
+ https://www.youtube.com/watch?v=grxFGwj1i4M&list=PLgPJX9sVy92x0IfsB1iIXt286LSn1kQ_j&index=2
+
+ echo $this->helper('Magento\Checkout\Helper\Cart')->getItemsQty();
+ 
+
+ В принципі можна написати код і в example.js і викликати його скріпті без спецатрибута, вказавши залежність. Але тоді кнокаут не ініціалізується
+	- <script type="text/javascript">    
+		requirejs(['Pulsestorm_JavascriptInitTutorial/example'],function(example){..
+
+ Маженто має 2 параметри у ф-ції var mageJsComponent = function(config, node) - config - це config ("#one": { "Pocketbook_Checkout/js/test":{"config":"value"}}), а node це дом елемент (у даному випадку елемент з айді #one)
+ Кавички теж можуть грати роль - <div data-mage-init='{"Pulsestorm_JavascriptInitTutorial/example": {"another":"example"}}'>A single div</div>
+ 1) кнокаут працює тыльки коли загружена сторінка
+ 2) data-bind="template" - можна звязати декілька параметрів. <div id="one" data-bind="template:{'name':'hello-world','data':first}"></div> 
+	- Алан написав внизу скріпт і айдішкою звязав name - 'name':'hello-world' - <script type="text/html" id="hello-world">
+	- 'data':first він звязав у скріпті var viewModelConstructor = function(){ this.first = { theTitle:ko.observable("Hello World"),  ...
+ 3) requirejs(['Magento_Ui/js/lib/ko/initialize'], function(){    //your program here });
+
+ 3) Алан звязував phtml i html без js в app/code але в мене не вдалось
+
+ 4) Коли я написав <script text/x-magento-init> ініціалізується RequireJS module (Magento_Ui/js/core/app), викликається ф-ція, яка повертає цей модуль, і объект данных цього файлу (цього модуля по ходу. Сам цей компонент Object {config:"value"} ) Модуль Magento_Ui / js / core / app RequireJS - это модуль, который создает экземпляры моделей KnockoutJS для использования с атрибутом scope. Хоча може не тільки для scope
+
+ 5) По ходу js файл виступаэ в ролы модельки. Формально скріпт модна викликати і без модельки, але вона всерівно має бути нативна хоча б 
+	#File: vendor/magento/module-ui/view/base/web/js/lib/ko/initialize.js - Я не знайов цей файл
+		define([
+		    //...
+		    './bind/scope', - це по ходу свойство обєкта, яке вказує по чому звязуються моделька і вюшка
+		    //... ],
+	<li class="greet welcome" data-bind="scope: 'customer'"><span data-bind="text: customer()... ( Це я викликав ф-цію customer. Вона викличеться і для потомків цього тега )"></span></li>
+	- Вверху я написав, що викликав ф-цю customer(), але скоріш за все, я тільки звязав її з викликом, який я описав нижче. Цей код з кастомером - це нативний ф-ціонал мадженти, який оприділяє чи користувач зареєстрований. Типу внизу я викликав модельку кастомера, записав її у RequireJS, і в цьому файлі я вже бачу цю модельку і можу її так викликати data-bind="text: customer()
+	<script type="text/x-magento-init">
+		{
+		    "*": {
+			"Magento_Ui/js/core/app": {
+			    "components": {
+				"customer": { - Я не зрозумів яким чином викликається кастомер, якщо це свойство а не обєкт. Можливо таким синтаксисом працює кнокаут. Алан писав, що такий виклик рівнозначний цьому - var ViewModelConstructor = requirejs('Magento_Customer/js/view/customer'); var viewModel = new ViewModelConstructor; viewModelRegistry.save('customer', viewModel);
+				    "component": "Magento_Customer/js/view/customer"
+				}
+			    }
+			}
+		    }
+		}
+	</script>
+		
+
+
+
+
+https://inviqa.com/blog/categories/technical-tutorials
+
+ 
+
+ <item name="component" xsi:type="string">uiComponent</item> uiComponent - це скорочення для app/code/Magento/Ui/view/base/web/js/lib/core/collection.js (імя, залежності, шлях до скріпта)
+
+ можна задати в xml, який буде використовуватись модуль скріпта
+	 <item name="children" xsi:type="array">
+	    <item name="errors" xsi:type="array">
+		<item name="sortOrder" xsi:type="string">0</item>
+		<item name="component" xsi:type="string">Magento_Ui/js/view/messages</item>
+		<item name="displayArea" xsi:type="string">messages</item>
+	    </item>
+	</item>
+	- This displayArea attribute refers to the region in getRegion. So if I wanted the progressBar component to render instead in the messages region for example (which is a region also defined in onepage.html), we could simply change the value of displayAreafrom progressBar to messages and the component would render within the messages getRegion foreach instead.
+	- Щоб передвинути компонент, треба вказати порядковийй номер <item name="sortOrder" xsi:type="string">0(ставити який хочу, навіть число з мінусом)</item>
+
+
+ html файли знаходяться по такому самому шляху як phtml, тільки у папці web. По цьому принципу кнокаут їх і шукає
+
+
+main_website_store
+
+ Додати атрибут до продукту - https://magecom.net/attributes-and-attribute-set-planning-creation-in-magento-2/
+ https://magento.stackexchange.com/questions/110531/get-product-attribute-in-cart-in-magento2
+
+ $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $product = $objectManager->get('Magento\Catalog\Model\Product')->load('10');
+    echo $product->getAttributeText('book_type');
+
+
+https://stackoverflow.com/questions/46391102/get-magento-2-custom-attribute-value
+
+
+ Супермаркет (slow)
+
+
+<?php
+                $crossSellProducts = $product->getCrossSellProducts();
+                foreach ($crossSellProducts as $crossSellItem){
+	                // echo $block->getProductData($crossSellItem->getId());
+
+                    // echo 555;
+	                //$crossSellProduct->getVisibility();
+                }
+            ?>
+
+https://alanstorm.com/category/programming-quickies/
+
+ Плагін before Буде у папці модуля Plugin І метод його в залежності від потреби - буде називатись beforeMethodName, afterMethodName, aroundMethodName
+
+ https://magento.stackexchange.com/questions/134338/i-want-to-customize-my-minicart-in-magento-2-i-need-to-add-3-attributes - редагувати кнокаут мінікорзини, через плагін
+ https://mage2.pro/t/topic/905 - Як рендериться мінікорзина
+ http://joxi.ru/D2P90yZidGk4DA
+
+ <?= $block->getReviewsSummaryHtml($relatedProduct, "short", true) ?>
+
+ На проді index.php знаходиться не в src а в pub. По ходу pub і буде сайт, так як туди все генерується. Але я не розумію як воно працює з сімлінками у цій папці
+ сетап апгрейд проходиться по модулях ы установлюэ їх
+ У Вови на уроці був хак як поправити щоб шлях до xsd у хml-ках не херився (у самому вверху підсвічується червоним)
+
+ Website - колекція сторів
+	- Store - у кожного стора може сути свої продукти, налоги, доставки, валюти ... указуэться до якого Website він належить
+		- Store view - в основному тут указується мова сайту. В основному на сайті 1 Website 1 Store і декілька Store view
+
+ папки
+	- app - файли в цый папці не мають пекеджів у композері
+	- app/code - файли в цій папці це вже неймспейси. Типу Сatalog. Наприклад буде модуль app/code/Pocketbook/Catalog - до нього можна буде достукатись за адресою - hostname/catalog (але треба це прописати в контролері)
+	- dev - для тестів, юніт тестів
+	- bin - зпускатор - чистит кеші, апгрейдить і тд
+	- lib - для модулів, для яких у композері не має пакетів. У папці вендор всі модулі з коробки установлені через композер, а сюди поставились ті, які не можуть установитись через нього. Якшо я хочу добавити модуль у якого не має пакета в композері, то його треба сюди добавити
+	- var - временні файли. Логи і тд
+ 	- vendor/module - ядро мадженти. тут всі модулі з коробки.
+	- Module-name/Congig - для роботи з xml-ками. читати, записувати.
+	- Module-name/Console - кожен модуль може предоставляти команди, якы можна запустити через bin magento... їх записувати сюди
+	- Module-name/Cron
+	- Module-name/etc
+	- Module-name/etc/module.xml - Я зрозумів що тут треба вказувати від якого модуля буде залежати мій модуль, я не зрозумів у чому це виражається
+	- Module-name/Rewrite
+
+ AbstractProduct.php
+ di.xml - dependenci injection. Вова казав, що це щось типу rest, soap. Тут так як усюди. глобальний маэ менший приорытет як той що  у папці frontend
+ app/etc/env.php - вын перезаписуэться кожен раз коли є шось нове. тут інфа про сайт взагальному. про кеші, креди ...
+
+
+ - Впродакшн моді, файли не генеруються в папку pub. Тож їх треба згенерувати в девелоп мод, а потім це все перевести в продакшн мод
+ - conf/nginx/vhost.conf - тут задаэться мод мадженти. По умолчанію дефолтний(якщо ніякий не вказаний), але він трохи дивний 
+
+ - У мадженті контролер работає з модельками і вюшками. Вюшка з лейаутом, а лейаут має доступ до модельки
+ - Кожен модуль має робити конкретну задачу і ніяк інакше. Каталог значить каталог
+
+ - В мадженті Контролер і його екшни розділені по різних файлах. Для кожного екшна треба створювати отдільний клас з методом execute, який буде виконуватись коли спрацює конкретний екшн. Маджента шукає клас який має назву потрібного контролера і метода і виконає метод execute, який знаходиться в цьому класі. З контролерами все стандартно. Якщо нічого не вказано, наприклад у модулі app/code/Pocketbook/Catalog він буде папку Controller, у ній файл контролера index.php з класом class Index, і метод(екшн) index(){}
+	- Голий контролер Index наслыдуэться від Action (use Magento\Framework\App\Action\Action; class Index extends Action) в якого вже є метод execute(){}
+
+
+
+ https://www.youtube.com/watch?v=9I4EWJX31gU&index=5&list=PL50JfAsLeXpC-UYFYmUInKYCuDCBt0ewX
+
+
+
+
+ Editor/file adnd code templates - сныпети для файлыв як у Вови. Він казав шо вони всі є у файлі прикріпленого до відео
+
+
+
+http://joxi.ru/V2VbKoXU0bLe52
+
+ /etc/init.d/elasticsearch restart
+
+
+
+
+ у модельці зазвичай бізнес логіка(getName(), getId(), getPrice(), calculatePrice()), але якщо там є методи для роботи з базою(зберегти, видалити елемент(save(), load(), delete(), insert()), це шаблон(патерн) Active Record, хоча це і порушує принцип що клас має виконувати конкретну задачу або описувати поведінку одного обєкта. У Паші прямо в конструкторі було це підключення ( __constructor(PDO $db) ), але я не зустрічав таких записів у 2-й мадженті
+
+ до Вови
+
+	- Нахер додавати Factory вкінці? ! Вова казав що коли треба обэкт (ексемпляр цього класа), то треба просити Фабрику. Мабуть це для того щоб потім в Блоці не писати Class->create->....
+
+ ssh smile@mustela.lxc 
+ cd var/www/mustela
+ php bin/magento smilesetup:execute-all
+
+
+ - pocketbook ssh 
+	ssh -A -t smile@venus.smile-magento.com ssh smile@10.203.0.34
+
+	SELECT entity_id FROM catalog_product_entity WHERE type_id = 'configurable';
+
+
+
+
+ Якщо файл знаходиться на сервері, який знаходиться на материнському сервері, то спочатку треба зайти на материнський сервер через sftp - sftp smile@venus.smile-magento.com І по ходу там вже будуть файли, які є на дочірніх. Можливо і ні, але перед тим Рома вводив тільки команду ssh -A -t smile@venus.smile-magento.com sftp(Якщо пыдключитись, то ssh, але якщо скачати, то sftp) smile@10.203.0.34 - і навряд вона скачала файл
+ 	- І щоб взяти файл - команда - get pocketbook-07-05-2018.sql
+	- Потім Рома видалив файл з материнського серверу, тож це ламає мою теорію, що файли дітей є на материнському сервері
+
+ - scp smile@one-106.nebula.instance:/var/www/pocketbook/current/composer.lock /home/shovak - скачати файл з сервера через ссш
+
+
+ 567632813595393
+ c90e1b6993be0f3241d43cdde9c4e249
+
+ http://pocketbook-dev.smile-magento.com/privacy-policy-cookie-restriction-mode
+ http://pocketbook-dev.smile-magento.com/search/term
+ http://pocketbook-dev.smile-magento.com/
+
+
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy
+bin/magento setup:static-content:deploy -f de_DE
+
+composer flush-cache
+composer clearcache
+
+sudo rm -rf pub/media/catalog/product/cache
+
+
+https://www.mageplaza.com/install-magento-2-extension/
+
+ підтвердження пошти при регістріції через соціалки
+
+
+ https://www.classyllama.com/blog/custom-product-types-magento-2
+ https://nwdthemes.com/2017/12/19/magento-2-product-image-size/
+
+
+ Запрос іде в контролер, це передається в лейаут, а алейаут створює блок, який в свою чергу створює модельки
+ У першій мадженті точно треба було вказувати клас який я створив у конфігах, наприклад хелпер або модельку
+
+
+
+ https://www.cookiebot.com/?gclid=EAIaIQobChMI4_eKno7E2wIVl5QYCh2spQVcEAAYASAAEgLAg_D_BwE
+ https://ffwagency.com/digital-strategies-blog/start-stop-and-restart-varnish-mac
+
+ https://mage2-blog.com/magento-2-get-all-attributes-of-product/
+
+
+ресайз
+продукт кеш
+кеш клын
+Додати продукт к вышлыст з корзини
+перезагрузити сторынку
+
+
+ додати скріпт з іншого модуля - "toggleInput": var config = {
+						    "map": {
+							"*": {
+							    "toggleInput": "Pocketbook_Theme/js/toggle-input"
+							}
+						    }
+						};
+
+
+public function test(\Magento\Catalog\Model\Product $product)
+    {
+        return $product->getAttributeText('book_type');
+        // return $product->getResource()->getAttribute('book_type')->getSource()->getOptionText($product->getData('book_type'));
+
+    }
+
+
+
+На деві теж є ця помилка при створенні продукту, але в адмінці 
+
+echo $block->getStoreProductById($product->getId())->getAttributeText('book_type');
+
+ У вышлысты бага з скріптом
+
+
+ http://joxi.ru/5mdgM6EfkkwqRr- продук не в категорії E-reader
+ http://joxi.ru/Dr8RE7kC44Bn92 - продук не в категорії E-reader
+
+http://joxi.ru/bmoEVXwuxxZoDA
+ http://joxi.ru/Y2Lz0oWi993Jkr
+ http://joxi.ru/VrwElJwuOOBRl2
+
+
+<?php
+/**
+ * Pocketbook Catalog E-reader attributes update
+ *
+ * @author    Tetiana Lebed <teleb@smile.fr>
+ * @copyright 2018 Smile
+ */
+
+/** @var Pocketbook\Catalog\Setup\InstallSetup $this */
+/** @var Magento\Framework\Setup\ModuleDataSetupInterface $setup */
+
+$setup->startSetup();
+$this->addExecutionMessage('Pocketbook_Catalog - Update ereaders attributes START');
+
+$this->addExecutionMessage('Pocketbook_Catalog - Update ereaders attributes END');
+
+$setup->endSetup();
+
+php bin/magento i18n:collect-phrases -o "/home/smile/es_ES.csv" /var/www/pocketbook/app/code/Pocketbook/ConnectorCatalog/
+
+
+
+
+
+19
+
+
+INSERT INTO `core_config_data` (`config_id`, `scope`, `scope_id`, `path`, `value`) VALUES (NULL, 'default', '0', 'admin/security/password_is_forced', '0');
+
+
+
+ <referenceContainer name="page.top">
+            <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div" htmlClass="top-container"/>
+            <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        </referenceContainer>
+
+/home/shovak/pocketbook/pocketbook/app/design/frontend/Pocketbook/pocketbook/Magento_Catalog/web/js/product/breadcrumbs.js
+
+
+ - Подивити як я плагінував блок на Покетбуці
+ public function afterSetLayout(\Magento\Catalog\Block\Product\View $subject, $result) { - справа в тому що метода SetLayout тут \Magento\Catalog\Block\Product\View не існує
+        $subject->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class); - і що це тут я зробив
+
+змінились креди до http авторизації:
+
+https://pocketbook-dev2.smile-magento.com/contact?00
+SMILE_HTTP_AUTH_PASSWORD     OmMoh1bC0nYh     
+SMILE_HTTP_AUTH_USER     pocketbookdev
+
+pp2 cluster:
+
+http://pocketbook-pp2.smile-magento.com/
+HTTP auth: pocketbookpp2loadbalancer / xSEhvoboR4Ix
+
+https://codepen.io/msha-showak/pen/VBaomQ
+
+Попробувати зробити свою розшоряючу хмл-ку, щоб модуль брав з неъ конфіги 
+
+ Подивити. Може апішка створювалась для того щоб модуль міш звязатись з хмлками. Вова казав з конфігами
+
+ https://inchoo.net/magento-2/setup-scripts-magento-2/
+
+
+
+
+
+
+
+ 0 - відключити See all ( поправити те що Коробчук скидав )
+ 0 - перевірити регістрацію і social login i 1 click 
+ 	- Перевірити чи 1 клік добавляє товар в корзину ( якщо у продукта не вибрана тип книжки, то просто  перекидує на пеймент, не додавши продукт ) 
+ - Сторынка Вішліста ерориь - Але на базі з дева ні. Принаймні не всюди
+ - При переходы в карзину, була якась помилка. Вроді через 1 клік на сторінці продукту, але це не точно 
+
+
+
+ - При добавленні продукта з вішліста в корзину, на сторінці корзини, перекидує на категорі пейдж - Не репродюситься
+
+
+ - плесходдер на вішлісті не работає для ебуків так як там виводиться не так як всюди
+
+ - Як ви оприділяєте аудіо
+
+
+
+
+
+
+ https://www.youtube.com/watch?v=LqQ_fAQq1Vo
+
+
+
+ 1) Кросели тыльки у ерідерів. Тепер додаються у пхтмл
+ 2) аудіо і ебуки у мінікорзині додаються скріптом - виправляю
+
+
+ по поводу maildev: 
+
+ если письмо отправлено с фронт сервера, то смотреть здесь: http://pocketbook-dev2-front1.smile-magento.com/maildev/ (pocketbookdev2front1 / 9n2v7LYvCBtJ)
+ если письмо отправлено с бекенд сервера, то смотреть здесь: http://pocketbook-dev2-back1.smile-magento.com/maildev/ (pocketbookdev2back1 / NtO0z1draixA)
+
+ 
+ 1 клік не работає, треба вибрати тип продукту. Попробувати зробити так, що редіректити тільки в тому випадку, якщо товар точео додався в корзину
+ Fixed - При добавленні аксесуарів в корзину, карт пейджа ерорить
+ Бредкрамси так всерівно глючать
+
+ Видалити код, де лінка see all з релейтедів ховається - Вроді вже там щось профіксили
+
+ contact us те саме
+ 
+
+ Не зберыгаэться продукт на чистый базі. В адмінці треба поставити чекбокси в Product in Websites
+
+ DELETE FROM `catalog_product_entity` LIMIT 20000; - видалити продукти з бази
+
+ product_status
+ 
+
+ 7 54
+
+
+ Помітив зранку багу з 1 клік ( для конфурейбл продуктів, якщо не вибрати жодного типу продукту, роблю  щоб 1 клік не спрацьовував  )
+
+
+ data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{"checkoutUrl":"<?= /* @escapeNotVerified */ ($block->getCustomerDeliveryPostcode()) ? $block->getCheckoutUrl().'#shipping_address_step' : $block->getCheckoutUrl().'#shipping'; ?>"}}'
+
+
+http://joxi.ru/vAWzZoxi1Knje2
+
+
+
+https://pocketbook-pp2.smile-magento.com/de_de/schlussel-17.html?options=cart
+
+
+
+ Додати чекбокс на реыстер пейдж
+ На сторінці продукту, якщо э блок зрівнення, то верстка летить на іе
+
+
+
+ https://pocketbook.lxc/de_en/catalog/product/view/id/145281/s/inselruhe/category/28557/
+ 
+
+
+
+ /home/shovak/pocketbook/pocketbook/app/design/frontend/Pocketbook/pocketbook/Pocketbook_Theme/web/css/source/_lists.less - 55
+
+
+ - 5096
+	- https://pocketbook.lxc/de_de/checkout/#shipping - Flat Rate - Fixed - З адмінки змінив
+	- http://joxi.ru/Grq79BwUQ8P3a2 - Ці 3 слова не переклав. Еластік дуже навантажує сторінку і вона не грузиться
+		- Screen resolution - Bildschirmauflösung
+		- Display size - Display-Größe
+		- Unique properties - Einzigartige Eigenschaften
+	- Free Shipping не переклав - З адмінки перекладається
+	-  Support Center - Не переклав
+	- E-mail Campaign - http://joxi.ru/823BK83UJ5Y74m - не зробив
+	- Payments - http://joxi.ru/8Ank9Nwijn46Dr - не зробив
+
+	
+
+
+
+
+
+ 
+
+-----------------------------------------------
+ You need to choose options for your item.
+ Support Center
+ You are signed out
+ Did you mean next query
+ Product Name
+----------------------------------------------
+
+
+
+
+
+
+ /home/shovak/pocketbook/pocketbook/app/code/Pocketbook/Customer/Controller/Readrate/Save.php - З цього файла не має перекладів на англійську, тільки на німецьку
+ /home/shovak/pocketbook/pocketbook/app/code/Pocketbook/Customer/Controller/Readrate/Unlink.php - З цього файла не має перекладів на англійську, тільки на німецьку
+
+
+
+
+
+
+
+
+ http://joxi.ru/eAOz1oKixDkwp2
+
+
+
+ На персонал арії круто роблять бредкрамси. Можливо знадобиться
+
+
+
+ You did not sign in correctly or your account is temporarily disabled.
+Thank you for registering with Germany Store.
+
+
+
+
+ $.mage.__('Serial number does not match to the standard')
+
+ https://codeforces.com/?locale=ru
+
+ атрибут contenteditable html
+
+
+ Профайлер - скыльки часу затрачено на код - загуглити. В xdebug є свій профайлер, але не знаю чи він ок
+ xdebuder - маэ класну штуку - condition. Поставити брекпоінт, ПКМ condition. Він використовується зазвичай в циклах. Наприклад йде цикл від одного до 10, і якщо я в кондішні поставив лічильнику 5, то коли цикл дійде до пяти, дебагер виведе що в цій змінній на даний момент. Хоча код кондішна можна використовувати як хочу і писати туди будь який код.
+
+ музыка из игр
+
+  $categories = $this->categoryCollection->create()
+                ->addAttributeToFilter('entity_id', ['in' => $categoryIds])
+                ->addAttributeToSelect('is_ereader')
+                ->getItems();
+
+ 
+    /**
+     * Set category_id value by attribute is_ereader
+     * $categoryAttribute is attribute is_ereader
+     *
+     * @param string $categoryAttribute
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function setCategoryIdByAttribute($categoryAttribute)
+    {
+        $categories = $this->categoryCollectionFactory->create()->addAttributeToSelect($categoryAttribute)->getItems();
+        $ereaderEntityId = [];
+
+        foreach ($categories as $category) {
+            if ( $category->getData($categoryAttribute) ){
+                $ereaderEntityId[] = $category->getData('entity_id');
+            }
+        }
+
+        $categoryId = $this->categoryCollectionFactory->create()
+            ->addAttributeToFilter('entity_id', ['in' => $ereaderEntityId])
+            ->setPageSize(1)
+            ->getFirstItem()
+            ->getData('entity_id');
+        $this->setData('category_id', $categoryId);
+    }
+
+ - https://blog.mdnsolutions.com/magento-2-create-product-attributes-and-options-programmatically/ - редагування атрибуту продукту - Головне знати що файл Catalog/Setup/InstallSetup.php це $this для апдейт файлів. У файл InstallSetup.php пишу методи фкі мені треба використовувати в апдейт файлах, а вже в апдейт скріптах викликаю ці методи
+ - $this->eavSetup->updateAttribute(\Magento\Catalog\Model\Product::ENTITY, 'format', 'frontend_input', 'swatch_text', '90'); - Апдейтнути тип атрибуту з дропдауна на Текст свотч
+	- Хоча і ця діч вроді має канати, але не канала: $attributeData['option'] = $this->addExistingOptions($attribute); - поставити ті опшини цьому фатрибуту що вже є в нього
+							$attributeData['frontend_input'] = 'select';
+							$attributeData['swatch_input_type'] = 'visual';
+							........ Ну і далі записувати всі, які хочу змінити
+							$attribute->addData($attributeData);
+        						$this->attributeRepository->save($attribute); - Занести дані в базу
+
+ - Там базовий функціонал. Цей модуль слідкує за зареєстрованими користувачами і видаляє їх по великому рахунку, зберінає інформацію в xml, яка в нас э про користувача. 
+ - Якщо треба розписати детальніше як він працює, скажи, я десь розписував Ромі його функціонал
+ - Я установив його (при заливці на дев з композером були конфлікти, Андрій допомагав вирішити ), перевірив чи працює функціонал, який написаний в його документації (працює) і стилізував. Це все
+ - Я ще оновлював його до до новішої версії, там теж треба було підправити. На даний момент у нас не остання версія цього модуля. Він оновлюється раз в місяць приблизно. Останні зміни я не стягував. Встановлена версія працює нормально
+
+
+
+
+
+- Подивити, яку інформацію ми будем зберігати, можна перейшовши на лінку у цьому вікні " Customize the use of your personal data"
+
+- В адмінці можна подивити, чи користувач згодився або не згодився на збереження - http://joxi.ru/YmEzDoji0BvEP2 або AdminPanel > Customers > Customer Consents
+    - Також можна подивити це у файлі, який користувач може завантажити собі - Personal Area > Download My Personal Data. Уцьому файлі є вся інформація про нього які ми маєм. Щоб подивити ви він згодився чи ні треба знайти у цьому файлі строчки <consents><consent><status>Allowed(Disallowed)</status><consent><consents>
+ 2) Завантажити дані, які ми маєм на користувача, можна з сторінки Personal Area > Download My Personal Data. Інтервал між завантаженнями задається в адмінці. 
+ 3) Видалитись користувач може, перейщовши в Personal Area і клацнути на лінку delete your account. На сторінці профілю користувача, користувач може відмінити своє рішення (Вверху буде повідомлення - Your account will be deleted soon. You can cancel your deletion request.)
+
+- У адмінку прийде сповіщення про те, що якиїсь користувач хоче видалити свій акаунт - AdminPanel > Customers > Deletion Requests
+
+
+https://www.youtube.com/watch?v=KBA5F_41fVc
+
+
+https://stackoverflow.com/questions/43200169/how-to-use-simple-product-images-for-configurable-product-images
+
+
+http://joxi.ru/EA4LvxOiwqwjKA
+
+
+арбівір
+
+add()adwirtaisement - реклама
+ash - попіл
+
+
+ Провірити вішліст
+
+
+
+
+
+https://magento.stackexchange.com/questions/225370/magento-2-2-4-breadcrumbs-do-not-show-on-product-pages-when-default-navigation - по бредкрамсах. але я не тестив чи це вирфшить проблему
+
+
+<?php if ($columnIterator == 1): ?>
+                        <?php $column->setItem($item); echo $column->toHtml($item);?>
+                        <div class="wishlist-product-detail">
+                    <?php elseif ($columnIterator == count($columns)): ?>
+                        </div>
+                        <?php $column->setItem($item); echo $column->toHtml($item);?>
+                    <?php else: ?>
+                        <?php $column->setItem($item); echo $column->toHtml($item);?>
+                    <?php endif; ?>
+                    <?php $columnIterator++ ?>
+
+
+
+ 
+ 1) Тільки 1 бандл додається в корзину 
+ 2) app/design/frontend/Pocketbook/pocketbook/Magento_Checkout/templates/success.phtml - Саксес пейджа покупки
+ 3) Провірити сторінку ордерів (І сторінку ордерів і сторінку в персонал арії)
+ 4) Провірити картинку на продукт пейджі
+ 5) !!!!!!!! На деві Провірити вю ордера - https://pocketbook.lxc/de_en/sales/order/view/order_id/8/
+ 6) https://pocketbook.lxc/de_en/pocketbook_customer/books/
+ - Після розлогування користувач може зайти в профіль
+ 
+  
+
+ - Провірити бандл на різних сторінках
+
+ - https://alanstorm.com/layouts_blocks_and_templates/ - У цій статті шторм розказував про лейаути і там був метод який виводить всі блоки на сторінці або з всієї теми
+
+ - http://www.jslint.com/- утіліта для провірки скріпта, який правильно написаний синематично але не правильно скомпільований. Наприклад js пробує вгадати де ставити крапку з комою, якщо вони не поставлені
+
+
+
+
+
+ 1) У першій статті Шторм створював різні контролери і екшни - https://alanstorm.com/magento_controller/
+ 2) core_resource - у цій таблиці маджента хранить модулі і їх версії. Шторм писав що якщо версія модуля не оновлюється, треба видалити його з цієї таблиці і оновити сторінку. Мав би загрузитись вже новий 
+ 3) Помимо звичайних апгрейд файлів, у м1 є ще такий файл - mysql4-install-0.1.0.php - nbge 0.1.0 - це версія модуля що указана в конфігах модуля. Якщо його мінити, то буде як з апгрейд файлами - коли маджента бачить що файл змінився, запустить скріпт який оновлює базу
+	- mysql4-upgrade-0.1.0-0.1.1.php - так виглядають апгрейд файли. Я помітив що префікс всіх такий як і у версії модуля - 0.1.0
+	- Шторм теж рекомендує видалити модуль з таблиці core_resource і перезагрузити сторінку щоб перевірити що на сервері буде все ок
+ 4) У файлах конфігів є прописана таблиця бази даних, але Алан поки не розказував що навіщо це
+	<global>
+		<models>
+		    <customer>
+		        <class>Mage_Customer_Model</class>
+		        <resourceModel>customer_entity</resourceModel>
+ 5) Алан розказував про оверайди базових класів - https://alanstorm.com/magento_class_abstration_autoload/
+ 6) Mage::Log($variable); - кине в логи те що мены треба. Алан розказував про це детальніше (де це конфігурується і що робити якщо повідомлення не зявляються в логах)
+	- https://alanstorm.com/magento_log_and_developer_mode/
+ 7) https://alanstorm.com/magento_model_generation/ - Тут Алан розказував про скидочний купон в корзині або просто скидку (я так і не догнав що конкретно)
+ 8) $etc_path = Mage::getBaseDir('etc'); - Так правильно треба звертатись до файлів. Замість etc може бути будь яка папка
+	- Mage::getBaseDir('base'); - початкова директорія де лежать файли мадженти (index.php, app, ...)
+	- В конструкторі класа Mage_Core_Model_Config_Options можна подивити до яких папок можна звертатись через цей метод. В принципі їх досить щоб знайти будь який файл. Цей клас можна знайти якщо клацнути по методі getBaseDir()
+	- Можна канешно і через __FILE__ шукати, але це не дуже хороший варіант
+	- Mage::getModuleDir('', 'Mage_Core'); - Знайде шлях до папки яку мені треба модуля який мені треба ( Mage::getModuleDir('etc', 'Mage_Core'); Mage::getModuleDir('controllers', 'Mage_Core');  Mage::getModuleDir('sql', 'Mage_Core'); - цей метод береться з app/code/core/Mage/Core/Model/Config.php class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
+ 9) Кеші для лейаутів працюють так - що XML-файлы Layout объединяются один раз, а затем дерево кэшируется, поэтому их не нужно снова объединять
+ /media/upload - Тут скоріш за все м
+ 10) Не забувати що Контролери в папці controllers не включені в автолоад (скоріш за все тому що імя папки не з великої букви)
+ 
+ 11) По ходу навіть якщо помилка знаходиться в try catch, вона всерывно буде в логах 
+ 12) При ініціалізації, Мадженто створює свій власний обработчик помилок.
+	- Розробники мадженти робили надстройку тільки для помилок вищого рівня (error_reporting(E_ALL & ~E_NOTICE);). і взалежності від мод режимма (девелоп, продакшн) ці помилки показуються чи пишуться в логи
+ 	- mageCoreErrorHandler() - ця ф-ція - це надстройка над обработчиком помилок пхп від мадженти. Вона визначить тип помилки. Тут по ходу і визначається що якщо девелоп мод, кидає помилку, а інакше кидає в логи - $errorMessage .= ": {$errstr}  in {$errfile} on line {$errline}"; - текст помилки
+		if (Mage::getIsDeveloperMode()) {
+		    throw new Exception($errorMessage);
+		} else {
+		    Mage::log($errorMessage, Zend_Log::ERR);
+		}
+	- Розробники мадженти стараються писати код який не буде викликати фатальні помилки. Стараються писати так щоб в помилки були не фатальні, що були вищого рівня для того щоб ними можна було управляти кастомними обработчиками помилок. Наприклад перед тим як викликати виконання обсервера, маджента подивить чи цей метод взагалі існує. Якщо не існує і я в девелоп моді, викине помилку, якшо в продакшн взагалі Нічого робити не буде ( _callObserverMethod() )
+ 13) Як працюють переклади -  слова в __('слово') проходять метод __(''), и используются в качестве ключей для поиска фактической строки, которая должна отображаться. 
+	- src/app/code/core/Mage/Core/Model/Translate.php - _addData() - У цьому методі можна переписати приорітети транслейтів по модулях. Тут вирішується звідки брати переклад, з глобального файлу чи з файлу модуля. Також тут вроді є та бага про яку Вова казав, що якщо включений девелоп мод, переклади можуть працювати не вірно - https://alanstorm.com/magento_exception_handling_developer_mode/
+ 14) В Magento БОЛЬШИНСТВО ОБЬЕКТОВ, (Модели, Блоки), в конечном счете наследуются от класса Varien_Object - lib/Object/Varien.php
+	- Благодаря тому, что все ваши объекты определенного типа имеют общий предок, вы можете писать методы, общие для всей вашей базы кода.
+	- Якщо я пишу метод, який починається на get..., а його не існує, то спрацює магічний метод __call(), який спробує дістати ці дані з Varien_Object якщо вони там є. Наприклад є метод getIsDefault(), а його не має - то цей метод переобразиться в Varien_Object::getData('is_default');
+	- Те саме з set, uns, has
+	- Это означает, что все обращения к волшебным геттерам и сеттерам фактически являются обертками для методов getData и setData объекта.
+	- По ходу метод getData() витягне з обєкта ті ключі, які були неправильно установлені через якиїсь set метод. Типу цей сет метод перетворився в getData(). Хоча на рахунок цього в мене є сумніви так як метод getData() хранить в собі овер 30 різних атрибутів ппродукта (якщо я звертаюсь до обєкта продукта)
+ 15) в php є функціонал у якому покажеться всі функції які були викликані до цього. і файли у яких були ці ф-ції. Приблизно так - function a() { b(); } 
+																  function b() { c(); } 
+																  function c(){ debug_print_backtrace();}
+																  a();
+	- Якщо debug_print_backtrace не підходить, то загуглити якусь іншу ф-цію ( debug_backtrace )
+ 	- Завдяки цьому я можу взнати що за метод був викликаний, що викликав __call() який в свою чергу викликав setData()
+		- Але якщо дивити повний список усіх методів по проекту, які викликали getData() то їх буде дуже багато. Алан використовував кондішни, щоб уточнити який метод і в якій строці викликаний був метод - public function setData($key, $value=null) { 
+		if($key == 'created_at (ключ або імя метода без букви set)' && get_class($this) == 'Modyf_Catalog_Model_Product') {
+			Mage::Log("Setting the key " . $key . " on a " . get_class($this) ); - this - це імя класа з якого був викликаний метод
+
+
+
+
+
+
+
+ https://sebweo.com/ru/magento-dlya-php-mvc-razrabotchikov-rasshirennyj-orm-eav-ch-6-11/ EAV magento
+ - https://devdocs.magento.com/guides/m1x/magefordev/mage-for-dev-1.html - Офіційна дока по першій мадженті
+ - https://magento.com - пошукати тут ще якісь статейки, або відоси
+ 
+
+
+https://www.youtube.com/watch?v=0fAncKaJelk
+
+
+
+ Диви - найшов статтю - https://help.ubuntu.ru/wiki/%D1%88%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%B2%D1%81%D0%B5%D0%B3%D0%BE_%D0%B4%D0%B8%D1%81%D0%BA%D0%B0
+	1) http://joxi.ru/5mdgM6Efk5lKgr , http://joxi.ru/Dr8RE7kC4EqyD2
+	2) http://joxi.ru/D2PzQoZipxNaNr - Тут вводити пароль під яким заходу в гівлаб?
+
+ 
+ 

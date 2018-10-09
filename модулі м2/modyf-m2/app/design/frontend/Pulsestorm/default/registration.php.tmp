@@ -1,0 +1,15 @@
+<?php
+/**
+ *
+ * Location app/design/frontend/Atwix/custom/registration.php
+ *
+ * @author Atwix Team
+ * @copyright Copyright (c) 2016 Atwix (https://www.atwix.com/)
+ * @package Atwix_Customtheme
+ */
+
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::THEME,
+    'frontend/Pulsestorm/default',
+    __DIR__
+);

@@ -1,0 +1,29 @@
+<?php
+/**
+ *
+ * @category    Shovak
+ * @package     Shovak_Customerinfo
+ * @copyright
+ * @license
+ */
+/* @var $this Shovak_Customerinfo_Block_Customer_Name */
+?>
+<?php 
+$_helper = $this->helper('catalog/product_compare');
+$_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
+?>
+<div class="block block-list block-compare">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('Shovak info') ?></span></strong>
+    </div>
+
+    <div class="block-content">
+        <p class="empty"><?php echo $this->getChildHtml('name') ?></p>
+        <br>
+        <p class="empty"><?php echo $this->getChildHtml('welcome_msg') ?></p>
+        <br>
+        <p class="empty"><?php echo $this->getCustomerName(); ?></p>
+        <br>
+        <p class="empty"><?php echo $this->escapeHtml(Mage::getSingleton('customer/session')->getCustomer()->getName()); ?></p><p class="empty"><?php echo $this->escapeHtml(Mage::getSingleton('customer/session')->getCustomer()->getName()); ?></p>
+    </div>
+</div>

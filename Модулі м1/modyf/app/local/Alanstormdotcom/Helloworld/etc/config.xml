@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Alanstormdotcom_Helloworld>
+			<version>0.1.0</version>
+		</Alanstormdotcom_Helloworld>
+	</modules>
+	<global>
+		<models>
+			<!-- standard model section -->
+			<roimagic>
+				<class>Companyname_RoiMagic_Model</class>
+			</roimagic>
+			<!-- new checkout section -->
+			<checkout>
+				<rewrite>
+					<cart>Companyname_RoiMagic_Model_Cart</cart>
+				</rewrite>
+			</checkout>
+		</models>
+	</global>
+	<frontend>
+		<routers>
+			<helloworld>
+				<use>standard</use>
+				<args>
+					<module>Alanstormdotcom_Helloworld</module>
+					<frontName>helloworld</frontName>
+				</args>
+			</helloworld>
+		</routers>
+	</frontend>
+</config>
