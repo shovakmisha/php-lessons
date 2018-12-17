@@ -1,0 +1,423 @@
+
+
+
+------------------------ Реквест флоу ------------------------
+
+ 1) У мадженті є нативний функціонал, який пропускає всі запроси через index.php Це робиться в адмінці (Вова показував), але тоді в адресній строці висвічується index.php. Це трохи не красиво, тому він відключений і на проектах міняють налаштування в htaccsess (Вова показував). Ну це я так зрозумів
+
+	- А Ваова казав що в адмінці можна налаштувати реврайти. Якщо реврайти виключені, то index.php буде висвічуватись в адресній строці і ф-ція getUrl() буде повертати разом з адресою сайту і index.php
+
+ 1) Вова розбирав index.php
+	- Якщо не має файла '/app/Mage.php', маджента перенаправить користувача на папку у якій з якої йде установка мадженти - header("Location: downloader"); А якщо є то маджента інклюдить цей файл
+		
+		- У файлі /app/Mage.php у перших строчках априділяється як буде працювати автолоадер
+
+		- Після того як у файлі Mage.php маджента оприділилась з приорітетами кодпулів, інклюдтиться файл "Varien/Autoload.php"; запускається ф-ція register, яка назначає ф-цію autoload() - автолоадером класів. Всі загружені класи, маджента хранить у змінній(масиві) _arrLoadedClasses
+
+		- Ну або якщо у файлі includes/config.php, розкоментовані нижні строчки, то замість стандартного автолоадера, підключиться цей, сторонній. І в ф-ції autoload() загружені класи будуть складуватись у змінну(масив) у першому кондішні - if ($this->_isIncludePathDefined) { $classFile =  COMPILER_INCLUDE_PATH . DIRECTORY_SEPARATOR . $class; }. Вова казав що ці строчки розкоментуються якщо включити в мадженті якиїсь її компілятор в адмінці. Якщо його включити, то в папці includes? зявиться папка src, в яку будуть складуватись всі файли класів. Ну не прям всі. Вова казав що можна знайти цей файл компілятор і подивити які класи він загружає
+
+		---- Алан ----  Компілятор покращує производительность --- 
+		У мадженти є свій компілятор. Вона збарає всі файли класів в одну папку і складає туди всі файли. Назви файлів будуть такі як і назви класів у цих файлах.
+			- Щоб це зробити вручну, є команда - cd shell; php compiler.php compile . Воно складе всі файли в папку includes/src
+
+			- Після цієї команди маджента зразу переходить в режим у якому вона буре класи з includes/src.
+ 
+			- І компілятор після цієї команди включений. Щоб його виключити - php compiler.php disable і маджета вже буде брати класи по нормальному з кодпулів. Але файли в includes/src залишаться
+			- Щоб видалити скомпільовані файли, є комана - php compiler.php clear - Ця команда також відключить режим компілятора
+
+			- Коли Компілятор включений, розкоментовуються строки в файлі includes/config.php #define('COMPILER_INCLUDE_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'src');
+											  #define('COMPILER_COLLECT_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'stat');
+			- Запуск сценария из другой папки, кроме тої же знаходиться папка shell, всегда будет сообщать о том, что режим компилятора отключен.
+
+			- Якщо будуть добавлятись нові класи, тркба буде перезапустити компілятор. Новые классы не будут включены в скомпилированную папку include/src, но их конфигурации (и события) будут включены в систему.
+
+			- В автолоадері і є ця ф-ція що заміняє такі класи Module_Folder_File на шлях до цього файлу
+		-----------------------------
+
+ 2) В index.php є провірка чи існує файл maintenance.flag Вова казав що цей на ті випадки коли сайт знаходиться у стані розробки. Типу користувач заходить на сайт, а я ставлю перевірку, якщо файл maintenance.flag існує, користувача перекине на сторінку помилки 503. Сторінки помилок знаходяться в папці errors, а цей файлик треба буде удалити після того як захочу щоб сайт работав
+ 
+ 3) Developer mode маэ проблеми з перекладами. Якщо на проді тект не добре перекладається, перше що треба перевірити чи сайт не в девелоп моді, можливо забули перевести в продакшн мод
+ 
+ 4) Одна Маджента може крутити декілька доменів. В index.php є код /* Store or website code */ Вова точно не сказав, але мабуть зінній $mageRunCode треба буде присвоїти домени, а $mageRunCode присвоїти стори
+ 
+ 5) В файлі index.php запускається ф-ція run в першому блоці try цієї ф-ції можна сказати що прохотидь весь цикл Мадженти. В кінці і на початку цього блоку є профайлери
+	- А якщо звести до мінімуму, то це строчка - self::$_app->run(... у файлі app/Mage.php $_app - Це клас Mage_Core_Model_App. Цей клас описує повне прилеженіє мадженти, через нього йде вся робота
+ 
+ 7) Першою строчкою у методі run(), йде виконання метода start() - Varien_Profiler::start('mage'); У цій строчці автолоадер і почне свою роботу. Varien_Profiler - це буде перший клас який він загрузить і покладе в масив свій.
+
+ 8) Далі в ф-ції run() йде код self::$_app = new Mage_Core_Model_App(); Автоладер загружає цей клас, потім створюється обєкт з цього класу і потім присвоюється змінній $_app
+
+------- Алан https://alanstorm.com/magento_config_tutorial/ --------
+
+ - Перед self::$_app->run( ... є строчка - self::_setConfigModel($options); ( це у файлі app/Mage.php )
+	- У цьому методі є строчка - self::$_config = new Mage_Core_Model_Config($options); - Здесь создается глобальная конфигурация Magento. и это объект, который будет использоваться для загрузки и взаимодействия с файлами конфигурации XML Magento. Тобто через цей обєкт Маджента працює з xml-ками
+
+		- На скільки я зрозумів, цей клас саме для роботи з конфігураційними хмл. Для лейаутів він не підійде
+
+		- Класс Mage_Core_Model_Config расширяет класс Mage_Core_Model_Config_Base
+
+		- Клас Mage_Core_Model_Config_Base расширяет класс Varien_Simplexml_Config
+		
+		- Varien_Simplexml_Config - является общим классом для работы с файлами конфигурации XML
+
+--------------------------------------------------------------------
+
+ 9) Далі йде виконання виконання строчки коду $_app->run(...
+
+	- baseInit () ( файл app/code/core/Mage/Core/Model/App.php )
+		- $this->_initEnvironment() - йде базова ініціалізація ( встановлення часу, дістаються/задаються конфіги з Mage.php самі базові(вебсайт, стор, кеш)) - Але по коді я бачу тільки
+ встановлення часу
+		- $this->_config = Mage::getConfig(); - встановлюються базові конфіги з файлу Mage_Core_Model_App
+
+----------- Алан https://alanstorm.com/magento_config_tutorial/ -------------
+		- $this->_config = Mage::getConfig(); - У цьому файлі теж є змінна _config і вона візьме дані з змінної _config у файлі app/Mage.php . Тобто змінні _config з цих двох файлів будуть ссилатись на один обєкт Mage_Core_Model_Config. Зміни в змінній $_config в файлі app/code/core/Mage/Core/Model/App.php повліяють на змінну $_config у файлі app/Mage.php так як вони ссилаються на 1 обєкт
+-----------------------------------------------------------------------------
+			
+		- $this->_initBaseConfig(); - Завантажуються тільки прямі чайлди xml з app/etc/.  app/etc/local.xml ( базові конфігурації наскільки я зрозумів з коду ) i app/etc/config.xml (наскільки я зрозумів з коду тут підключення до бази, редіс, шляхи до папок, мова, таймзона... Також по коду я побачив що завантажується модуль Mage_Core). Помім ці xml-ки зливаються в 1 файл. Тобто теж базова кофігурація
+
+----------- Алан https://alanstorm.com/magento_config_tutorial/ -------------
+		- $this->_config->loadBase(); - Це перший метод, який починає працювати з конфігами xml мадженти. Він знаходиться в класі Mage_Core_Model_Config ( app/code/core/Mage/Core/Model/Config.php )
+ Це він загружає ці 2 базові хмл-ки. Наприклад тут є метод loadFile() через який він їх загружає.
+
+			- Не так важливо, але можливо знадобиться. Метод loadBse() має строчку $etcDir = $this->getOptions()->getEtcDir(); $etcDir - у цій змінній буде шлях до app/etc. Кароче тут є метод 
+getOptions(); Він поверне змінну $_options з класа конфігів Mage_Core_Model_Config. А конфіги ці тянуться ще з файла index.php Mage::run($mageRunCode, $mageRunType, тут третім параметром можуть іти опшини); Потім у методі run() є строчка self::_setConfigModel($options(це ті опшини які передались у файлі index.php) );
+				- У методі self::_setConfigModel($options) є строчка - self::$_config = new Mage_Core_Model_Config($options);
+				- А у конструкторі класа Mage_Core_Model_Config є строчка - $this->_options = new Mage_Core_Model_Config_Options(Сюди передаються опшини);
+				- Тобто змінна $_options у класі конфігів хранить у собі ті опшини які їй передались у файлі index.php
+
+
+		- return $this->loadString($fileData, $this->_elementClass); loadString() - створює SimpleXML обєкт з переданої xml-ки конфігів
+
+			- Тут є строчка - $xml = simplexml_load_string($string, $this->_elementClass(Varien_Simplexml_Element)); simplexml_load_string - це нативна ф-ція пхп, Интерпретирует строку с XML в объект. 2-м параметром вказується від якого класа буде створюватись обєкт. У мадженті всі роботи з конфігураційними xml-ками мають йти через маджентівські обєкти. У методі loadString() йде перевірка, чи хмл-ка яку я передав є інстансом Varien_Simplexml_Element ( if ($xml instanceof Varien_Simplexml_Element) ). Скоріш за все взагалі всі конфігураційні хмл-ки мають проходити цю перевірку, а не тільки ці 2 стандартні конфіги
+
+			- У цьому методі є строчка $this->_xml = $xml; А враховуючи то, що це клас Mage_Core_Model_Config від якого наслідуються всі класи конфігів, змінна $_xml буде хранитись у всіх класах які обробляють xml-ки конфігів
+
+		- У класі Mage_Core_Model_Config_Base ( Він екстендиться від Varien_Simplexml_Config (в цьому класі є свойство $_elementClass = 'Varien_Simplexml_Element'  ) ), у конструкторі, свойство _elementClass переоприділяється ($this->_elementClass = 'Mage_Core_Model_Config_Element';). Класс Mage_Core_Model_Config_Element екстендиться від Varien_Simplexml_Element ( тож умова if ($xml instanceof Varien_Simplexml_Element також буде проходити і метод loadString() не викине ексепшн ). Mage_Core_Model_Config - через цей клас маджента працює з xml - ками. А він наслідується від Mage_Core_Model_Config_Base. Тож получається така ситуація, що коли я буду створювати свій кастомний обєкт для роботи з хмл-ками, він вже не буде працювати з тими даними, з якими працює самий базовий клас. Тобто я створю обєкт з Mage_Core_Model_Config і йому по наслідству передасться метод loadString(). Але обєкт на основі якого створиться моя xml-ка буде вже не Varien_Simplexml_Element, а Mage_Core_Model_Config_Element
+
+		- На даний момент я у файлі #File: app/code/core/Mage/Core/Model/Config.php у методі loadBase() заходжу у цикл while. Поки в мене є загружений перший файл з папки app/etc і обєкт SimpleXml створений з цього файлу і присвоїний змінній $_xml. Тобто у змінній $_xml храниться перший файл з папки app/etc з яким я можу зручно працювати 
+		- $merge = clone $this->_prototype; - перша строчка в циклі. _prototype - це свойство класа Mage_Core_Model_Config. У його конструкторі є строчка $this->_prototype = new Mage_Core_Model_Config_Base(); Тобто получається що $this це Mage_Core_Model_Config (екстендиться від Mage_Core_Model_Config_Base), а $_prototype - це Mage_Core_Model_Config_Base
+
+		- Тобто у циклі у змінній $_prototype завжди буде пустий обєкт. І і пуста змінна $_xml. Логіка в тому щоб не ламати конфігурацію яка вже є у змінній $_xml. Типу у змінній $_xml вже є текуща конфігурація, потім створюється клон пустого базового обєкта конфігурацій і через нього загружається нова хмл-ка конфігурацій ($merge->loadFile($file);) (тобто так само як і стара, вони створюються ідентично, у тому й суть). Тож на даний момент виконання коду ( $merge->loadFile($file); ) У змінній $_xml є обєкт конфігів який зроблений з першого файлу у папці app/etc, а у змінній $merge храниться обєкт конфігів який зроблений з другого файлу
+
+		- І якщо все ок, то вони мержаться ( $this->extend($merge); ). У методі extend є строчка $this->getNode()->extend($config->getNode(), $overwrite); Метод getNode(якщо не передавати аргументи) поверне змінну $_xml; Тобто можна сказати що буде приблизно таке хмл-ка_з_конфігами->extend(текуща_хмл, $overwrite);
+
+
+ По цьому принципу хмл конфігів зєднується в 1 файл -
+	$first = new Mage_Core_Model_Config_Base; - це стандартний  клас для обробки xml. Скоріш за все цим класом обробляються всі xml-ки, але не факт
+	$first->loadString('<config>
+	    <one></one>
+	    <two></two>
+	    <three></three>
+	</config>');
+
+	$second = new Mage_Core_Model_Config_Base;
+	$second->loadString('<config>
+	    <four></four>
+	    <five></five>
+	</config>');
+
+	$first->extend($second); - тут будуть всі 5
+echo $first->getNode()->asNiceXml() we’d get output something like this. Якщо треба детальніше подивити як вони мержаться, тут алан вкінці статті розписав - https://alanstorm.com/magento_config_tutorial/ 
+	<config>
+	   <one/>
+	   <two/>
+	   <three/>
+	   <four/>
+	   <five/>
+	</config>
+
+ $first->getNode()->asNiceXml() - <config>
+				   <one/>
+				   <two/>
+				   <three/>
+				   <four/>
+				   <five/>
+				</config>
+
+ - Якщо вузли одинакові, то при екстенді вузел який накочується перепише старий вузел
+
+		- У методі extend є другий аргумент $overide, якщо він буде false, то при екстенді новий вузел не буде переписувати старий. Будут добавлены только новые узлы из второго дерева, конфликты будут игнорироваться.
+
+		- За замовчуванням $overide = true. Саме у цьому файлі він тру - /lib/Varien/Simplexml/Config.php (public function extend( Varien_Simplexml_Config $config, $overwrite=true) ) але якщо копнути глибше у сам метод src/lib/Varien/Simplexml/Element.php він вже буде фолс - public function extend($source, $overwrite=false). Тож коли буду працювати з хмл-ками треба буде бути уважним. А то у батька і у нащадка різні аргументи. В принципі таких проблем і не буде якщо для роботи з хмл-ками я буду брати клас Mage_Core_Model_Config і тоді вузли будуть переписуватись. Хоча для впевненості можна задати в ручну цей аргумент
+
+		 - Останньою строчкою у методі loadBase() - є перевірка чи з папки app/etc був взятий файл local.xml Якщо так, то $this->_isLocalConfigLoaded = true; Справа в тому що файл local.xml створюється при установці мадженти. Тож якщо змінна _isLocalConfigLoaded буде фолс, маджента ще не установлена, або не доустановлена повністю
+	
+
+ getStoreConfig - метод щоб витягти хмл глобальних конфігурацій
+
+----------------------------------------------------------------------------
+
+		- $this->_initCache($cacheInitOptions); - потім йде ініціалізація кеша. На цьому базова ініціалізація мадженти завершена!
+
+
+
+
+ 11) Там є строчка if ($this->_cache->processRequest()) { $this->getResponse()->sendResponse(); } - Якщо ця сторінка закешована, витягнути її з кеша. Вова сказав що можна подивити цей метод processRequest(), щоб взнати в яких випадках запрос сторінки повністю може бути витягнутий з кеша. Наскільки памятаю якщо кеш спрацьовує, то кешується вся сторінка, хоча це не точно. Я навіть не впевнений що повна сторінка кешується так як модулі і кеші повної сторінки храняться у var/cache. Та і наврядче це мається на увазі що саме сторінка кешується. Наскільки я бачу по коду на цьому етапі навіть не зрозуміло яку саме сторінку кешувати. Скоріш за все з кешів можна витягнути тільки базові модулі
+
+--- _initModules() - ініціалізація модулів ---
+
+ 12) Далі йде загрузка модулів. Якщо Сторінку не можна витягнути з кеша, йде загрузка модулів - loadModulesCache(). Потім йде перевірка чи є модулі для цієї сторінки (Знову ж, наврядче що він шукає модулі саме цієї сторінки, яку я загружаю, скоріш за все маджента просто пробує витягнути всі модулі мадженти з кеша. На цьомуу єтапі не зрозуміло для якої сторінки треба модулі, так як фронтконтролер ще не був запущений) в папці var/cache/ 
+ - loadModulesCache() - Якщо закоментувати цю строчку, то не треба буде скидувати кеш після змін у xml файлах модуля	
+ - Якщо у кеші немає модулів:
+	- $this->_config->loadModules();
+
+ ------------------------------ Алан https://alanstorm.com/magento_config_declared_modules_tutorial/ --------------------------------
+
+		- $this->_loadDeclaredModules(); - добавлення модулей app/etc/modules/*.xml в хмл конфігів.
+
+			- $moduleFiles = $this->_getDeclaredModuleFiles(); - У змінній $moduleFiles будуть відсортовані шляхи до файлів модулів app/etc/modules/*.xml ( Першим буде Mage_All.xml, далі будуть іти модулі з префіксом Mage_, останніми будуть кастомні - http://joxi.ru/E2pEgxwu9QQ6LA)
+
+				- Спочатку у змінну $moduleFiles (масив) потрапляють шляхи до модулів з папки app/etc/modules. Вони ще поки не відсортовані. Потім створюється багатовимірний масив $collectModuleFiles з ключами 'base' 'mage' 'custom' і вони сюди будуть розприділятись
+				
+				- Потім Йде сортування модулів з app/etc/modules/*.xml
+			    		'base' => [ 0 => string '/path/to/magento/app/etc/modules/Mage_All.xml' ], - тут буде Mage_All.xml
+			    		'mage' => [ 17 => string '/path/to/magento/app/etc/modules/Mage_Api.xml', ...... ], - тут будуть всі модулі з префіксом 'Mage_'
+			    		'custom' => [ '129' => [string '/path/to/magento/app/etc/modules/Mage_Authorizenet.xml', ..... ] - тут будуть всі кастомні модулі
+
+				- Потім 'base' 'mage' 'custom' мержаться в 1 масив і цей змержений масив і поверне метод _getDeclaredModuleFiles()
+
+				- Шторм казав що приорітети такі - Mage_All.xml найнижчий, модулі з префіксом Mage - їх вищий і найвижчий приорітет у тих у яких не має префікса Mage (тобто кастомні. Під приорітетами я маю на увазі сортування шляхів до модулів у масиві $moduleFiles[0 => Mage_All.xml, 1 => Mage_Api.xml, 2 => My_Custom_Module.xml]).
+
+			- Потім цей відсортований масив з шляхами до модулів (app/etc/modules/*.xml) перебирається в циклі і збирається в 1 файл методом extend(). Цим самим методом екстендились і файли config.xml local.xml у методі базової ініціалізації. Тільки на відміну від config.xml local.xml, вони не потрапляють зразу у глобальну змінну $_xml. Тобто, створюється 2 пусті обєкти  Mage_Core_Model_Config_Base(); Один буде завжди пустий на початку циклу (це для нового файлу який буде потрапляти в цикл. При мержі базових конфігів (local.xml, config.xml) це був не пустий обєкт, а змінна $prototype у якій був клон обєкта створеного з класу Mage_Core_Model_Config_Base(). В принципі різниці не має ($prototype теж був пустий), мабуть це робили 2 різні розробники з різними баченнями), а на інший будуть накочуватись(extend()) хмл-ки. і в результаті у змінній $unsortedConfig буде обєкт SimpleXml з конфігами модулів з папки app/etc/modules/*.xml Тобто за структурою такий самий як і обєкт з базовими конфігами, змінна $_xml з структурою модулів у нього теж буде. 
+	
+			- На даний момент у мене є обєкт SimpleXml з відсортованими конфігами модулів app/etc/modules/*.xml у змінній $unsortedConfig
+
+			- Потім модулі зі змінної $unsortedConfig (сам $unsortedConfig поки залишається незмінним) ще сортуються, це для того щоб модулі, які залежать від іншого модуля (<depends>), перекривали його конфіги. Створюється масив $moduleDepends і пропускається через цикл щоб виділити залежності.
+
+				- Це будуть сортуватись тільки діти ноди <modules>. Якщо випадково у файлі буде якась додаткова інфа до модуля, вона не попаде в сортування 
+																			<config>
+																			    <any_additional_information> - ця нода не попаде
+																				<added_to>the declaration file</added_to>
+																			    </any_additional_information>
+																			    <modules>
+																				<Foo_Bar>
+																				    <active>true</active>
+																				    <codePool>core</codePool>
+																				</Foo_Bar>
+																			    </modules>
+																			</config>
+			- Потім створюється багатовимірний масив для всіх модулів у такому вигляді. 
+											$moduleDepends[$moduleName] = array(
+												0 => [
+													'module'    => $moduleName, - імя модуля
+													'depends'   => $depends, - масив модулів від якого він залежить
+													'active'    => ('true' === (string)$moduleNode->active ? true : false), - true/false
+													],
+												1 => [ .....],
+												    );
+			- Затем эта информация передается отдельному методу для сортировки - $moduleDepends = $this->_sortModuleDepends($moduleDepends); -
+
+				- Типу через цей метод будуть проходитись всі модулі. 
+
+					- Береться масив з залежностями цього модуля - $depends = $moduleProps['depends']; і потім цикл проходиться по його залежностях (moduleDepends['depends'])
+
+					- Ящо цей модуль активний, але в файлі конфігів не має модуля від якого він залежить (!isset($modules(<modules>)[$depend(<імя модуля>)]) чи у файлі конфігів від якого він залежить не має ноди <active>, викинеться ексепшн, що текущому модулю потрібен модуль який прописаний в його залежностях 
+
+					- А якщо все ок, то до залежностей модуля, додаються залежності модулів від яких вони залежать $depends = array_merge($depends, $modules[$depend]['depends']);
+            																	  $modules[$moduleName]['depends'] = $depends;
+
+					- Потім масив $modules переіндексовується - $modules = array_values($modules);
+
+					- Потім йде цикл для перевірки залежностей модулів (цикл в циклі. Для текущого модуля і модулів що йдуть після нього в списку. Починається цикл з останнього модуля.  Цикл закінчиться коли дойде до першого). Береться передостанній модуль (Спочатку останній, але він не відповідає умові, тому що у теперішнього модуля індекс має бути менший як у останнього, а це і є останній модуль) зі списку модулів і перевіряється чи у списку його залежностей <depend> є останній модуль - if (isset($modules['213']['depends'][$modules['214']['module']])). Тобто, наприклад у мене є 214 модулів, а перевіряються всі від останнього до першого. 
+
+						- Робиться це двома циклами. 1 цикл буде внутрі іншого 
+
+							- for ($i = 214; $i >= 0; $i--) - Спочатку йде цикл який буде вибирати модуль з останнього до першого - назвемо це перевіркою "текущого модуля"
+
+								- for ($j = 214; 100 < 214; $j--) -У ньому йде цикл у якому перевіряється чи у залежностях "текущого модуля" немає модулів які йдуть після нього. Наприклад цикл тепер на сотому модулі. Він перевірить список залежностей сотого модуля, чи у його залежностях немає модулів що йдуть після нього починаючи з 214 -го.
+								- Якщо є і умова проходить (Наприклад 1 184-го у залежностях є 207-й модуль), ці модулі поміняються місцями
+															 - if (isset($modules[$i]['depends'][$modules[$j]['module']])) {
+															    $value       = $modules[$i]; - береться 184-й модуль
+															    $modules[$i] = $modules[$j]; - замість 284-го, стависться 207-й
+															    $modules[$j] = $value; - замість 207-го, ставиться 184-й 
+															} 
+								- В чому ще полягає залежність одного модуля від іншого (крім того що модуль від якого залежить інший модуль загрузиться першим), на даний момент сказати не можу. Адам сказав що тільки в порядку загрузки. Типу модуль бандлів не може загрузитись до модуля каталога. Наприклад з каталогом щось сталось а бандли вже загрузились. У бандлів же не буде працювати функціонал, так як весь його функціонал звязаний з каталогом продуктів (ціна, назва, ...)
+
+				- Після цього $moduleDepends буде виглядати приблизно так. правильна сортіровка модулів в цьому масиві збережеться 
+												array
+												  0 => 
+												    array
+												      'module' => string 'Mage_Core' (length=9)
+												      'depends' => 
+													array
+													  empty
+												      'active' => boolean true
+												  1 => 
+												    array
+												      'module' => string 'Mage_Eav' (length=8)
+												      'depends' => 
+													array
+													  'Mage_Core' => boolean true
+												      'active' => boolean true
+			
+			- Потім йде ще одна перевірка (цикл foreach ($unsortedConfig->getNode()->children() as $nodeName => $node) {). Зі змінної $unsortedConfig у якій храняться відсортовані модулі з папки app/etc/modules/*.xml, будуть братись ноди які лежать не в ноді <modules> . $unsortedConfig залишається незмінна
+
+																		<config>
+																		    <any_additional_information> - ця нода
+																			<added_to>the declaration file</added_to>
+																		    </any_additional_information>
+																		    <modules>
+																			<Foo_Bar>
+																			    <active>true</active>
+																			    <codePool>core</codePool>
+																			</Foo_Bar>
+																		    </modules>
+																		</config>
+
+				- Створюєтьсф новий обєкт - $sortedConfig = new Mage_Core_Model_Config_Base(); і цикл проходиться по всіх модулях, якщо там є шось типу <any_additional_information>, то ці всі ноди попадуть в $sortedConfig. Тобто $sortedConfig буде такий самий по структурі які і обєкт у якому хранятся модулі і у якому хранятся базові конфіги. Змінна $_xml там теж буде (у ній і храниться дерево цих додаткових нодів)
+				
+					- Але ці додаткові ноди до модуля (<any_additional_information>) не екстендяться між собою, а просто апендяться у змінну $_xml - http://joxi.ru/823dpX3TJ7KQRA .
+						- як я бачу зі скріна, ідентичні ноди не дублюються, але різні ноди не перекривають одна одну як при екстенді, а додаються.  
+
+ 					- Поки я не розумію навіщо це. Так ці додаткові ноди у змінній $sortedConfig ніяк не звязані з основними модулями, а просто кидаються новостворене дерево $_xml(це не головна $_xml конфігів) 
+
+			- Потім йде цикл (foreach ($moduleDepends as $moduleProp) {) У якому у змінну $sortedConfig апендяться модулі зі змінної $unsortedConfig.
+
+				- Змінна $unsortedConfig хранить у собі конфігураційний файл зі списком модулів по структурі як базовий обєкт конфігурацій (local.xml confsg.xml). Він відсортований по принципу Mage_All.xml найнижчий, модулі з префіксом Mage - їх вищий і найвижчий приорітет у тих у яких не має префікса Mage (тобто кастомні. Під приорітетами я маю на увазі сортування шляхів до модулів у масиві $moduleFiles[0 => Mage_All.xml, 1 => Mage_Api.xml, 2 => My_Custom_Module.xml]).
+
+				- Змінна $moduleDepends хранить у собі відсортований список модулів по залежностях (модуль який стоїть у списку раніше (наприклад 100), не може мати в залежностях модуль, який в списку модулів пізніше (наприклад 200) ).
+
+				- Береться перший модуль з масиву $moduleDepends, шукається цей модуль у обєкті конфігів(у змінній $_xml) $unsortedConfig і аппедниться у змінну $sortedConfig. Як цей цикл пройде до кінця у змінній $sortedConfig будуть ті самі модулі що і в змінній $unsortedConfig, тільки відсортовані по залежностях
+
+			- Потім $sortedConfig екстендиться в глобальне дерево конфігів і в глобальній $_xml будуть всі модулі. $sortedConfig
+
+			- Вкінці метод _loadDeclaredModules повертає обєкт з конфігами - return $this(Mage_Core_Model_Config);
+		
+
+
+		2) Далі йде загрузка конфігурацій з модулів config.xml, config.mysql4.xml
+
+			- $resourceConfig = sprintf('config.%s.xml', $this->_getResourceConnectionModel('core')); У змінній $resourceConfig буде config.mysql4.xml
+
+				- $setupResource = $moduleName('core') . '_setup';
+
+				- $config        = $this->getResourceConnectionConfig($setupResource('core_setup'));
+
+					- $config = $this->getResourceConfig($name('core_setup'));
+
+						- return $this->_xml->global->resources->{$name}; - візьме з глобального конфіга ($_xml) ноду core_setup Mage_Core_Model_Config-><_xml><global><resources><core_setup> Це базовий файл config.xml  - http://joxi.ru/Vm6Z71XiDJXagm
+
+					- http://joxi.ru/xAeg0WjfpDZNgm
+
+					- Потім з ноди <core_setup> береться нода <connection> а з <connection>, береться нода <use> - В <use> храниться строка "default_setup"
+
+					- return $this->getResourceConnectionConfig((string)$conn->use); Рекурсія. Тобто запускається ще раз метод getResourceConnectionConfig('default_setup') з аргуметом - 'default_setup'
+						 - На цей раз $config = $this->getResourceConfig($name); у $name буде "default_setup". Метод getResourceConfig("default_setup") поверне ноду  Mage_Core_Model_Config-><_xml><global><resources><default_setup>. На цей раз в змінній $conn ($conn = $config->connection;) буде хранитись інфа для підключення в БД - http://joxi.ru/Q2Kz7o6i4eWyam - В ній вже немає ноди <use>, тому кондішн (!empty($conn->use)) не пройде, і виконання коду перейде у else - return $conn; - Тобто метод getResourceConnectionConfig() поверне дані для підключення з БД. Мабуть метод getResourceConnectionConfig() можна буде використати і в побутових цілях для взяття інфи для підключення з базою
+
+				- Далі йде ще один кондішн ( if (!$config) { ), але в ньому те саме що і у верхньому, викличеться метод ( getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE) ), але вже підставиться арумент "core_setup". Якщо у верньому кондішні все спрацювало і змінній $config присвоїлась нода з підключенням до БД, то цей нижній кондішн не пройде ( код в ньому не виконається)
+
+				- І в кінці метод _getResourceConnectionModel() поверне значення 'mysql4' - return (string)$config->model; - model - ця нода храниться у ноді з інфою підключення до БД - її значення - 'mysql4'- http://joxi.ru/EA4LvxOiw8j5VA
+
+			- $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this); - загружає всі конфіги модулів з файлу config.xml і config.mysql4.xml. Взагалі метод loadModulesConfiguration() можна використовувати і в побутових цілях. Алан писав шо він його використав шоб подивити які роути є на сторінці (https://alanstorm.com/magento_simple_page_django). По ходу це гнучкий метод і можна вибрати які конфіги будуть приходяти для конкретної сторінки. Але для цього йому не треба передавати 2-й аргумент в якості обєкта конфіга. Тут я передав 2-й аргумент $this, тому вибереться вся глобальна конфігурація що є на даний момент. $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this(Mage_Core_Model_Config)); (не спутатись, це 2 аргументи, один просто масив у якому array('config.xml',$resourceConfig), але array('config.xml',$resourceConfig) це один(перший) аргумент )
+				
+				- $disableLocalModules = !$this->_canUseLocalModules(); - У цьому методі перевіряється чи локальні модулі не відключені. Не буду розписувати цей метод, так як Алан казав що за 3 роки розробки він не зустрічав щоб цей модуль використовувався
+					- В загальному я з коду зрозумів, що щоб відключити локальні модулі, треба щоб у глобальних конфігураціях була нода <disable_local_modules>true</disable_local_modules>  Тоді змінній $disableLocalModules присвоїться true
+
+					- Потім йде перевірка якщо disableLocalModules == true і я не підставив сторінній автолоадер (includes/config.php, розкоментовані нижні строчки) - if ($disableLocalModules && !defined('COMPILER_INCLUDE_PATH')), то робота автолоадера зміниться ( У set_include_path() не попаде папка local і новий автолоадер перезареєструється - Mage::registry('original_include_path'))
+
+					- Тоді $this(Mage_Core_Model_Config)->_canUseLocalModules = !$disableLocalModules; - у змінній $disableLocalModules буде true, y $this->_canUseLocalModules буде false
+
+					- return $this->_canUseLocalModules; - метод _canUseLocalModules() поверне false;
+
+				- if ($mergeToObject === null) - перевіряє чи аргумент $resourceConfig( $this(Mage_Core_Model_Config) ) передався, якщо ні, змінній $mergeToObject передається клон обєкта new Mage_Core_Model_Config_Base(); ($mergeToObject = clone $this->_prototype;) і в цьому обєкті конфігів ($mergeToObject) створюється нода <config> - $mergeToObject->loadString('<config/>');
+
+					- Тут так само як і з etc/modules/config.xml s etc/modules/local.xml клонується змінна _prototype обєкта Mage_Core_Model_Config_Base(). Не знаю чому у різних місцях по різному зроблено. Можливо розробники були різні
+
+				- Потім перевіряє чи передався аргумент $mergeModel (цей агрумент взагалі не передавався, передавались тільки 2 аргументи), якщо ні, то - $mergeModel = clone $this->_prototype; Тобто знов передається пустий прототайп. Як і з etc/modules/config.xml s etc/modules/local.xml клонується змінна _prototype обєкта Mage_Core_Model_Config_Base().
+
+				- Потім беруться модулі з глобальних конфігів у змінну - $modules = $this->getNode('modules')->children(); і пропускаються по циклу кожен модуль.
+
+				- Провірка чи модуль активний - цікава (Метод is() (app/code/core/Mage/Core/Model/Config/Element.php  ) ). Якщо тег <active/> відсутній або у ньому установлено false або of - тоді модуль неактивний, інакше активний і код цикла продовжує работати.
+
+					- Ще раз нагадаю, що і цей і всі інші методи для роботи з конфігами я можу використати у своєму класі, якщо він буде заекстенджений від Mage_Core_Model_Config
+
+				- Якщо кодпул не буде вказаний в xml, модуль теж не загрузиться. Тут є і перевірка чи локальні модулі включені. Якщо виключені, то цикл переключиться на слідуючий модуль -  
+if ($disableLocalModules && ('local' === (string)$module->codePool)) { continue; } - Але це гон, і Алан теж це казав. Навіщо перевіряти кожен раз в циклі чи локальні модулі включені. Та і навіть якщо виключені (disableLocalModules = true), тоді цикл спрацює в холосту для кожного модуля і на постой код буде потрапляти на строчку - continue, так як змінна установлюється на початку метода і не міняється.
+
+					- Схоже на то що функціонал - строчки - $disableLocalModules = !$this->_canUseLocalModules(); - у методі loadModulesConfiguration() робився після цієї строчки - if ($disableLocalModules && ('local' === (string)$module->codePool)) { continue; }. Алан писав що скоріш за все чуваки не хотіли паритись переробляти функціонал загрузки конфігів із за нового метода _canUseLocalModules(), а так як він не мішав, то залишили як є. Я це до того що відключати локальні модулі способом створення в конфігах ноди <disable_local_modules>true</disable_local_modules> поганий варіант.
+
+				- Якщо файли конфігів, що передались методу $this->loadModulesConfiguration(array('config.xml', config.mysql4.xml), $this); як аргументи не в масиві, зроби щоб були в масиві - if (!is_array($fileName - це і є array('config.xml', config.mysql4.xml)()) { $fileName = array($fileName); }
+
+				- Потім масив з файлами текущого модуля config.xml', config.mysql4.xml пропускається церез цикл - foreach ($fileName as $configFile) { 
+
+					- $configFile = $this->getModuleDir('etc', $modName).DS.$configFile; - береться шлях до файлу конфігів текущого модуля - Першим майже завжди буде Mage_Core - src/app/code/core/Mage/Core/etc/config.xml
+
+					- А далі знайомий метод для загрузки файла конфігів - loadFile('src/app/code/core/Mage/Core/etc/config.xml'), який загружав 2 базові конфіги ('config.xml', 'local.xml') і конфіги в яких були списки модулів
+
+						- $mergeModel($_prototype - Mage_Core_Model_Config_Base() - пустий обєкт конфігів )->loadFile('src/app/code/core/Mage/Core/etc/config.xml')
+
+					- Перед екстендом є ще така строчка - $this->_makeEventsLowerCase(Mage_Core_Model_App_Area::AREA_GLOBAL(тут буде арія), $mergeModel - це $_prototype - клон  обєкта Mage_Core_Model_Config_Base());
+
+						- Таких строчок є 4 під кожну арію - global, frontend, admin, adminhtml - Беруться івенти (<events>) з кожної ноди у змінну $events = $mergeModel->getNode($area . "/" . Mage_Core_Model_App_Area::PART_EVENTS(тут буде 'events'));
+
+						- $children = clone $events->children(); беруться діти ноди <events> і пропускаються через foreach
+
+							- if ($this->_isNodeNameHasUpperCase($event)) - Перевіряє чи назва івента складається пвність з малих букв
+
+								- Поверне return (strtolower($event->getName()) !== (string)$event->getName()); - Тобто якщо пропустити назву івента через ф-цію strtolower і він буде відрізнятись від текущого імені, тоді 'true';
+
+								- Якщо метод _isNodeNameHasUpperCase() повернув true - візьметься назва цього івента - $oldName = $event->getName();
+
+								- $newEventName = strtolower($oldName); - переведеться в нижній регістр і якщо такого івента не має, цей івент додасться у конфіги
+
+					- Потім обєкт з текущим модулем $mergeModel екстендиться в глобальні конфіги - $mergeToObject->extend($mergeModel, true); І на цьому все. Метод loadModulesConfiguration() поверне гобальний обєкт конфігів - return $mergeToObject;
+	
+						- Если $configFile не существует или нечитаем, loadFile вернет false і конфіги модуля не загрузяться.
+
+						- другим параметром йде аргумент true тож то при знаходженні одинакових вузлів, новий перетре старий
+
+					--------------------------------------------
+					- Тепер стало ясно навіщо був <depend>. Він вліяє на порядок загрузки модулів, а конфіги якого модуля загружаються пізніше, у глобальну конфігурацію, ті і залишаться у глобальній конфігурації, так як вони перезапишуть ідентичні ноди. 
+					--------------------------------------------
+
+				- Якщо захочу використати метод у побутових цілях, то Работає він так - $lint_config = Mage::getConfig()->loadModulesConfiguration('configlints.xml')->getNode('global'); - візьме з цього файлу('configlints.xml') ноду <global>. 
+
+					- Цей xml код можна буде вивести на фрон красиво - $lint_config->asNiceXml(); Навть якщо файл configlints.xml не в моєму модулі, він всерівно захватиться і захватяться його ноди
+
+					- Після цього з файлом configlints.xml я можу робити будь які операції. Змінній $lint_config будуть доступні всі методи мадженти для роботи з хмл-ками
+
+
+			- На даний момент у глобальних конфігах храняться модулі і конфіги з файлів модулів config.xml, config.mysql4.xml
+
+		
+ ------- Тепер коли все понятно як це работає (все що я описав вверху, вже не буду так розжовано розписувати)
+
+			- Далі у методі loadModules() знов екстендиться файл local.xml на випадок, якщо якісь конфіги при загрузці перебили його ноди
+
+			- Потім йде строчка - $this->applyExtends(); - Вона скоріш за все взагалі не використовується в мадженті
+
+			- Вкінці метод loadModules() повертає $this ( глобальний обєкт модулів )
+
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
