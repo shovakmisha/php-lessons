@@ -1,0 +1,38 @@
+
+ ---------- 1 - The Magento Config - https://alanstorm.com/magento_config/ ----------
+
+ 1) У цій статті він нічого нового не написав, тільки була створена мінімальна конфігурація для модуля -  Alanstormdotcom_Configviewer
+
+	- Також був створений обсервер який виводив всі глобальні конфіги на фронт
+
+ ---------- 2 - Magento Controller Dispatch and Hello World - https://alanstorm.com/magento_controller_hello_world/ ---------
+
+ 1) Когда маршрутизатор анализирует URL, он разделяется следующим образом - http://example.com/frontName(<frontName> тег з файла конфіга config.xml)
+												/actionControllerName(src/app/code/local/Alanstormdotcom/Helloworld/controllers/IndexController.php )
+												  /actionMethod(src/app/code/local/Alanstormdotcom/Helloworld/controllers/IndexController.php - public function indexAction() {...)
+		
+		- Це я описав шлях до файлів, які маджента буде шукати при такому запросі - http://exmaple.com/helloworld/index/index
+
+			- Тобто http://exmaple.com/checkout/cart/add - знайде в конфігах <frontName>checkout</frontName>, подивить в конфігах, який модуль до цього фронтнейма відноситься - Mage_Checkout і у цьому модулі у gfgws controllers знайде файл CartController.php і викличе метод addAction()
+	
+ 2) Створюю новий роут для фронта 
+	<frontend>
+		<routers>
+			<helloworld> - Этот тег должен быть строчной версией названия вашего модуля. Наш модуль называется Helloworld, этот тег - helloworld.
+				<use>standard</use>
+				<args>
+					<module>Alanstormdotcom_Helloworld</module> - Этот тег модуля должен быть полным именем вашего модуля Кампанія/Модуль. Это будет использоваться системой для поиска файлов вашего контроллера.
+
+					<frontName>helloworld</frontName> - це буде перше в адресній строці - http://example.com/frontName/ - Соглашение о том, что frontNames совпадает с именами модулей, не является обязательным. Фактически, один модуль может определять несколько <routers> и, следовательно, иметь несколько frontNames.
+				</args>
+			</helloworld>
+		</routers>
+	</frontend>
+
+ 3) В цій статті я створив декілька простих контролерів, щоб подивити як маджента розбарає юрл і на які контролери і екшни вона відправляє запрос. Але це не були поглиблені статті. Тут були тільки вершки. Тіпа ця юр-лка відправляє на цей метод, а ця на цей і тд...
+
+
+
+ ---------------- 3 Layouts, Blocks and Templates - https://alanstorm.com/layouts_blocks_and_templates/ ----------------
+
+ 1) 

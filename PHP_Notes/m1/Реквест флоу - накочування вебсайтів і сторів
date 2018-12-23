@@ -1,0 +1,271 @@
+
+
+
+
+----------   ???? ----------
+	- Потім накочуються на них апдейти, інстал скріпти ( метод applyAllUpdates() ) 
+
+		- Я нічого не знаю про цей метод, треба буде повернутись до нього
+
+	-  $this->_config->loadDb(); - ... Загружаються конфіги з БД. Я так поняв що applyAllUpdates() установив дані в базу, а тепер я беру ці дані. Тобто дані модулів які храняться в базі накочуються пізніше, тому вони перекриють дані з xml. Даны в базі найприорітетніші. У першій маджеті дані модуля в базі храняться в папці sql i data. sql накочуються раніше, тому дані з папки data будуть в приорітеті. На даний момент накочується sql
+
+ -------- Alan - https://alanstorm.com/magento_loading_config_variables/ --------
+
+		- $dbConf = $this->getResourceModel(); - Звертається до ресурсної модельки, Яка по ходу хранить всі дані бази про модулі 
+
+			- $this->_resourceModel = Mage::getResourceModel('core/config'); - Тут я вперше зустрічаю виклик ресурсної модельки - getResourceModel - це буде файл - app/code/core/Mage/Core/Model/Resource/Config.php
+
+			- Тобто у змінній $dbConf буде обєкт класа - Mage_Core_Model_Resource_Config
+
+        	- $dbConf->loadToXml($this(Mage_Core_Model_Config)); загружає конфіги бази в глобальні конфіги Mage_Core_Model_Config
+		
+			- Зразу ремарка - тут не має сортування. Конфіги, які я буду описувати нижче не будуть залежати від айдішок і не будуть пересортовуватись. Який стоїть у базі першим, той і буде першим
+
+			- $read = $this->_getReadAdapter();
+
+				- Метод _getReadAdapter - это стандартный метод для каждого объекта ресурсной модели, который доставит вам прямой обработчик в базу данных. Это позволяет создавать запросы SQL через стандартный интерфейс в стиле Zend.
+
+			- Далі йле запрос бо бази через $read - $read->select()->from($this->getTable('core/website'), array('website_id', 'code', 'name'));
+
+				- цей метод буде брати дані з бази. Цей запрос те саме, що SELECT website_id, code, name FROM core_website.
+
+					- Тобто $this(Mage_Core_Model_Config)->getTable('core/website') == SELECT FROM core_website
+
+				- core_website - у цій таблиці маджента хранить стори - System -> Manage Stores
+
+				- По суті це звичайний sql запрос був виконаний, а не православний (через апі модельки яка працює з базою)
+
+			- Потім йде строчка $rowset = $read->fetchAssoc($select); і $rowset пропускається через цикл . Список вебсайтів у цій змінній буде виглядати так - http://joxi.ru/eAOz1oKixWXn82
+
+				- Але у базі даних core_website не має всіх сайтів що є в адмінці. А в змінній $rowset є всі вебсайти що є в адмінці. Поки не розумію чому. По ідеї всі вебсайти створені у адмінці мали б бути у таблиці core_website. Можливо це якось звязано з інстал скріптами (може там створювались стори), але всеодно вони б мали попасти в базу 
+
+				- Єдине що я вебсайт Admin не бачу в адмінці, а в базі він є.
+
+			- Потім дані з бази загружаються у файл конфігів $xmlConfig->setNode('websites/'.$w['code'].'/system/website/id', $w['website_id']);
+            								 $xmlConfig->setNode('websites/'.$w['code'].'/system/website/name', $w['name']);
+							<websites>
+								<admin> - 'code' вебсайта у базі
+								    <system>
+									<website>
+									    <id>0</id> - ($w['website_id']);)
+									    <name>Admin</name> - ($w['name']);) - ЦіЄЇ строчки у Алана не було, але в мене було і імя вебсайту
+									</website>
+								    </system>
+								</admin>
+								<base>
+								    <system>
+									<website>
+									    <id>1</id>
+									</website>
+								    </system>            
+								</base>
+
+			- У глобальному методі конфігів вже були теги <websites>, вони не перезапишуться. Мабуть тому що ноди які добавить метод  setNode() не перекликаються з тими що є
+
+			- Після того як він пройдеться по всіх вебсайтах у мене в конфігах буде список всіх вебсайтів
+
+			- $websites[$w['website_id']] = array('code' => $w['code']); - Також у циклі заповниться змінна $websites у якій будуть хранитись 'website_id' => ['code' = 'значення code']  (http://joxi.ru/xAeg0WjfpDo8em).  У базі вони у одному рядку знаходяться і по цьому зрозуміло який 'website_id' відповідає 'code' - http://joxi.ru/YmEzDoji0149L2 . $websites поки що хранится в локальном массиве. Мы увидим эту переменную позже, но сейчас ее можно игнорировать. У змінній $websites є усі вебсайти
+
+				- У змінній $websites, 'code' привяжеться до 'website_id' - $websites[$w(текущий рядок з таблиці core_website, тобто текущий вебсайт у циклі)['website_id']] = array('code' => $w['code']); http://joxi.ru/YmEzDoji0149L2
+
+		- Потім те саме для таблиці core_store. SELECT store_id, code, name, website_id FROM core_store;
+
+			- Кожен стор привязаний до вебсайту (колонка website_id в таблиці core_store покаже до якого вебсайту привязаний стор) - http://joxi.ru/MAjElawu490yz2
+
+			- Цикл foreach буде установлювати стори у глобальні конфіги - foreach ($rowset as $s) {
+
+				- if (!isset($websites[$s['website_id'] - тут буде значення 'website_id' до якого привязаний текущий стор])) { -  Стор не запишеться в конфіги, якщо 'website_id' вебсайта, до якого привязаний стор немає у змінній $websites. і цикл візьме інший стор. Тобто у базі є список вебсайтів (таблиця core_website), у кожного з них є всій унікальний website_id і до цього website_id привязані стори. Якщо стор привязаний до website_id, якого не має у табблиці core_website, він не запишеться у конфіги і цикл візьме інший стор
+
+			- Ці строчки запишуть стор у глобальні конфіги <stores>-$xmlConfig->setNode('stores/'.$s['code'].'/system/store/id', $s['store_id']);
+									    	$xmlConfig->setNode('stores/'.$s['code'].'/system/store/name', $s['name']);
+										$xmlConfig->setNode('stores/'.$s['code'].'/system/website/id', $s['website_id']);
+										http://joxi.ru/Dr8RE7kC4gNpX2 - Тобто у конфігах буде 
+
+			- $xmlConfig->setNode('websites/'.$websites[$s['website_id']]['code'].'/system/stores/'.$s['code'], $s['store_id']); - строчка, яка будe привязувати стор до його вебсайту у глобальних конфігах(http://joxi.ru/82QB5lacj0lVaA) - 'core' стора і ід стора - <store_code>[STORE_ID]</store_code>
+
+			- Також змінна $stores заповниться сторами - $stores[$s['store_id']] = array('code'=>$s['code']); - http://joxi.ru/82QB5lacj0BdJA
+
+			- змінна $websites також доповниться у цьому циклі - стор привяжеться до його вебсайту $websites[$s['website_id']]['stores'][$s['store_id']] = $s['code']; - http://joxi.ru/L216bOac81KgqA
+
+			- Тобто після цього і у конфігах будуть прописані залежності - у сторах буде показано до якого вебсайту він привязаний і у вебсайта буде написано, які стори він має.
+
+		- ПО СУТІ НА ДАНИЙ МОМЕНТ Я МАЮ СТОРИ І ВЕБСАЙТИ У ФАЙЛІ ГЛОБАЛЬНИХ КОНФІГІВ І МАЙЖЕ ЦЯ САМА ІНФА ХРАНИТЬСЯ У ЗМІННИХ - $stores(у цій змінній не інфи до якого вебсайту привязаний стор), $websites
+
+		<config> - глобальний файл конфігів
+		    <!-- ... -->
+		    <stores> - розділ сторів
+			<de_outdoor> - 'code' стора у базі
+			    <system>
+				<store>
+				    <id>[STORE_ID]</id> - значення store_id цього стора у базі. Можна сказати айдішка цього стора
+				</store>
+				<website>
+				    <id>[WEBSITE_ID]</id> - значення website_id цього стора у базі. Айдішка вебсайта, до якого привязаний стор
+				</website>
+			    </system>
+			</default>
+			<!-- ... above node structure repeat for each store row ... -->
+		    </stores>
+
+		- Потім те саме для таблиці core_config_data - $select = $read->select()->from($this->getMainTable(), array('scope', 'scope_id', 'path', 'value')); 
+
+			- (SELECT scope, scope_id, path, value FROM core_config_data;). 
+
+				- До речі щоб поставити кондішни для запросу (тіпа (SELECT value FROM core_config_data WHERE LALLALA).  ), треба у змінної $select викликати метод 'where' - $select = $read->select()->from($this->getMainTable(), array('scope', 'scope_id', 'path', 'value')); - $select->where('id = 0');
+
+			- І дані фетчаться у змінну $rowset = $read->fetchAll($select);
+
+			- І цикл пробігається по всіх рядках з бази core_config_data, що лежать в змінній $rowset і записує їх в глобальну конфігурацію - foreach ($rowset as $r) {
+
+				- $xmlConfig->setNode('default/' . $r['path'], $value); - Тобто конфіги таблиці core_config_data попадуть у ноду <default> - http://joxi.ru/82QB5lacj0nWoA
+
+				- $rowset = array(
+					    'scope'     => 'default', - якщо не буде дефолтний скоуп, цей рядок не попаде в конфіги (if ($r['scope'] !== 'default') {continue;}). Тобто якщо буде 'website' - це не попаде в конфіги. Крім 'website' може бути і 'store'. Типу є якісь налаштування для окремих сторів або вебсайтів і вони на даний момент не попадуть в конфіги. http://joxi.ru/GrqjgkwHQ73JPm
+					    'scope_id'  => '0' - У дефолтного стору scope_id завжди = 0. Якщо scope_id не = 0, то це <website> або <store>
+					    'path'      => 'web/unsecure/base_url', - це ноди конфігів. Тобто це буде <web><unsecure>base_url(ключ)
+					    'value'     => 'http://magento1point6point1.dev/' - це буде значення ключа - <web><unsecure>base_url = "http://magento1point6point1.dev/" - http://joxi.ru/V2VbKoXUxZyXj2
+					);
+
+					- Тобто значення base_url буде лежати в конфігах і його можна буде витягнути коли захочу
+
+			- Тут те саме що і з вебсайтами. У змінній $rowset є такі дані яких немає в таблиці core_config_data. Я не знаю звідки він їх бере
+
+			- Тепер в конфігах в мене є дані з таблиці - core_config_data у яких 'scope' => 'default'
+
+		----------------------------------
+
+		- setNode() - перезапише значення конфігів, якщо в конфігах вже є значення які я хочу записати
+
+		---------------------------------
+
+		- На даний момент у я накотив дані з таблицы бази core_config_data у яких 'scope' => 'default' у ноду глобального конфіга <default> Але з дефолтною нодою ще не все
+
+			- $extendSource = $xmlConfig->getNode('default'); - Дефолтна нода глобальних когфігів береться у змінну $extendSource
+
+			-  foreach ($websites as $id=>$w) { - Помните информацию, которую мы ранее хранили в массиве $websites? Вот где мы его используем. Пробігаюсь по всіх вебсайтах
+
+				- $websiteNode = $xmlConfig->getNode('websites/' . $w['code']); - з глобальних конфігів, з ноди <websites> береться текущий вебсайт - http://joxi.ru/v293l81I3MEzJr (На цьому скріні є нода <web>, але я не впевнений що вона буде завжди. Вона сюди попала, так як в конфігах якогось модуля є цей запис. наскільки бачу це роут. Не знаю хто його сюди записав. На чистій мадженті його б вроді не мало бути). Принаймні цей код який я розбирав вверху, його сюди не записував. Записувалась тільки нода <system>. Нода <web> теж попаде у $websiteNode так як вона теж знаходиться у текущій ноді $w['code'](До прикладу тепер це <admin>)
+
+				- $websiteNode->extend($extendSource); - Текущий вебсайт розширяю дефолтнимим конфігами. Тобто кожен вебсайт від тепер буде мати у своїх конфігах дефолтну конфігурацію мадженти $_xml['default']( Ці ноди заекстендяться кожному вебсайту - http://joxi.ru/Vm6Z71XiDJBeVm )
+
+ ----------------------------
+
+		- Потім крім дефолтних скоупів (дані з таблиці - core_config_data у яких 'scope' => 'default'), вебсайтам треба записати конфіги які у скоупах 'website' (це теж з таблиці core_config_data)
+Тобто є конфіги, які будуть у всіх вебсайтів, а є конфіги які у кожного вебсайу будуть різні. Наприклад base_url у різних вебсайтів буде різний (наприклад дефолтний - http://modyf.lxc, а у нідерладського вебсайту буде - http://nl.modyf.lxc).  
+
+			- У змінній $rowset  все ще храняться дані з бази core_config_data. Цикл пробігається по всіх рядках таблиці core_config_data - foreach ($rowset as $r) {
+
+				- Якщо скоуп не вебсайт, цикл візьме інший рядок з бази - if ($r['scope'] !== 'websites') { continue; }
+
+				- if (isset($websites[$r['scope_id']])) { - У мадженті як я памятаю у EAV. Коли створюэться новий вебсайт, цей запис потрапляє у таблицю core_website і для нього створюється нова айдішка у колонці website_id. Дані про новий вебсайт також потрапляють у таблицю core_config_data. У ній буде колонка scope_id, яка буде така сама як і айдішка вебсайта(website_id). Тобто тепер йде перевірка чи існує вебсайт у таблиці core_website з айдішкою, яка привязана до вебсайту (колонка 'scope_id') у таблиці core_config_data.
+
+					- Якщо існує, то дефолтні конфіги (core_config_data у яких 'scope' => 'default') перепишуться конфігами з скоупа 'websites'.  Перезапишуться у глобальній конфігурації
+
+						- $nodePath = sprintf('websites/%s/%s', $websites[$r['scope_id']]['code'], $r['path'] ); - для прикладу візьму рядок з таблиці core_config_data у якого скоуп 'website' і він пройде умову - if ($r['scope'] !== 'websites') { .. - http://joxi.ru/L216bOac89aZ7A . 'scope_id' у ного == 2. Тож це буде вебсайт з айдішкою 2 - http://joxi.ru/p27a7yxIo487kr . 
+
+							- $websites[$r['scope_id']]['code'] - Береться 'code' вебсайта, айдішка('website_id') якого == 'scope_id' текущого рядка таблиці у базі core_config_data - це буде перший %s. Цей 'code' береться зі змінної $websites, але щоб понятніше було кину скрін з бази, щоб було понятно що це ячейка з таблиці бази core_website і у змінну $websites він попав з бази - http://joxi.ru/DrlgV3efvoxKvA - 'modyf_fr'
+
+							- $r['path'] - ячейки колонки path з текущого рядка таблиці core_config_data. web/unsecure/base_url це ноди конфігів. Тобто це буде <web><unsecure>base_url(ключ) - це буде друга %s - http://joxi.ru/5mdgM6EfkW05or
+
+							- $nodePath = 'websites/modyf_fr/web/unsecure/base_url';
+
+						- $xmlConfig->setNode($nodePath(<websites><modyf_fr><web><unsecure>base_url(ключ)), $value(текуща ячейка колонки 'value' з таблиці core_config_data - http://joxi.ru/Vm6Z71XiDlb6Km)); - Тобто так само як я установлював дефолтні конфіги (вверху я описував), установляться і конфіги для вебсайтів  - http://joxi.ru/brRz6oRiJP6Wnr - По ідей на французькому вебсайті мав би установитись базовий юрл з адресою http://fr.modyf.lxc/ так як і базі він такий, але в модіфі це чомусь не працювало, хоча б мало работати. Скоріш за все в інстал сріптах це хтось поміняв
+
+					- Якщо вебсайта з такою айдішкою не існує - $deleteWebsites[$r['scope_id'](2)] = $r['scope_id'(2)]; - вебсайт з цією айдішкою потрапить у масив $deleteWebsites
+			
+			- На даний момент у мене у глобальних конфігах у ноді <default> конфіги з таблиці core_config_data у яких 'scope' => 'default', у ноді <websites> у кожного вебсайта теж є конфіги з таблиці core_config_data у яких 'scope' => 'default' і також є конфіги з таблиці core_config_data у яких 'scope' => 'website' (не прям всі у яких 'scope' => 'website'. Я описував вверху як воно встановлюється), які перекривають дефолтні якщо це ідентичні ноди.
+
+ -----------------------
+
+		- Потім йде установка сторів. У кожен стор буде екстендитись конфіги з вебсайта
+
+			- Через цикл пропускаються всі вебсайти - foreach ($websites as $website) { - змінна $websites не змінилась, у ній і досі список з вебсайтами і сторами які належать до цього сайту
+
+				- $extendSource = $xmlConfig->getNode('websites/' . $website['code']); - береться текуший вебсайт - $website['code'] - ця нода це і буде вебсайт, наприклад modyf_fr - http://joxi.ru/brRz6oRiJP449r . У змінній $extendSource буде всі конфіги цього вебсайта що є у глобальних кофігах
+
+				- if (isset($website['stores'])) { - Якщо у вебсайта є якісь стори, продовжую.
+
+					- foreach ($website['stores'] as $sCode) { - пробігаюсь по сторах, які є у вебсайта
+
+						- Беру текуший стор $sCode з гобальних кофігів - $storeNode = $xmlConfig->getNode('stores/'.$sCode); - http://joxi.ru/Q2Kz7o6i4P0Mbm
+
+						- $storeNode->extend($extendSource, false(конфіги вебсайта не перепишуть конфіги стора)); - І розширяю його конфігами вебсайта до якого він належить. По ходу глобальна хмл-ка буде гіганська, якщо у кожному сторі будуть і дефолтні конфіги і конфіги вебсайта і зараз ще накотяться конфіги самого стора
+
+		- Ідентично тому як встановлювались конфіги з таблиці бази даних core_config_data з скоупом website для вебсайтів, так само тепер будуть встановлюватись конфіги з цієї таблиці у яких скоуп 'stores' - http://joxi.ru/8AnEVnwujp8EX2
+
+			foreach ($rowset as $r) { - у змінній $rowset ще й досі таблиця бази core_config_data
+			    if ($r['scope'] !== 'stores') { - якщо у текущого рядка скоуп не 'stores', візьми інший рядок
+				continue;
+			    }
+			    $value = str_replace($substFrom, $substTo, $r['value']);
+			    if (isset($stores[$r['scope_id']])) { - якщо у змінній $stores у якій є всі стори, є стор у якого ідентифікатор('store_id') == 'scope_id(думаю scope_id у таблиці core_config_data  для стора створються так само як і для вебсайта. При створенні нового стора, створиться новий рядок у таблиці core_config_data з scope_id, який буде == айдішці стору)' 
+				$nodePath = sprintf('stores/%s/%s', $stores[$r['scope_id']]['code'], $r['path']);  - візьме ноду потрібного стору + вузли зі змінної $r['path']
+				$xmlConfig->setNode($nodePath, $value); - і замінить цю ноду у текущому сторі
+			    } else {
+				$deleteStores[$r['scope_id']] = $r['scope_id']; - Якщо у змінній $stores не має стора у якого ідентифікатор('store_id') == 'scope_id' текущого рядка таблиці core_config_data
+			    }
+			} 
+
+		- ГОТОВО. - На даний момент у мене у глобальних конфігах у ноді <default> конфіги з таблиці core_config_data у яких 'scope' => 'default', у ноді <websites> у кожного вебсайта теж є конфіги з таблиці core_config_data у яких 'scope' => 'default' і також є конфіги з таблиці core_config_data у яких 'scope' => 'website' які перекривають дефолтні. І також є конфіги з таблиці core_config_data у яких 'scope' => 'stores' які перекривають дефолтні і вебсайтовські. 
+
+		--------------------------
+
+		- Чистка. У змінних $deleteWebsites і $deleteStore є рядки, 'scope_id' яких не звязані з з айдішками вебсайтів і сторів. Тобто налаштування на вебсайтів і сторів з цими айдішками є, але а базі цих вебсайтів і сторів немає. Тож ці налаштування(рядки) з бази core_config_data можна видалити. - http://joxi.ru/RmzEkMwu04d8Lr
+
+			- if ($deleteWebsites) {  $this->_getWriteAdapter()->delete($this->getMainTable(), array( 'scope = ?' => 'websites', 'scope_id IN(?)' => $deleteWebsites, )); }
+										- DELETE FROM core_config_data WHERE scope_id IN (7,8,9);
+
+			- if ($deleteStores) { $this->_getWriteAdapter()->delete($this->getMainTable(), array('scope= ?' => 'stores', 'scope_id IN(?)' => $deleteStores, )); }
+										- DELETE FROM core_config_data WHERE scope_id IN (6,4,7);
+
+		- return $this - метод loadToXml() завершив свою роботу і повертає глобальний метод конфігів
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ Mage::getConfig(); - взяти обєкт з деревом глобальний конфігів
+
+ - Далі Алан чомусь розбирав метод #File: app/Mage.php. Можливо й треба буде повернутись до розбору цього коду пізніше, так як на даний момент я не розумію навіщо це все 
+					public static function getStoreConfig($path, $store = null)
+					{
+					    return self::app()->getStore($store)->getConfig($path);
+					}
+
+	- Його можна розбити на 3 частини - $app            = self::app();
+					    $store_object   = $app->getStore($store);
+					    $value          = $store->getConfig($path);
+					    return $value;
+
+	- #File: app/code/core/Mage/Core/Model/Store.php
+
+		- метод getConfig($path) - наскільки я зрозумів цей метод поверне обєкт у якому будуть глобальні конфіги, я якщо захочу взяти конкретну ноду, то треба вказати це у змінній $path
+			
+		- При загрузці мадженти цей метод хтось викликає, поки не знаю хто. По цьому й буду розбирати. Той хто викликав, передав аргументу $path значення - catalog/price/scope - http://joxi.ru/RmzEkMwu04d6Rr
+
+			- $config = Mage::getConfig(); - змінній $config присвоїться глобальна конфігурація
+
+			- $fullPath = 'stores/' . $this->getCode() . '/' . $path; - змінній $fullPath присвоїться шлях до ноди яка передана в змінній $path. - http://joxi.ru/5mdgM6EfkWPe4r
+
+				- $this->getCode() - поверне текущий стор (хз як він визначає). Тобто з цього коду ясно, що метод Mage::getConfig(); шукає конфіги у конфігах стору, а не в дефолтних або у вебсайта
+
+			- $data = $config->getNode($fullPath); - змінній $data присвоїться нода, яка була передана в змінній $path.
+
+			if (!$data && !Mage::isInstalled()) { - якщо немає ноди $fullPat в конфігах стору  і маджента ще не встановлена
+			    $data = $config->getNode('default/' . $path); - шукай цю ноду у дефолтній ноді. З цього коду зрозуміло, що у ноді вебсайт маджента не шукає конфіги
+			}
+			
+			- if (!$data) { return null; } - якщо і в дефолтних немає, Mage::getConfig(); поверне null
+
+			- return $this->_processConfigValue($fullPath, $path, $data);
+
+				- if ($node->hasChildren()) { - якщо в ноди $data є діти 
+	
+					- foreach ($node->children() as $k => $v) { - цикл проходиться по всіх дітях $data
+                				- $aValue[$k] = $this->_processConfigValue($fullPath . '/' . $k, $path . '/' . $k, $v); - і запускає для дитячих нод рекурсивно цей же самий метод - $this->_processConfigValue()
+
+
+
+  -------- Я так і не дочитав цю статтю. Алан розказував у ній про методи, які я не бачив щоб використовувались в мадженті і я не розумів навіщо він про них розказує
+
+
