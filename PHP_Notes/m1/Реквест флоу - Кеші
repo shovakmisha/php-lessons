@@ -65,20 +65,94 @@
 
 		- return $this->getCacheId().'.lock';
 
-			- return $this->_cacheId; - На момент виконання цього коду, змінній _cacheId вже хтось присвоїв значення - 'config_global'
+			- return $this->_cacheId; - На момент виконання цього коду, змінній _cacheId вже хтось присвоїв значення - 'config_global' . Тобто метод $this->getCacheId() поверне 'config_global'
 
 	- Тож тепер у змінній $cacheLockId - 'config_global.lock'
 
 	- if ($this->_loadCache($cacheLockId) || $this->_hadCacheLock) { return $this; } - Цей кондішн тепер не спрацює, так як змінним $cacheLockId і _hadCacheLock на даний момент нічого не присвоїно, код іде далі
 
-	- if (!empty($this->_cacheSections)) { - $_cacheSections - це масив з секціями для кеша.
+	- if (!empty($this->_cacheSections)) { - $_cacheSections - це масив у який я буду записувати кеш по секціях
 
 		- $xml = clone $this->_xml; - клонується свойство класа Mage_Core_Model_Config _xml у якому храниться всі базові конфіги
 
-			- foreach ($this->_cacheSections as $sectionName => $level) { - проходжусь по всіх секціях(ключах) $_cacheSections
+			- foreach ($this->_cacheSections as $sectionName => $level) { - проходжусь по всіх секціях(ключах) $_cacheSections.
 
-				-  $this->_saveSectionCache($this->getCacheId(), $sectionName, $xml, $level, $tags); - цей метод робить всю роботу - зберігає конфіги в кеш
+				-  $this->_saveSectionCache($this->getCacheId() ('config_global'), $sectionName (текуща секція(ключ) $_cacheSections), $xml (глобальні конфіги), $level (значення ключа з масива $_cacheSections), $tags ('CONFIG' - категорія до якої відноситься кеш)); - цей метод робить всю роботу - зберігає конфіги в кеш
+					
+					- У самому методі _saveSectionCache() аргументи називаються по іншому. Не буду писати ще раз що їм присвоїно, просто треба підставити з виклика метода $this->_saveSectionCache()
 
+					- if ($source && $source->$sectionName) { - Якщо є копія глобального дерева конфігів $xml($xml = clone $this->_xml) ($xml - це $source) і якщо в ньому є нода, яка дорівньоє текущому ключу(СЕКЦІЇ) масива $_cacheSections
+
+						- $cacheId = $idPrefix( 'config_global' ($this->getCacheId()) ) . '_' . $sectionName('admin'); - це буде ідентифікатор для секції кеша. До прикладу тепер у циклі секція 'admin' - http://joxi.ru/Q2Kz7o6i4P8vVm - 'config_global' . '_' . 'admin'; Тобто $cacheId == 'config_global_admin'. По цьому ідентифікатору, можна буде витягнути цю секцію кеша з масива $_cachePartsForSave
+
+						- if ($recursionLevel > 0) { - Якщо значення секції(ключа) масива $_cacheSections більше 0
+
+							- $recursionLevel - вказує рівень, як глибоко заходити в ноду щоб розділити її дітей на секції. У всіх секціях що знаходять у масиві $_cacheSections цей рівень == 0, крім 'stores'(=> 1). Це означає що всі ноди у змінній $xml($xml = clone $this->_xml) крім 'stores' не будуть розділятись на секції, збережеться ціла нода в одну секцію
+
+							- Нода 'stores' => 1, тож її діти будуть розділятись на секції - foreach ($source($xml)->$sectionName('stores')->children() as $subSectionName => $node) { - Цикл буде проходитись по всіх дітях ноди 'stores'
+
+								- $this->_saveSectionCache($cacheId, $subSectionName, $source->$sectionName, $recursionLevel-1, $tags); І запустить метод _saveSectionCache() для всіх дітей ноди 'stores' - http://joxi.ru/p27a7yxIo4zXJr . По суті це звичайна рекурсія і нічого важкого, але трохи розпишу. І так, цей метод запускається ще раз для першої дитини 'stores'
+
+									- $this->_saveSectionCache( - цей метод запуститься з такими аргументами
+
+												- $cacheId, - 'config_global_stores' - Це ще батьківський айді стора. Якби 'stores' не мав левел 1, то він би записався в кеші з цією айдікою
+
+												- $subSectionName, - імя текушої дитини ноди 'stores' http://joxi.ru/Q2Kz7o6i4Plj6m - для прикладу візьму першу - 'default'
+
+												- $source->$sectionName, - нода 'stores'. Якщо б не було дітей, то цей аргумент був би клон глобальних кофігів $xml($xml = clone $this->_xml), але якщо аргумкнт левел == 1, то візьметься нода, для дитини якої запустився метод _saveSectionCache()
+
+												- $recursionLevel-1, - змешити левел на 1. Тобто якщо у ноди 'stores' левел == 1, і я не хочу щоб по дітях ноди 'stores' запускався метод _saveSectionCache() (тоді внуки ноди 'stores' розібються по секціяї), то зменшую левел до нуля і буду впевнений що дитина ноди 'stores' одним цілим запишеться в кеші, так як щоб внуків ноди 'stores' розбились по секціях, треба пройти цей кондішн - if ($recursionLevel > 0) { . 
+
+												- $tags - Тут без змін. так як і було у батьків - $tags[ '0' => 'CONFIG' ];
+											    );
+
+										- if ($source && $source->$sectionName) { - нода 'stores' є у змінній $xml($xml = clone $this->_xml) і у неї є дитина з тою назвою, яку я передав як аргумент. Наприклад це перша дитина і це нода 'default'. Цей кондішн пройде.
+
+											- $cacheId = $idPrefix ('config_global_stores' - це аргумент $cacheId, який я передавав при запуску метода _saveSectionCache() ) . '_' . $sectionName (текуще імя дитини ноди 'stores'. Наприклад це буде нода 'default'); - $cacheId = 'config_global_stores_default'
+
+											- if ($recursionLevel > 0) { - цей кондішн не пройде, тож код що в ньому, я не беру до уваги
+
+											- Перескакую зразу сюди - $this->_cachePartsForSave[$cacheId] = $source->$sectionName->asNiceXml('', false); - Цю строчку я розписував нижче (Якщо $recursionLevel не більше 0)
+
+
+
+						- Якщо $recursionLevel не більше 0
+
+							- На даний момент $_cachePartsForSave - пустий масив. Зараз йому присвоїться перша секція кеша
+
+							- $this->_cachePartsForSave[$cacheId('config_global_admin')] = $source($xml = clone $this->_xml)->$sectionName('admin')->asNiceXml('', false); - У масив _cachePartsForSave добавиться ключ 'config_global_admin' значення якого буде нода з глобальних конфігів 'admin' http://joxi.ru/823dpX3TJLByqA - не обовязково 'admin', це я для прикладу. З цієї змінної (масив_cachePartsForSave), я буду витягувати кеші по ключах в майбутньому. 
+
+						- return $this; - потім знов повертаюсь у метод saveCache() на строчку unset($xml->$sectionName); Вона йде якраз після $this->_saveSectionCache($this->getCacheId(), $sectionName, $xml, $level, $tags);
+
+						- unset($xml->$sectionName); -  Тобто я записав секцію з когфігами в кеш (наприклад <admin>), тепер її можна видалити зі змінної $xml, де хранятся всі конфіги 
+
+							- Після unset($xml->$sectionName); - http://joxi.ru/a2XzQoki1BzdMr - як бачу зі скіна, у змінній $xml вже не має ноди <admin>. Потім цикл продовжує свою роботу і іде заповнювати вже іншу секцію(ключ масива $_cachePartsForSave) строкою у якій будуть хранитись хмл кофіги ноди, імя якої буде таке саме як у секції(ключ масива $_cacheSections). і так для кожної секції. 
+
+				- Після того як цикл foreach ($this->_cacheSections as $sectionName => $level) { завершить свою роботу, у свойстві $_cachePartsForSave класа Mage_Core_Model_Config буде масив, у якому будуть хранитись ноди глобальних конфігів http://joxi.ru/KAxB9qwcMle5km, імя яких співпадало з іменем ключів масива $_cacheSections. 
+
+					- У кожної ноди у масиві _cachePartsForSave буде ідентифікатор(ключ). Хранятся в масиві вони так - ключ(config_global + імя ноди) => нода(хмл у вигляді строки)
+
+			- $this->_cachePartsForSave[$this->getCacheId()] = $xml->asNiceXml('', false); - Конфіги, які залишились у змінній $xml ($xml = clone $this->_xml), будуть теж  записані у свойство $_cachePartsForSave класа Mage_Core_Model_Config з ключем 'config_global' - http://joxi.ru/LmG9DozuePOPPA
+
+				- $this->getCacheId() поверне 'config_global'. Тож це буде виглядати приблизно так - $this->_cachePartsForSave['config_global'] = $xml->asNiceXml('', false);
+
+
+		- Тут є ще ці 2 строчки, але вони по ходу ні на що не вліяють на даний момент, та і Алан про них нічого не писав - $this->_saveCache(time(), $cacheLockId, array(), 60);
+        															   $this->removeCache();
+
+		- Алан каже, що цей метод saveCache() у якому я розбивав конфіги по секціях - це надстройка над головним методом _saveCache(); Головний метод _saveCache(); який відповідає за механізм зберігання кешів знаходиться в файлі - src/app/code/core/Mage/Core/Model/App.php (файл приложухи мадженти). Алан не розписував як він работає і я небуду
+
+			- foreach ($this->_cachePartsForSave as $cacheId => $cacheData) {
+			    $this->_saveCache($cacheData, $cacheId, $tags, $this->getCacheLifetime());
+			}
+
+ 7) Кроче це все цщо я знаю про записування інфи в кеш. Більше Алан нічого не писав. Взагалі метод для запису інфи в кеш, який я розписував ( saveCache() ) знаходиться у методі initModules(); У методі initModules() на початку є перевірка чи в кеші вже є дані про модулі, конфіги, базові конфіги (то що я описувах у попередніх файлах). Якщо ці всі дані є, то маджента не буде робити ті операції що я опсував у попереднії файлах. Тобто в цій строчці маджента перевіряє чи дані вже є в кешах - if (!$this->_config->loadModulesCache()) { ... Алан розписав як маджента це перевіряє
+
+	- У методі loadModulesCache() є метод loadCache() - його я і розпишу - $loaded = $this->loadCache();
+
+		
+
+		
 
 
 

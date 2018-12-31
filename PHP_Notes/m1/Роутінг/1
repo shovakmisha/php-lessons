@@ -1,0 +1,196 @@
+
+----------------------------------- Дублікат з іншого документу. Щоб було більш ясно який код виконувався в методі run -----------------------------------
+
+- $this->_initCurrentStore() - Загрузка текущого стору стору. При ініцілізації маджента вже витягнула всі стори вроді стори які є в адмінці. Тут по ходу вона назначає його в залежності від країни або таймзони, короче не знаю по чому, але після цієї ф-ції зявилась змінна стору ('fr_fr'). Наскільки я зрозумів. Ці стори є в базі (якщо є в адмінці, є і в базі)
+
+	- $this->_initRequest() - Загрузка реквесту ( По ходу тут получаю адресну строку )
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+------------- In Depth Magento Dispatch: Top Level Routers - https://alanstorm.com/magento_dispatch_routers/ --------------
+
+	- У минулій статті - https://alanstorm.com/magento_dispatch_routers/ - Алан розказував що є роути 2-х рівнів. нижчого рівня і вищого рівня. Роути вищого рівня будуть залежати від роутів нижчого тегом <use>. Умовно роут хелоуворд, який я створював це роут вищого рівня, який буде залежати від роути нижчого рівня Mage_Core_Controller_Varien_Router_Standard, так як у нтого в конфігах була прописана ця залежність <use>standart</use> Внизу це буде описано детальніше
+
+ 1) У базовому методі run, остання строчка йде - $this->getFrontController()->dispatch(); - тут все починається
+
+	- Якщо йти через дебагер, то код виконується у цьому порядку. Виконується ця частина коду - $this->getFrontController()
+
+		- if (!$this->_frontController) { $this->_initFrontController(); } - $this->_frontController ще не ініціалізована, тож виконується строчка _initFrontController();
+
+			-  метод _initFrontController(); виконує метод init(); - $this->_frontController->init(); - І це ще до того як метод dispatch() запустився. Тобто ініціалізація стандартних роутів (Mage_Core_Controller_Varien_Router_Standard, Mage_Core_Controller_Varien_Router_Admin, ...), виконується ще до метода match(). Це важливо розуміти, так як Алан почав розбирати диспетчирезацію з метода match(), але на той момент коли метод матч запускається, метод init() вже виконався у якому виконались також методи collectRoutes() і addRouter()
+
+				
+ ---------------------
+ 
+	- Метод init() - ініціалізує роути.
+
+		- Mage::dispatchEvent('controller_front_init_before', array('front'=>$this)); - якщо я хочу добавити свій роут нижчого рівня, то мій роут треба додавати перед нативними, інакше нативний роут обробить запрос. Щоб маджента обробила мій роут першим можна підписатись на івент 'controller_front_init_before', добавити свій роут і дати йому значення. Але я трохи забігаю наперед. Я опишу нижче чому роут у якого сортордер менший як у дефолтних роутів виконається першим. Кароче це простий івент на який можна підписатись і поки все.
+
+		- $routersInfo = Mage::app()->getStore()->getConfig(self::XML_STORE_ROUTERS_PATH (web/routers) ) - <web><routers>  Це буде багатовимірний масив з конфігами нативних роутів мадженти - http://joxi.ru/a2XzQoki1Bb1jr . Ці нативні роути маджента взяла з глобальних конфігів
+
+			- Це роути нижчого рівня. Від них залежать роути вищого рівня (ті шо в модулях у фалах config.xml). Роути вищого рівня будуть залежати від цих роутів нижчого рівня за допомогою тега <use>. Для прикладу у змінній  $routersInfo буде стандартний роут Mage_Core_Controller_Varien_Router_Standard який буде обробляти фронтові роути і коли я створив модуль helloworld, я прописав йому в залежностях стандартний роут - <use>standard</use> - http://joxi.ru/YmEzDoji0ywMY2
+
+		- foreach ($routersInfo as $routerCode => $routerInfo) { - проходжусь по нативних роутах мадженти. На наний момент їх 2 (Mage_Core_Controller_Varien_Router_Standard, Mage_Core_Controller_Varien_Router_Admin), якщо якиїсь обсервер не додав якиїсь кастомний роут перед цим.
+
+			- if (isset($routerInfo['disabled']) && $routerInfo['disabled']) { continue; } - Якщо у текущого нативного роута є тег <disabled> і якщо він true, то цикл не візьме цей нативний роут. Перейде до іншого нативного роуту
+
+				- if (isset($routerInfo['class'])) { - Якщо у текущого роуту в циклі є тег class
+
+					- $router = new $routerInfo['class']; - Створи з цього класу обєкт
+
+						- if (isset($routerInfo['area'])) { $router->collectRoutes($routerInfo['area'], $routerCode); } - метод collectRoutes() я описував нижче. Щоб краще зрозуміти цей воркфлоу, краще перейти зразу до описання цього методу. Я не писав зразу тут описання цього методу, так цей файл коротка копія статті Алана і тут опис стандартного роута йде в тому самому порядку що і в Алана
+
+
+
+
+		- Mage_Core_Controller_Varien_Router_Standard - стандартний (для фронта). Він знаходиться в конфігах - $routersInfo = Mage::app()->getStore()->getConfig(self::XML_STORE_ROUTERS_PATH);
+
+		- Mage_Core_Controller_Varien_Router_Admin - адмінський (для адмінки). Він знаходиться в конфігах - $routersInfo = Mage::app()->getStore()->getConfig(self::XML_STORE_ROUTERS_PATH);
+
+		- Mage_Cms_Controller_Router - цмс роутер, який додається після підписки на івент "controller_front_init_routers". Важливо - івент "controller_front_init_routers" виконується майже вкінці метода init(), перед додаванням дефолтного роута (дефолтний роут теж нижчого рівня). 
+
+  2) Алан почав з цього. #File: app/code/core/Mage/Core/Controller/Varien/Front.php - while (!$request->isDispatched() && $i++<100) { - цей код знаходиться у методі dispatch() який виконується після метода init() 
+
+	- foreach ($this->_routers as $router) { - На цьому етапі, обєкт фронт контроллера (Mage_Core_Controller_Varien_Front) має 4 (на модіфі 6) обєкти(роутери) які можуть зайнятись роутінгом. Ці 4 обєкти знаходяться у його свойстві _routers - http://joxi.ru/l2Z46oyTwPJ5yr . Цикл буде передавати цим 4-рьом обєктам адресну строку, чи вона їм підходить. Він передає не адресну строку, а обєкт $request, але наскільки я зрозумів маджента працює з адресними строками через цей обєкт
+
+		- Тут не 1 рівень абстракції роутів. І поки я не все розумію. навіщо стільки рівнів роутів. Поки я більш менш зрозумів 2 рівні. Найвижчий, який вже у файлі конфіга модуля, як я створював на уроках першого модуля хелоу ворлд і нижчий рівень, це роути Mage_Core_Controller_Varien_Router_Standard (головний роут для фронта), Mage_Core_Controller_Varien_Router_Admin  (головний роут для адмінки. Роут для адмінки екстендиться від фронтового роута). Стандартний роут направляє на роути вищого рівня на форонтенді і Адмін роут відправляє на роути вищого рівня на бекенді.
+
+			- І ці 2 роути (Mage_Core_Controller_Varien_Router_Standard, Mage_Core_Controller_Varien_Router_Admin) створюються у методі init() - src/app/code/core/Mage/Core/Controller/Varien/Front.php Ці 2 рівня абстракції я розумію. Навішо все інше, поки не знаю
+
+		- if ($router->match($request)) { break; } - Якщо якиїсь з роутерів підходить (match() повертає тру), я виходжу з циклу foreach. З цього коду можна сказати що роутер може бути тільки 1
+
+
+ ---------- In Depth Magento Dispatch: Standard Router - https://alanstorm.com/magento_dispatch_standard_router/ --------------------------------------
+
+ 3) Запускається метод match() у стандартного роута Mage_Core_Controller_Varien_Router_Standard
+
+	- if (!$this->_beforeModuleMatch()) { return false; } - Як я вже казав адмінський роут наслідуэться від стандартного роута. Тож у стандартному роуті можуть зустрічатись перевірки чи це точно запрос фронта. Це якрах такий випадок. На це модна поки не зважати, код піде далі
+
+	- $this->fetchDefault(); - установлюються дефолтні модуль контролер екшн -  'module' => 'core',
+										    'controller' => 'index',
+										    'action' => 'index'
+										));
+
+	- $front = $this->getFront(); - у змінній $front буде обєкт фронт контролера
+
+	- $path = trim($request->getPathInfo(), '/'); - у змінній $path буде інфа що йде після домена - http://magento1point6rc2.dev/catalog/category/view/id/8 (catalog/category/view/id/8)
+
+		- $request->getPathInfo() - catalog/category/view/id/8 . Тобто мені не треба діставати інфу з масивів $_GET, $_POST, маджента їх хранить у змінній $request
+
+	-  if ($path) {
+            	$p = explode('/', $path);
+					$p = array (
+					0 => 'catalog',
+					1 => 'category',
+					2 => 'view',
+					3 => 'id',
+					4 => '8',);
+	   } else {
+		$p = explode('/', $this->_getDefaultPath());
+
+			- Але якщо після домена немає нічого (https://modyf.lxc/), маджента не буде розуміти якому контролеру направити інфу. Тому вона ставить якесь дефолтне значення  $this->_getDefaultPath()
+
+				- protected function _getDefaultPath() {
+				    return Mage::getStoreConfig('web/default/front'); - System -> Configuration -> Web -> Default Pages -> Default Web URL - http://joxi.ru/82QB5lacjoYloA
+				}
+	   }
+
+		- $p = (array) 0 => string 'cms'
+
+		- Дефолтна цмс сторінка у мадженті - це хомпейджа - CMS Index Controller
+
+		- Але я не буду брати цмс сторінку. Візьму краще сторінку продукта - http://joxi.ru/DmB8DjGUwa0zxA
+
+
+	if ($request (Mage_Core_Controller_Request_Http)->getModuleName()) { - На даний момент при нормальних умовах, я можу тільки здогадуватись який модуль буде обробляти адресну строку (якщо в адресній строці є модуль). Але це тільки здогадки. Поки ні я ні маджента цього не знає. Хоча може бути таке, що хтось через обсервер вже назначив цей модуль. Не знаю точно як це зробити але це можливо. Тут це і перевіряється. В мене ніхто нічого не переназначав, тому цей кондішн не пройде. Переходжу в else
+
+            $module = $request->getModuleName();
+
+        } else {
+
+		-  if (!empty($p[0])) { $module = $p[0]; - $module = 'catalog'. http://joxi.ru/n2Yg5o1foPMK7r
+
+		- Якщо у $p[0] пусто, візьметься дефолтне значення для модуля - System -> Configuration -> Web -> Default Pages -> Default Web URL - http://joxi.ru/82QB5lacjoYloA . Але таке дуже рідко буває
+	
+						    if (isset($this->_modules[$frontName])) { - більш цікаво що це за змінна _modules
+							return $this->_modules[$frontName];
+						    }
+						    return false;}
+
+		- #File: app/code/core/Mage/Core/Controller/Varien/Router/Standard.php - public function addModule() - заповнює змінну _modules
+
+			- В цьому ж файлі він і викликається - $this->addModule($frontName, $modules, $routerName); У методі collectRoutes (Mage_Core_Controller_Varien_Router_Standard) .
+
+				- $router->collectRoutes($routerInfo['area'], $routerCode); - викликається у фронтконтролері у методі init()
+
+					- collectRoutes(<арія роута front/back>, <імя роута>) (http://joxi.ru/krDzDoEiEY1Oq2)
+
+					- На момент виконання метода collectRoutes(), маджента загрузила 2 ноди нативних роутів (нижчого рівня) з глобальних конфігів (Mage_Core_Controller_Varien_Router_Admin Mage_Core_Controller_Varien_Router_Standard)
+
+					- Метод collectRoutes будет проходить через объединенное дерево конфигураций и искать узлы <router />
+
+					- Важливо памятати метод collectRoutes() викликається з фронтконтроллера, а фізично цей метод знаходиться у роутів нижчого рівня. (у обєктів класів Mage_Core_Controller_Varien_Router_Admin Mage_Core_Controller_Varien_Router_Standard)
+
+				- Розпишу що він робить - public function collectRoutes($configArea ('frontend'), $useRouterName ('standart'))
+
+					- Дивно що навіть коли у адресній строці сторінка каталога, і для запуску метода collectRoutes() (у фронт контролері) береться адмінський обєкт роута (у адмінському обєкті є метод collectRoutes(), фронт контролер його запускає) і коли маджента зайшла в його код і вияснила що він справді не підходить, то адмінський роут в будь якому вирадку (підходить він чи не пдходить) запустить метод collectRoutes() у обєкті стандартного роута (Mage_Core_Controller_Varien_Router_Standard) 
+
+						- Але аргументи передасть адмінські - parent::collectRoutes($configArea (наприкдал admin), $useRouterName (наприкдал admin)); - Ця строчка є вкінці адмінського роута. Адмінський роут наслідується від Mage_Core_Controller_Varien_Router_Standard, тож парент це стандартний роут
+
+						- Судячи з того що стандартний роут запускається навіть у випадку коли фронт контролер перевіряє адмінський роут, зроблю висновок що стандартний роут по суті і обробляє адмінський запрос. Мабуть адмінський роут просто вносить якісь корективи у його роботу
+ 
+ -- поїхали --
+					- $routers = array();
+        				- $routersConfigNode = Mage::getConfig()->getNode($configArea ('frontend/backend').'/routers'); - Тут будуть всі <routers> з файлу config.xml модулів - http://joxi.ru/KAggGLzf4WRPoA В даному випадку роути фронта (Це вже роути вищого рівня). Для прикладу так виглядає конфіг модуля Хелоуворлд - http://joxi.ru/krDzDoEiEY1jW2 який є в цьому списку 
+
+					- if($routersConfigNode) { $routers = $routersConfigNode->children();} - візьми всіх дітей $routersConfigNode (дитячі ноди)
+
+					- foreach ($routers as $routerName=>$routerConfig) { - цикл пробігається по всіх роутах <routers> що у файлах модулів config.xml . У даному випадку роути фронта
+
+						- $use = (string)$routerConfig->use; - у кожного роута вищого рівня є тег use - <use>standard/admin</use> - він взазує на те який з роутів нижчого рівня буде обробляти цей роут (Mage_Core_Controller_Varien_Router_Standard  Mage_Core_Controller_Varien_Router_Standard) - http://joxi.ru/L216bOac8MRpeA
+
+            					- if ($use == $useRouterName) { цей тег <use> у роуті вищого рівня має співпадати з іменем(<нодою>) роута нижчого рівня. Типу <use>standard/admin</use> - http://joxi.ru/5mdgM6Efkzkxar . Це типу залежності. Тобто, наприклад на даний момент у мене у змінній $routers тільки фронтові роути. цикл проходиться по них. У всіх у них в залежностях по хорошому має бути прописано - <use>standard</use>. Тоді буде понятно що це фронтовий роут вищого рівня. Тому що standart - це роут нищого рівня який обробляє фронтові роути вищого рівня. 
+
+																	<standard>
+																	    <area>frontend</area>
+																	    <class>Mage_Core_Controller_Varien_Router_Standard</class>
+																	</standard>
+
+							- Якщо роутер вищого рівня буде знаходитись у арії <frontend> і в use у нього буде прописаний роут нижчого рівня не standard, то він не пройде цей кондішн ($use == $useRouterName) і не добавиться у $this->_modules. І так само з іншими роутами (admin install). Тобто все маэ співпадати
+
+							- $modules = array((string)$routerConfig->args->module); - Сюди попаде імя модуля який написаний у тегах <module>Alanstormdotcom_Helloworld</module> у роуті вишого рівня - http://joxi.ru/EA4LvxOiwEoQwA
+
+							- Далі йде цикл у якому розбираються про атрибути before after у текущого модуля в циклі, але я поки це пропущу, Алан сказав що він про це писав у іншій статті
+
+							- $frontName = (string)$routerConfig->args->frontName; - змінній $frontName присвоюється frontName текущого модуля в циклі - http://joxi.ru/nAyv8gwUYzg7er . Правильніше було б сказати, що змінній $frontName присвоюється frontName текущого роута в циклі, але я трохи спростив щоб було понятніше. Тим паче я ще не зустрічав щоб у одного модуля було декілька фронтнеймів і навпаки. Зазвичай 1 модуль має 1 свій фронтнейм
+
+							- $this->addModule($frontName, $modules, $routerName);
+
+								- $frontName - фронтнейм текущого роута (модуля) у циклі - http://joxi.ru/a2XzQoki1Y4Mer
+
+								- $modules - я заповнював вверху. текущий модуль у циклі - $modules['0' => Mage_Core] http://joxi.ru/RmzEkMwu0eMJQr . Це я для прикладу взяв. Хоча якщо змінній $routers будуть фронтові роути , то першим скоріш і буде модуль Mage_Core, так як він іде першим у списку модулів у глобальних конфігах.
+
+									- $modules - це масив. У ньому може бути не тільки текущий модуль в циклі, а ще і ті які звязані з ним через атрибути before i after. Але про це я поки не в курсі. Тож зупинюсь на тому що тут тільки один модуль.
+
+								- $routerName - назва текущого роута в циклі. Це роут верхнього рівня. - <helloworld> - http://joxi.ru/L216bOac8M0oDA
+
+								public function addModule($frontName, $moduleName, $routeName){ - http://joxi.ru/DrlgV3efvgGvjA
+									$this->_modules[$frontName] = $moduleName;
+									$this->_routes[$routeName] = $frontName;
+									return $this;}
+
+							- І ВСЕ. СВОЙСТВА КЛАСА STANDARD $this->_modules I $this->_routes ЗАПОВНИЛИСЬ МОДУЛЯМИ І РОУТЕРАМИ ВИЩОГО РІВНЯ. Важливо розуміти що метод collectRoutes() викликається ще на дуже ранньому етапі. У фронтконтроллері у методі init() 
+
+
+
+
+
+
+	- if (!$module) { if (Mage::app()->getStore()->isAdmin()) {$module = 'admin'; - змінній $module не присвоїться тут admin, це можна проігнорувати
+
+	- НА ДАНИЙ МОМЕНТ Я МАЮ ІМЯ МОДУЛЯ ЯКИЙ БУДЕ ОБРОБЛЯТИ ЗАПРОС. МОДУЛЬ Я ПОЛУЧИВ З АДРЕСНОЇ СТРОКИ
+
+	- Тепрер я знаю імя модуля (наприклад catalog) і мені треба взнати імя кампінії для цього модуля (наприклад Mage_Catalog). це робиться тут - $modules = $this->getModuleByFrontName($module);
+
+		- Взагалі цей метод дуже простий public function getModuleByFrontName($frontName) {

@@ -19,7 +19,7 @@
 	<frontend>
 		<routers>
 			<helloworld> - Этот тег должен быть строчной версией названия вашего модуля. Наш модуль называется Helloworld, этот тег - helloworld.
-				<use>standard</use>
+				<use>standard</use> - Я не впевнений, але мабуть це стандартний роутер - Mage_Core_Controller_Varien_Router_Standard - це тільки догадки
 				<args>
 					<module>Alanstormdotcom_Helloworld</module> - Этот тег модуля должен быть полным именем вашего модуля Кампанія/Модуль. Это будет использоваться системой для поиска файлов вашего контроллера.
 
