@@ -1,0 +1,1 @@
+{"virtualbox":{"/var/www/html/magento.one":{"guestpath":"/var/www/html/magento.one","hostpath":"/var/www/html/shovak/new_git/php-lessons/vagrant/html/magento.one","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/var/www/html/shovak/new_git/php-lessons/vagrant","disabled":false,"__vagrantfile":true}}}

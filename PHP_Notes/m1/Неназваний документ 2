@@ -129,16 +129,6 @@
 			
 				- В ітозі getGroupedClassName() поверне Modyf_Cms_Model_Page. З цього класу створиться обєкт $obj = new $className($constructArguments); Це був розжований курс про те що вираз  Mage::getModel('cms/page'); поверне обєкт з класа Modyf_Cms_Model_Page
 
-	- Після того як він розібрався з моделькою для класу, назначається контролер
-$request->setModuleName('cms') - модуль
-            ->setControllerName('page') - Контролер для цієї цмс пейджі
-            ->setActionName('view') - екшн для цієї цмс пейджі
-            ->setParam('page_id', $pageId); - Тут по ходу будуть медіа квері з адресної строки або скоріш за все - це ідентифікатор цмс сторінки
-        $request->setAlias(
-            Mage_Core_Model_Url_Rewrite::REWRITE_REQUEST_PATH_ALIAS,
-            $identifier
-        );
-	- Потім роут повернув тру. Це означає що він розпізнав юрл-ку
 
 
  ------ Продубльовано з файла де я розписував стандартний роут ---------------
@@ -157,9 +147,7 @@ $request(Mage_Core_Controller_Request_Http) - він буде запрашува
 	- Нагадую що я ще в циклі, який проходиться по всіх роутах що записані (навіть у модулях) у файлі config.xml. getRouterByRoute() Перевірить чи це не стандартний роут для фронта або адмінки, і назначить роутер по фронтнейму(<frontName>) - $router = $this->getRouter($routeName); return $router; Нагадую це четод getRouterByRoute у файлі /lxc/modyf/home/smile/modyf/src/app/code/core/Mage/Core/Controller/Varien/Front.php
  // Повертаюсь до метода setRouteName(); поки не знаю що тут доповнити
 
- 
- - Потым йде перевірка чи є файл контролера і якщо є виконується його інклюд в код
- - Потім цей контролер ініціалізується і йде провіка чи він наслідується від instanceof Mage_Core_Controller_Front_Action;
+
  - Потім Контролер назначає Екшн
  - Запускається dispatch()
 	-  У методі dispatch назначається арія(фронтенд, adminHtml) у методі preDispatch(). Також у методі preDispatch я вперше побачив щоб встановлювались якісь сесії і кукі

@@ -82,7 +82,9 @@
 
  3) Запускається метод match() у стандартного роута Mage_Core_Controller_Varien_Router_Standard
 
-	- if (!$this->_beforeModuleMatch()) { return false; } - Як я вже казав адмінський роут наслідуэться від стандартного роута. Тож у стандартному роуті можуть зустрічатись перевірки чи це точно запрос фронта. Це якраз такий випадок. На це модна поки не зважати, код піде далі. До речі у адмінського роута взагалі не має метода match(). А оскільки адмінський роун наслідується від стандартного, то і викличеться метод match() стандартного роута  
+	- if (!$this->_beforeModuleMatch()) { return false; } - Як я вже казав адмінський роут наслідуэться від стандартного роута. Тож у стандартному роуті можуть зустрічатись перевірки чи це точно запрос фронта. Це якраз такий випадок. На це модна поки не зважати, код піде далі. До речі у адмінського роута взагалі не має метода match(). А оскільки адмінський роун наслідується від стандартного, то і викличеться метод match() стандартного роута 
+
+		- Але сам цей метод як вын оприділяє чи це не адмінський роут, можна передивити буде
 
 	- $this->fetchDefault(); - установлюються дефолтні модуль контролер екшн -  'module' => 'core',
 										    'controller' => 'index',
@@ -325,7 +327,7 @@
 				- $module = $router->getFrontNameByRoute($route); - Метод getFrontNameByRoute('catalog') просто повертає аргумент, який я йому передав. Тож змінній $module присвоїться 'catalog'
 
 				- if ($module) {
-	    				$this->setModuleName($module); - Це взагалі зендовський метод. Не знаю як він работає, Алан не розписував. Тим паче Алан казав що це і не важливо. Цей метод не має ніякого відношення до встановлення. Проігнорую цю строчку.
+	    				$this->setModuleName($module); - Це взагалі зендовський метод. Він назначить обєкту Mage_Core_Controller_Request_Http свойство _module якому буде присвоїно $module. Алан казав що це і не важливо. Внизу є метод setModuleName(), який я описав, який переназначить це свойство.
 
 		- Тож получається що вся ця строчка $request->setRouteName($this->getRouteByFrontName($module)); і то що я описував була безполезна майже
 
@@ -355,9 +357,186 @@
 
 	- $this->_checkShouldBeSecure($request, '/'.$module.'/'.$controller.'/'.$action); - Цей кусок робить з http https. Тож якщо у мене сайт по якихось причинах буде переходити на https а мав би бути на http, треба буде подивити, можливо в цьому причина
 
- 	- $controllerClassName = $this->_validateControllerClassName($realModule, $controller); - Провіряє чи є файл контролера (типу цього $this->_validateControllerClassName('Mage_Catalog', 'category');)
+ 	- $controllerClassName = $this->_validateControllerClassName($realModule, $controller);- Провіряє чи є файл контролера (типу цього $this->_validateControllerClassName('Modyf_Catalog', 'category');)
 
 		- Зміннa $realModule - це імя текущого модуля в циклі. Нагадаю що я тепер в циклі -  foreach ($modules as $realModule) {
+
+		- Я не буду тут розписувати кожну строчку, так як логіка навіщо цей код досить понятна. весь код нижчого рівня вже виконаний і тепер в мене вже є точні назви модуля контролера екшна. Все що тепер перевіряється іх валідація. Валідація тут дуже проста - складується шлях до цих файлів і перевіряється чи з ними можна працювати.
+
+		- ЧЕРВОНОЮ ниткою через весь цей цикл foreach ($modules as $realModule) { йде код викидування з циклу якщо щось не так. Провірок тут куча і якщо щось не так, то зразу викидує з цього циклу і буде братись інше імя модуля.
+
+		- модулі контролери екшни не загружаються автолоадером. Тобто немає такого що в адресній строці є catalog/category/view і маджента перетворить це атоматом у клас MyCompany_Сatalog_Category_View. Алан казав самому розбиратись чому так. Думаю це із за того, що це дуже важко реалізувати. Треба було б ставити дуже багато кондішнів і метод який би назначав адресну строку був би дуже запутаний.
+
+			- Не було б якоїсь поступовості як тепер. А йшла б перевірка на все і зразу і була б каша. А так як тепер більш менш структуровано, елегантно і гнучко. 
+
+			- Я і сам не розумію чому не використовується автолоадер, тому так розмито написав
+
+		- І на Модіфі я не міг відкрити сторінку категорії, тож буду приводити в приклад сторінку продукта ($controller == 'product')
+
+		- $controllerFileName = $this->getControllerFileName($realModule, $controller); - Тут все просто. Шукається файл контролера, який в змінній $controller. Нічого нового, єдине що можна відмітити це метод - Mage::getModuleDir('controllers' (фізична папка), 'Modyf_Catalog'); - він поверне повний шлях до папки  'controllers' в модулі 'Modyf_Catalog' - /home/smile/modyf/src/app/code/local/Modyf/Catalog/controllers
+
+			- $controllerFileName = /home/smile/modyf/src/app/code/local/Modyf/Catalog/controllers/ProductController.php
+
+			- if (!$this->validateControllerFileName($controllerFileName)) { return false; } - перевіряє чи до файла $controllerFileName можна достукатись
+
+				- На модіфі не було файла $controllerFileName, тому у циклі - foreach ($modules as $realModule) { я беру інший маджентівський модуль Mage_Catalog
+
+				- А в ядрі мадженти вже він є, тому беру його /home/smile/modyf/src/app/code/core/Mage/Catalog/controllers/ProductController.php і кладу його у змінну $controllerFileName
+
+				---------------------------------
+				- Тепер в циклі модуль з назвою Mage_Catalog
+				---------------------------------
+
+		- $controllerClassName = $this->getControllerClassName($realModule (Mage_Catalog), $controller ('product')); - складе з аргументів строку. Ця строка буде клас контролера
+
+			- return Mage_Catalog_ProductController
+
+		- if (!$this->_includeControllerClass($controllerFileName, $controllerClassName)) { - аргументами метода будуть клас контролера і файл у якому цей контролер. Якщо вони валідні, заінклюдиться файл контролера - include /home/smile/modyf/src/app/code/core/Mage/Catalog/controllers/ProductController.php
+
+			- if (!class_exists($controllerClassName, false)) { - Тут перевіряється чи є цей клас . Другий аргумент false означає що не викликати цей клас (запуск __construct())
+
+				-  if (!file_exists($controllerFileName)) { return false; } - ще раз перевіряє чи є файл у якому цей клас
+
+				- include $controllerFileName; - інклюдиться файл з класом контролера
+
+				- return true;
+
+		- return $controllerClassName;
+
+	- $controllerClassName = Mage_Catalog_ProductController
+
+	- Єдине що я поняв з цього це треба зберігати правильний синтаксис класів, імен файлів, класів. Щоб була правильна структура і тд. Інакше у методі _validateControllerClassName() не пройде валідація контроллера. Іце обернеться або помилкою, або тим що маджента просто не помітить мій контролер і треба буде дебажити цей метод
+
+	- if (!$controllerClassName) { continue; } - Якщо текущий контролер не пройде хоч одну з цих провірок, візьметься слідуючий модуль в циклі (якщо він є). Якщо модулі закінчились, я вийду з циклу. 
+
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+	- $controllerInstance = Mage::getControllerInstance($controllerClassName, $request, $front->getResponse()); - якщо валідаіція контролера пройшла успішно, ініціалізую контроллер
+
+		---------------------------------
+		- Тепер я ще в циклі foreach ($modules as $realModule) - // $realModule == Mage_Catalog
+		---------------------------------
+
+		- $front->getResponse() - Алан не не описував. Я просто хотів показати що в getResponse() нічого сверхособливого немає. він просто відсилає якісь заголовки
+
+			- return Mage::app()->getResponse();
+				if (empty($this->_response)) {
+				    $this->_response = new Mage_Core_Controller_Response_Http();
+				    $this->_response->headersSentThrowsException = Mage::$headersSentThrowsException;
+				    $this->_response->setHeader("Content-Type", "text/html; charset=UTF-8");
+				}
+				return $this->_response;
+
+		- getControllerInstance($controllerClassName, $request, $front->getResponse()
+
+			- return new Mage_Catalog_ProductController(обєкт Mage_Core_Controller_Request_Http, обєкт Mage_Core_Controller_Response_Http(), array()); - Тобто ініціалізація контролера це мається на увазі викликати у контролера метод __construct() і передати йому потрібні аргументи.
+
+			- Так як у класа Mage_Catalog_ProductController немає конструктора, йду шукати у предків - Mage_Core_Controller_Varien_Action
+
+				- public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+
+					    {
+						$this->_request = $request; - у мого контролера буде свойство _request - обєкт Mage_Core_Controller_Request_Http
+						$this->_response= $response; - у мого контролера буде свойство _response - обєкт Mage_Core_Controller_Response_Http
+
+						Mage::app()->getFrontController()->setAction($this); - Фронтконтроллер не має метод setAction(); цей код не виконується. Не розумію цю логіку. Навіщо тут викликати метод якого немає в нативній мадженті
+
+						$this->_construct(); - це пустий метод (це не конструктор, у нього назва починається тільки з одного підчеркування _. Якщо шо то цей метод можна заестендити собі і по ідеї він буде викликатись кожен раз коли конструктор буде викликатись)
+					    }
+
+	- if (!$this->_validateControllerInstance($controllerInstance)) { continue; } - йде провіка чи він наслідується від instanceof Mage_Core_Controller_Front_Action;
+
+		- return $controllerInstance instanceof Mage_Core_Controller_Front_Action;
+
+	- if (!$controllerInstance->hasAction($action)) { continue; } - Перевірка якщо у мого обєкта контролера є метод екшена. Перевірка дуже проста, описувати не буду. Просто до змінної $action додається слово Action і перевіряється чи є цей метод - return $action . 'Action'; Якщо метода екшна не має, цикл візьме імя іншого модуля.
+
+	- $found = true;
+
+        - break; - Виходжу з цикла
+
+----------------------------------------------------------------------------------
+
+	- if (!$found) { - Змінна $found залишиться false, якщо жоден з модулів що пропускався по циклу вверху не дійшов до кінця. Якщо $found = true; це означає, що текущий модуль пройшов всі провірки і йому назначились контролер і екшн.
+
+		- if ($this->_noRouteShouldBeApplied()) { - у станддарного роутера цей кондішн не пройде так як метод _noRouteShouldBeApplied() поверне фолс.
+
+		- return false; - і в ітозі метод match() стандартного роута поверне фолс і фронтконтроллер візьме інший роутер
+
+		- Алан каже що ці строчки коду більш для адмін роутера
+
+	- // set values only after all the checks are done - Після того як модуль контроллер екшн пройшли всі провірки і я маю їх назви, тепер назначаю обєкту $request (Mage_Core_Controller_Request_Http) свойства у яких будуть хранитись ці дані. Нагадаю що у аресній строці в мене - catalog/product/view/id/127205
+
+------------------------
+
+		- Нагадаю що крім ініціалізації обєкта контроллера (описував вверху), з функціоналу код нічого не робив. Просто брались дані з адресної строки, і йшли перевірки чи модуль контроллер екшн підходять. Якщо контроллер екшн не підходять, то замість них ставились 'index'. Тобто нічого не назначалось, тільки примірялось чи підходить все.
+
+-----------------------
+
+	- $request->setModuleName($module); - Я вже описував вверху про то що зендівський метод setModuleName() установлював імя модуля модуля у обєкті $request, але цей код його перезапише. В принципі те дублікат того коду, так як метод setModuleName() який я тепер викликаю той же самий зендівський метод. 
+
+		- public function setModuleName('catalog') { $this->_module = 'catalog'; ( Mage_Core_Controller_Request_Http->_module = 'catalog'; )
+
+	- $request->setControllerName($controller); - зендівський метод
+
+		- public function setControllerName('product') { $this->_controller = product; ( Mage_Core_Controller_Request_Http->_controller = 'product'; )
+
+	- $request->setActionName($action); - зендівський метод
+
+		- public function setActionName('view') { $this->_action = 'view'; ( Mage_Core_Controller_Request_Http->_action = 'view'; )
+
+		- if (null === $value) { $this->setParam($this->getActionKey(), $value); } - я не знаю навіщо цей код і при яких умовах на цьому етапі екшн може бути пустий. Впевнений що дуже рідко
+
+	- $request->setControllerModule($realModule); - $realModule - це імя модуля на якому завершився цикл. Це вже модуль який пройшов провірки і його контролер і екшн теж
+
+		- public function setControllerModule('Mage_Catalog') { $this->_controllerModule = 'Mage_Catalog'; ( Mage_Core_Controller_Request_Http->_controllerModule = 'Mage_Catalog'; )
+
+	- Розбираю оставшуся часть адресної строки - id/127205 == id = 127205 . Ці дані теж присвоюються обєкту $request ($request->setParam('id', 127205)
+
+		for ($i = 3, $l = sizeof($p); $i < $l; $i += 2) {
+		    $request->setParam($p[$i], isset($p[$i+1]) ? urldecode($p[$i+1]) : ''); urldecode - Декодирование URL-кодированной строки
+		}
+
+ ---------------------------------------- Dispatch Time! ----------------------------------
+
+	- $request->setDispatched(true); - Просто установлює обєкту $request свойство _dispatched = true. Не знаю де це свойство перевіряється, Алан казав що десь перевфряється. І як я писавв вверху, у контроллера теж є свойство у якому храниться обєкт $request. А враховуючи що це обєкт, то якщо я поміняю з контролера свойство _dispatched, то воно поміняється і в обєкті $request
+
+	- $controllerInstance->dispatch($action); - це вже загрузка сторінки, наскільки я зрозумів. Алан нічого про це не писав
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Метод match() завершений. Він повернув true. Змінна $found = true; 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	
+
+			
+
+		 	
+
+	
 
 
 
