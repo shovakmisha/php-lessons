@@ -1,0 +1,232 @@
+ 
+ ------------------------------------------ In Depth Magento Dispatch: Rewrites - https://alanstorm.com/magento_dispatch_rewrites_intro/ -----------------------------------
+
+	- У цьому уроці я розгляну як адресні строки з такого вигляду electronics/cameras/accessories/universal-camera-case.html, перетворюються в catalog/product/view/id/133/category/25
+
+ - Кароче ця стаття з реврайтами не ідентична тому що у Алана. Я почав описувати реврайти, відколи у мене код почав співпадати з статтею Алана. Я проходився по коду і не бачив щоб до цього коду з реврайтами відбувався серйозний функціонал.
+
+ - Реврайти корисні для сео. Коли у адресній строці є імя продукта, гугл краще індексує сайт
+
+ - в Magento есть две разные системы переписывания запросов. Первая система перезаписи основана на наборе правил перезаписи, расположенных в  database/model-layer модели Magento, доступ к которому осуществляется классом модели core / url_rewrite. Вторая система перезаписи основана на наборе правил перезаписи, добавленных в комбинированное дерево config.xml. 
+
+ 1) $this->_getRequestRewriteController()->rewrite(); - тут все починається.
+
+	- $this->_getRequestRewriteController() - поверне модельку яка буде працювавти з реврайтами
+
+		- $className = (string)Mage::getConfig()->getNode('global/request_rewrite/model');
+
+		- Візьме значення ноди $className і створить з цього класу сінглтон обєкт - core/url_rewrite_request - http://joxi.ru/D2PzQoZipV3YXr.
+
+		- Взагалі то як маджента створює обєкти так як тут я ще не бачив
+
+			  return Mage::getSingleton('core/factory')->getModel($className, array( --- getSingleton('core/factory') - цей запис я не дуже зрозумів. Мабуть це означає що реєструється сінглтон обєкт core/factory (class Mage_Core_Model_Factory). ->getModel - це метод обєкта Mage_Core_Model_Factory. о ходу він такий самий як і Mage::getModel()
+
+			    'routers' => $this->getRouters(), - це буде 2-й аргумент метода getModel(). Після цього у обєкта, який створює метод getModel() у свойстві 'routers' будуть обєкти роутерів
+			));
+
+	- ->rewrite(); - цей метод вже виконується у обєкті класа, який взяли з конфігів ->getNode('global/request_rewrite/model'); - Mage_Core_Model_Url_Rewrite_Request. Тобто у нього є цей метод  rewrite() і він є $this. Задача метода rewrite() взяти адресу з адресної строки, подивити чи в базі є реврайт для неї,
+
+		- if (!$this->_request->isStraight()) { - після цієї строчки, й обєкта $request зявиться свойство _isStraight зі значенням false. Якщо б ця умова не пройшла, то реврайт для текущої адреси не робивбися, і метод $this->_rewriteDb(); не спрацював би. Але це дуже рідко буває і на практиці $this->_rewriteDb(); майже завжди спрацьовує
+
+		- на момент виконання цього коду, у обєкті Mage_Core_Model_Url_Rewrite_Request вже є всі реврайти, які я маю в мадженті в адмінці (в базі)
+
+			$c = Mage::getModel('core/url_rewrite')->getCollection(); - Саме зараз я не маю всіх реврайтів, я маю тільки обєкт Mage_Core_Model_Url_Rewrite_Request, але якщо викликати в нього метод getCollection(), то буду мати всі реврайти
+
+			foreach($c as $item)
+			{
+			    var_dump($item->getData()); - http://joxi.ru/4AkgeRYfywOWGA
+			}
+
+		- для прикладу запишу реврайт продукт пейджі. Ось ці дані хранить адмінка
+
+			  'url_rewrite_id' => string '3' (length=1)
+			  'store_id' => string '1' (length=1)
+			  'id_path' => string 'product/1/4' (length=11)
+			  'request_path' => string 'test-cat/test.html' (length=18)
+			  'target_path' => string 'catalog/product/view/id/1/category/4' (length=36)
+			  'is_system' => string '1' (length=1)
+			  'options' => null
+			  'description' => null
+			  'category_id' => string '4' (length=1)
+			  'product_id' => string '1' (length=1)
+
+				- По великому рахунку, задача метода _rewriteDb() поягає в тому, щоб взяти текущу адресну строку, яка храниться в свойстві 'target_path' і зробити щоб у обєкті $request замісь ней була адреса зі змінної 'request_path'
+
+		- ПОЧИНАЮ РОЗБИРАТИ МЕТОД. Спочатку йде установка стору, якщо він ще не установлений
+
+		- $requestCases = $this->_getRequestCases(); - вызьме текущу адресну строку з обєкта $request і зробить масив у якому будуть версії адресної строки, одна з  слешем в кінці, одна без [sony-vaio-vgn-txn27n-b-11-1-notebook-pc.html/ , sony-vaio-vgn-txn27n-b-11-1-notebook-pc.html] (без http і домена)
+
+			- Якщо є queryString, то у масив $requestCases спочатку добавляться елементи в яких будуть адресна строка і медіа квері з слешем і без 
+
+				[sony-vaio-vgn-txn27n-b-11-1-notebook-pc.html?queryString, sony-vaio-vgn-txn27n-b-11-1-notebook-pc.html/?queryString]
+
+			- http://joxi.ru/82QB5lacj5Eq5A
+
+		- $this->_rewrite->loadByRequestPath($requestCases); - ця строчка візьме з бази core_url_rewrite рядок, який підходить під дану адресну строку на основі масива $requestCases. Дані рядка бази я описував више - Mage::getModel('core/url_rewrite')->getCollection();
+
+			------------- https://alanstorm.com/magento_dispatch_rewrites_advanced/ ------------
+
+			- $this->setId(null); - дивлячись на то що аргумент у метода null, то можна сказати що це спеціально зроблено щоб ресетнути налаштування перед дим як установити айдішку реврайту. Але це тільки догадки. Внизу трохи розпишу що робить цей метод
+	
+				- if ($this->getIdFieldName()) {
+
+					public function getIdFieldName() {
+        					if (!($fieldName = parent::getIdFieldName())) { 
+
+							public function getIdFieldName() {
+								return $this->_idFieldName; } - Свойство _idFieldName у обєкта Mage_Core_Model_Url_Rewrite пусте, тож кондішн пройде. Йду шукати дані в базі 
+
+							- $fieldName = $this->_getResource()->getIdFieldName();
+
+								- $this->_getResource() - поверне Mage::getResourceSingleton(core/url_rewrite); - тобто це буде обєкт сінглтон - Mage_Core_Model_Url_Rewrite
+
+								- getIdFieldName(); Цей метод вже виконується у контексті обєкта Mage_Core_Model_Url_Rewrite. У нього є свойство _idFieldName, якому присвоїно значення url_rewrite_id. url_rewrite_id - це значення має кожен реврайт. Це по суті айдішка реврайта і в кожного вона різна 
+
+			- $this->_getResource()->loadByRequestPath($this, $path);
+
+				- $this->_getResource() - - поверне Mage::getResourceSingleton(core/url_rewrite); - тобто це буде обєкт сінглтон - Mage_Core_Model_Url_Rewrite
+
+				- loadByRequestPath(Mage_Core_Model_Url_Rewrite $object, $path) - цей метод вже буде виконуватись у контексті обєкта Mage_Core_Model_Url_Rewrite. $path - це масив з різними видами адресних строк - http://joxi.ru/J2bglQGfXz0egA текщої адресної строки
+
+					- foreach ($path as $key => $url) { - проходжусь по масиву $path циклом і складую адресні строки у масив $pathBind. $pathBind['path0' => 'test-cat/test.html?ss', ..] - http://joxi.ru/p27a7yxIoPKRnr
+
+						- $adapter = $this->_getReadAdapter(); Знайомий метод _getReadAdapter(). Підключаюсь до бази
+
+						- $select  = $adapter->select()->from($this->getMainTable())->where('request_path IN (:' . implode(', :', array_flip($pathBind)) . ')')
+        												->where('store_id IN(?)', array(Mage_Core_Model_App::ADMIN_STORE_ID, (int)$object->getStoreId()));
+
+							- SELECT `core_url_rewrite`.* FROM `core_url_rewrite` WHERE (request_path IN (:path0, :path1)) AND (store_id IN(0, 1))
+
+						- $items = $adapter->fetchAll($select, $pathBind); - після цього в мене в змінній $items залишилась тільки той елемент масива $path, який мені підходив
+
+				- ЩЕ РАЗ ПРО РЕВРАЙТИ. ЯК ВОНИ ПРАЦЮЮТЬ. 
+
+					- наприклад я створюю категорію. В неї є поле нейм, цей нейм і буде відображатись у адресній строці, тільки замість пробілів будуть дефіси. імя категорії у якому дефіси замісь пробілів буде знаходитись у полі  URL Key - http://joxi.ru/KAxB9qwcMx1nQm
+
+					- Если для категории установлено это поле, Magento автоматически создаст перезапись для этой страницы категории, а также URL-адрес продукта на основе полного пути к дереву категорий. Объекты продукта также имеют свой собственный URL-ключ. Кроме того, если вы измените URL-ключ для категории, Magento не только создаст для вас новый набор перезаписей, но и будет использовать поле «option» перезаписи для создания перенаправлений HTTP 301 с старых страниц на новые, пытаясь сохранить любой существующий сок SEO. Код состояния HTTP 301 предназначен для указания того, что веб-страница переместилась куда-то еще, и вам следует прекратить искать ее здесь. Вроде как адрес пересылки. Без этих перенаправлений Google рассматривает перемещенную страницу как новую и оценивает ее соответственно. Вот для чего предназначены все эти дополнительные свойства данных объекта перезаписи
+
+					- При переіндексації, один з процесів якраз відповідає за то, щоб реврайти вели на правильну адресу - refreshRewrites()
+
+						- public function reindexAll() { Mage::getSingleton('catalog/url')->refreshRewrites(); } - 
+
+			------------------------------------------------------------------------------------
+
+			- Також тут установлюється обєкту Mage_Core_Model_Url_Rewrite свойство _data - http://joxi.ru/KAggGLzf4LzeyA у якому і буде хранитись інфа з бази про реврайт для текущої строки - http://joxi.ru/4AkgeRYfywOWGA . Свойство _data на скільки я знаю, це частина функціоналу обєктів у мадженті. Коли я прошу дані і обєкта методом getData('змінна'), то саме у масиві _data, маджента буде його 'змінну'
+
+		- Також тут є строчка $fromStore = $this->_request->getQuery('___from_store'); яка розбирає ці дивні адресні строки з різними строрами, коли переключання на різні стори добавляє у адресну строку щось типу цього ___fr_en. Але Алан це не розбирав
+
+		- $this->_request->setAlias(Mage_Core_Model_Url_Rewrite::REWRITE_REQUEST_PATH_ALIAS, $this->_rewrite->getRequestPath()); - далі йде встановка аліасів обєкту $request. Він може мати багато аліасів. Аліаси це референси на реальний юрл. наприклад 'request_path' це аліас на 'target_path' -
+
+			- Спочатку виконується код аргумента - $this->_rewrite (Mage_Core_Model_Url_Rewrite)->getRequestPath() - тут діє правило, що _rewrite->getRequestPath() == _rewrite->getData('request_path'); - http://joxi.ru/4AkgeRYfywPYNA (test-cat/test.html)
+
+			- $this->_request->setAlias('rewrite_request_path', 'test-cat/test.html');
+
+				- $this->_aliases[$name] = $target; - $request['rewrite_request_path'] = 'test-cat/test.html' - Тобто у обєкта реквест заповнюється  свойсто _aliases з ключем rewrite_request_path якому буде привсоїна текуща адресна строка. Це є сказати встановка аліаса
+
+		-  $this->_processRedirectOptions(); - алан казав що для запросів вроді цього /electronics/cameras/accessories/universal-camera-case.html (catalog/product/view/id/133/category/25). Цей метод не буде примінятись. Це не по сттаті, це вже від мене трохи. У адмінці якщо зайти у розділ реврайтів для якоїсь сторінки, то реврайт можна задати кастомно. Тобто не обовязково буде - catalog/product/view/id/133/category/25 (target_path), може бути https://www.google.com. Цей код якраз і відповідає за це. Ставить заголовок (301/302) і перенаправляє на гугл
+
+			- Перевірка йде, що if ($external === 'http:/' || $external === 'https:') { спочатку він дивить чи target_path не починається з http ...
+
+			- $isPermanentRedirectOption = $this->_rewrite->hasOption('RP'); == _rewrite->getData('option') - Типу у обєкта _rewrite є свойсто _data у якому э свойсто option. hasOption('RP') це вын якраз перевыряє заголовки (301/302). Якщо в адмінці нічого не вказано то буде 302 (по замовчуванню), а якщо вказано 301, то ці дані візьмуться зі змінної option. Ця строчка стоїть в самому верху. Я написав її функціонал тут, щоб не ламати логіку
+
+			- $external = substr($this->_rewrite->getTargetPath(), 0, 6); - у змінній $external якраз і буде та строчка по якій буде перевірятись target_path (перші 6 символів, чи вони не http:/)
+
+			- $targetUrl = $this->_request->getBaseUrl() . '/' . $this->_rewrite->getTargetPath(); - Якщо перевірка if ($external === 'http:/' || $external === 'https:') { не пройшла і в target_path не була лінка на зовнішній ресурс, то у змінну $targetUrl присвоїться лінка яка складеться з getBaseUrl() і target_path - http://magento.on/catalog/product/view/id/1/category/4
+
+		- $storeCode = $this->_app->getStore()->getCode(); - у змінній $storeCode буде 'code' текущого стору
+
+		- if (Mage::getStoreConfig('web/url/use_store') && !empty($storeCode)) { - Якщо $storeCode не пуста і у текушого стору у конфігах є нода web/url/use_store - http://joxi.ru/V2VbKoXUx5pxl2
+
+			- Цей кондішн не пройде, так як у мене тепер не має сторів. Якби були то адресна строка б змінилась -  $targetUrl = $this->_request->getBaseUrl() . '/' . $storeCode . '/' . 'http://magento.on/catalog/product/view/id/1/category/4'
+
+			- Ось чому коли на сайті мультистор, адрексні строчки так погано виглядають
+		
+
+		- if ($this->_rewrite->hasOption('R') || $isPermanentRedirectOption) { - ще одна перевірка. У адмінці є поле редірект - http://joxi.ru/82QB5lacj5Y3oA. У мене воно не установлено, тому цей кондішн не пройде і код піде далі, але якби воно було встановлено, то код б послав заголовок, який вказаний у цьому полі (301/302) і мене б редіректнуло на цю сторінку і в адресній строці було б не красиво - http://magento.on/catalog/product/view/id/1/category/4
+
+
+---------------------------
+
+ - Ці опшини RP R - це для апатча. Щоб він знав як перенаправляти на іншу строінку. Алан не розказував про це багато
+
+--------------------------
+
+		- $queryString = $this->_getQueryString();
+		if ($queryString) { $targetUrl .= '?' . $queryString; } - тут додається до адресної строки квері стрінг. Хоча не знаю, дивна логіка. Навіщо тоді я раніше робив масив у якому були всі види строк, якщо тут в кінці я знов складуюю юрл по кусках
+
+			- ВСЕ. В МЕНЕ ВЖЕ Є НОРМАЛЬНА АДРЕСНА СТРОКА З ЯКОЮ МОЖЕ ПРАЦЮВАТИ МАДЖЕНТА
+
+		- $this->_request->setRequestUri($targetUrl); - Провірить юрлку на безпеку і тд. Також установить обєкту $request свойство _requestUri якому присвоїть текущу юрл але без http i домена - /index.php/catalog/product/view/id/1/category/4?ss
+
+		- $this->_request->setPathInfo($this->_rewrite->getTargetPath()); - установить обєкту request свойстово _pathInfo у якому буде хранитись зареврайчена адресна строка - catalog/product/view/id/1/category/4 
+		
+			- Як бачу у _pathInfo не має квері стрінг. На скільки знаю і не мало б бути так як маджента їх хранить отдільно у отдільному масиві. І звичайно квері стрінг можна буде витягути якимось методом з обєкта request
+
+		- ВСЕ. нА ЦЬМУ ЗАКІНЧИЛОСЬ. МЕТОД _rewriteDb() БРАВ АДРЕСНУ СТРОКУ, ДИВИВ ЧИ В БАЗІ НЕМАЄ ДЛЯ НЕЇ РЕВРАЙТА І ЯКЩО БУВ, ТО ЦЕЙ МЕТОД ПЕРЕРОБЛЮВАВ АДРЕСНУ СТРОКУ. НУ НЕ ТО ЩО ПЕРЕРОБЛЮВАВ АДРЕСНУ СТРОКУ. Ардесними строками хаймається обєкт  request і через нього маджента і працює з адресними строками. _rewriteDb() якраз і робив, щоб у цьму обєті зявилась адресна строка, з якою маджента зможе працювати
+
+
+ ------------------------------------------------------------------------------------------
+
+	- $this->_rewriteConfig(); - Вверху я описував реврайт який звязаний з базою, а цей метод реврайтить реквести які звязані з конфігами
+
+		- Не памятаю де я це чув, але з переписуванням контролера не все так просто. Вроді метод _rewriteConfig() якраз може зайнятись цим.
+
+		- В чистій мадженті не має реврайтів, тому візьму проект модіф.
+
+		- $config = $this->_config->getNode('global/rewrite'); - беру з конфігів ноду з реврайтами - http://joxi.ru/BA05vlZSJngZqr
+
+		- roreach ($config->children() as $rewrite) { - проходжусь по них циклом
+
+		- Реврайт виглядає так - <rewrite>
+					    <modyf_outofstocksubscription>
+						<from><![CDATA[#^/outofstocksubscription/#]]></from>
+						<to>/modyf_outofstocksubscription/</to>
+						<actions>
+						    <post>
+							<to>modyf_outofstocksubscription/index/index</to>
+						    </post>
+						</actions>
+					    </modyf_outofstocksubscription>
+					</rewrite>
+
+			- $from = (string)$rewrite->from; - #^/outofstocksubscription/#
+
+		        - $to = (string)$rewrite->to; - /modyf_outofstocksubscription/
+
+		- $from = $this->_processRewriteUrl($from); - трохи пізніше про ці методи. А ні, навіть Алан толком не міг сказати що це за меод
+            	  $to   = $this->_processRewriteUrl($to);
+
+		- $pathInfo = preg_replace($from, $to, $this->_request->getPathInfo()); - Якщо в адресній строці, я зустріну $from, то заміню його на $to
+
+		- if (isset($rewrite->complete)) { - В мене в текущій ноді циклу не було ноди  complete, тож код пішов в else
+		        $this->_request->setPathInfo($pathInfo);
+		    } else {
+		        $this->_request->rewritePathInfo($pathInfo); - у цьому методі йде перевірка чи адресна строка тепер така сама як після того як я зробив preg_replace. Тобто цикл проходиться по всіх нодах <rewrite> що у мене є. У цих нодах знаходяться частини адресних строк, які зареврайчені. Тобто можна реврайтити не весь шлях, а тільки частину. і якщо у адресній строці строка співпададає з тим що у текущій ноді у циклі (регулярка), то нода <from> заміниться нодою <to>
+
+				- У методі rewritePathInfo() якраз йде перевірка на це. Якщо після того як  пройшла ця срочка коду - $pathInfo = preg_replace($from, $to, $this->_request->getPathInfo()); змінна $pathInfo стала не така як раніше і якщо свойство обєкта $request _rewritedPathInfo === null, то свойству обєкта $request _rewritedPathInfo присвоїться ця нова $pathInfo у якої буде  <to> замість <from>
+
+					- Також метод rewritePathInfo() установить свойству обєкта $request _pathInfo значення цієї нової $pathInfo
+		    }
+
+
+		- Алан каже, що свойство _rewritedPathInfo враховується при встановленні модуля контролера екшна. Воно шукається коли працюють методи getRequestedRouteName(), getRequestedControllerName(), and getRequestedActionName(). Але коли я проходився дебагером, я не відловити виконання їхнього коду вже в самому кінці і то методи виконувались по іншому маршруту . Тож про це треба буде дописати, а то я не розумію як і коли ці методи працюють
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------
+ 
+ - Не знаю як, але якщо проходитись по коду дебагером, то у методі _processRedirectOptions() є строчка $targetUrl = $this->_request->getBaseUrl() . '/' . $this->_rewrite->getTargetPath();
+
+	- $this->_rewrite->getTargetPath(); буде catalog/category/view/id/4 . Я не знаю як він це вичисляє. Але він якось витягнув ці дані з адмінки - http://joxi.ru/EA4LvxOiwQE9PA
+
+ --------------- До цього код який був, задача, яка у нього була зробити з зареврайченої адресної строки, нормальну. Таку як я розбирав на попередніх уроках

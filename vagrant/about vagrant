@@ -1,0 +1,48 @@
+
+
+
+
+ - Vagrant - це обертка для віртуалбокс. Тобто як віндовс крутиться на віртуалбоксі так і вагрант. Коли відкриваю віртуалбокс, зліва є список віртуалок які крутяться на віртуалбоксі. Я звик що там список віндовсів. Коли я піднімк вагрант, у тому списку буде і вагрант. Мабуть крім вагранта і віндовса можна ще щось установити щоб крутилось на віртуалбоксі
+
+ - Як установився выртуалбокс, можна становлювати вагрант
+
+ - Далі я буду описувати налаштування, коли вагрант вже установився і vagrant up работає
+
+ - Коли цей чувак розказував про налаштування вагранта, в мене vagrant up вже работав. Це лінки на відоси. Він розбив на 2 частини 
+
+	1) https://www.youtube.com/watch?v=lgeY66i14bY (https://drive.google.com/open?id=1dllHSFJh0r6mvvh4A5yrXvCOK39dWAe8)
+
+	2) https://www.youtube.com/watch?v=t7IBeHnwQRw (https://drive.google.com/open?id=1WKae-l-WjJxn0bNI8d8f1bJ0R3qF8FjR)
+
+		Список команд из урока:
+			sudo apt-get update
+			sudo apt-get install apache2
+			sudo apt-get install mysql-server
+			sudo add-apt-repository ppa:ondrej/php
+			sudo apt-get install php7.2
+			sudo apt-get install php-pear php7.2-curl php7.2-dev php7.2-gd php7.2-mbstring php7.2-zip php7.2-mysql php7.2-xml
+			sudo a2enmod rewrite
+			sudo service apache2 restart
+			cd /etc/apache2/sites-available
+			sudo nano magento.conf
+			sudo a2ensite magento
+			curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer - глобальна установка комрозера
+			composer install ( cd /var/www/magento.one/ - з папки проекта)
+
+ - Я мало тупанув. Чувак показував що установлює апатч у папці projects, я я установив у папці /var/www 
+
+ - Я думав що головне шоб вагрант був глобально встановлений в системі, і потім можна робити з будь якої папки вагрант сервер. Але чувак на відео робив папки проекта прям в папці, де був вагрант
+
+ - При ініціалізації вагранта у папці створюється Vgrantfile. Це і буде файл налаштування вагранта. Наприклад тут буде видно айпі сайта. Також тут можна буде налаштувати общу папку яка буде видна і у вагранті і у системі - config.vm.synced_folder "(локально)/var/www/html/shovak/new_git/php-lessons/vagrant", "(сервак)/var/www"
+ 
+ - У папці /var/www/html/shovak/new_git/php-lessons/vagrant у мене була папка projects і у ній була вже папка з маджентою magento.one/ Не знаю як так вийшло але в ітозі magento.one і була прописана в хостах у моїй системі (etc/host) 192.168.33.10 magento.one По ідеї б мала прописатись папка /var/www/html/shovak/new_git/php-lessons/vagrant так як я там установив вагрант. Мабуть це якась лінуксовська фішка шо можна вказати конкретну підпапку
+
+<VirtualHost *:80>
+	ServerName www.example.com
+	DocumentRoot "var/www/magento.one"
+
+	<Directory "/var/www/magento.one"
+	  AllowOverride all
+	</Directory>
+</VirtualHost>
+ 

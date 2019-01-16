@@ -6,6 +6,8 @@
 
 	- У адмінського роута метод є метод _beforeModuleMatch() і він завжди повертає тру, тож код йде далі
 
+	- Напишу щоб не запутатись. $modules = $this->getModuleByFrontName($module); у модіфі змінній $modules присвоювалась строка "catalog". мабуть це вже якиїсь кастомний модуль "catalog" так як у голій мадженті його не має 
+
 	- _afterModuleMatch() - провірить чи маджента установлена ( if (!Mage::isInstalled()) { ) і якщо ні, перенаправить на сторінку установки мадженти. Справа у тому що адмінський роут виконується самий перший. І при першій загрузці мадженти коли вона ще не установлена, вона проходить той же самий шлях що я описував у минулих файлах. І тільки у цьому місці почнеться установка
 
 		- Алан і сам охерівав від цієї логіки. Справау тому що на момент написання статті у Алана не було роутера install, який би мав цим займатись. Хоча в мене він тепер є і всерівно адмінський виконується першим. Алан каже що код написаний по принципу работає не трогай
@@ -33,6 +35,168 @@
 
 	- if (!$found) { - Змінна $found залишиться false, якщо жоден з модулів що пропускався по циклу вверху не дійшов до кінця. Якщо $found = true; це означає, що текущий модуль пройшов всі провірки і йому назначились контролер і екшн.
 
-		- Если у нас есть действительный модуль, но мы не можем найти контроллер и екшн, мы вызываем метод _noRouteShouldBeApplied(). цей метод остання спроба назначити контроллер і екшн, Алан його розписував, але в нових версіях мадженти, він просто повертав true
+		- Если у нас есть действительный модуль, но мы не можем найти контроллер и екшн, мы вызываем метод _noRouteShouldBeApplied(). цей метод остання спроба назначити контроллер і екшн, Алан його розписував, але в нових версіях мадженти, він просто повертав false
 
 		- Також десь тут мав виконуватись norouteAction(), якщо контролер і екшн не знайшлись, але цього коду я не знайшов. По ходу задумка у ранішньому коді адмінського роута мадженти була у тому щоб адмінський роут міг сам займатись сторінками, фронтнейм у адресі у яких адмінський, але контролера і екшна не має. але згодом цей код випілили і цим займається дефолтний роут скоріш за все. 
+
+
+ ---------------- The CMS Router Object -----------------
+
+ - Як я вже писав цмс роутер не беретьтся з конфігів, а добавляється підписанням на івент controller_front_init_routers
+
+ - Ціль цмс роутера не обробити запрос. Тобто він тільки опридіділяє чи в мене є ця сцм сторінка, що в адресній строці. Він не наслідується від стандартного роутера (class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abstract).
+
+ - Я проходився дебагером. Флоу такий що у фронтконтроллері викликався метод match() у роутерів і ні адмінсьуий ні стандартний не підійшли 
+
+ - public function match(Zend_Controller_Request_Http $request)
+
+	-  if (!Mage::isInstalled()) { - перше що перевіряється, це то чи маджента встановлена
+
+	- Вичислив ідентифікатор - і поставив у змінну $identifier - $identifier = trim($request->getPathInfo(), '/');
+
+	- Задиспатчив якиїсь свій івент
+
+		$condition = new Varien_Object(array(
+		    'identifier' => $identifier,
+		    'continue'   => true
+		));
+
+		Mage::dispatchEvent('cms_controller_router_match_before', array(
+		    'router'    => $this,
+		    'condition' => $condition
+		));
+
+		- Я не знаю чому саме такий синтаксис у відправленні івента, думаю що сенс у тому, щоб можна було підписатись це цей івент, який відбувається до операцій матчінга у цмс роутері. І також якщо підпишусь на цей івент, то має бути якась можливість витягнути цю додаткову інфу яка тут передається (ідентифікатор строінки і обєкт цмс роутера)
+
+	- $identifier = $condition->getIdentifier(); - Я вде жесь описував цей принцип виборки свойства з обєкта. цей метод потім перетвориться у $condition->getData('identifier'); не знаю точно чому він бере свойство у обєкта який був тільки що створений для відправки івента і йому передавався ідентифікатор строки. Скоріш за все щоб заодно перевірити чи у обєкта $condition є у свойствах ідентифікатор
+
+	- if ($condition->getRedirectUrl()) { - тут те саме що і вверху. шукає свойство 'redirect_url' у обєкта $condition. Сенс у тому тепер шукається чи у з цим ідентифікаторм є якиїсь редірект. Наприклад це можна було зробити підписавшись на івент 'cms_controller_router_match_before' і додати обєкту це свойство. Якщо це свойство є, то мене перекине на сторінку з юрлкою, яка буде така сама як і назва цього свойства ...->setRedirect($condition->getRedirectUrl()...
+
+		- Нагадую. Якщо виконався код перенаправлення на іншу сторінку, це не означає що код перестав виконуватись. Треба поставити exit, якщо хочу щоб перестав
+
+	- if (!$condition->getContinue()) {return false;} - вверху я вже писав що свойство 'continue' задається обєкту $condition зі значенням true; Якщо хтось підписався на івент cms_controller_router_match_before і змінив це значення у цього обєкта на фолс, то тут виконання коду роутера цмс закінчиться. Йде перевірка, якщо значення фолс - match() роутера цмс поверне фолс
+
+	- Береться моделька cms - $page   = Mage::getModel('cms/page');
+
+		- return self::getConfig()(тобто береться з глобальних конфігів інфа)->getModelInstance($modelClass, $arguments) - (getModelInstance() - це метод обєкта конфігів Mage_Core_Model_Config. Тобто по суті Mage::getModel() звертається до конфігів через цей метод )
+
+		- getModelInstance($modelClass, $arguments) - розбираю першу строчку - $className = $this->getModelClassName($modelClass); - $modelClass виглядає як cms/page
+
+			- Якщо $modelClass має слеш (у даному випадку має), йду далі. Якщо не має повертаю $modelClass
+
+			- return $this->getGroupedClassName('model', $modelClass); - Далі мова буде йти про getGroupedClassName(). Я памятаю, що при Mage::getModel('cms/page'); я не запускаю зразу автолоадер класів, а йду шукати цей клас в файлі конфігів xml, який збирає всі конфіги і збивається в 1 - 
+
+				- Перевіряє арію, якщо немає, вказує глобал - $groupRootNode = 'global/'.$groupType.'s'; Тут вкінці додається 's'; Ось чому тег називається <models> а не <model>
+
+				- $classArr = explode('/', trim($classId)); // розбиваю cms/page в масив
+				  $group = $classArr[0]; // cms
+				  $class = !empty($classArr[1]) ? $classArr[1] : null; // page
+
+				- if (isset($this->_classNameCache[$groupRootNode][$group][$class])) { return $this->_classNameCache[$groupRootNode][$group][$class]; } - Якщо в кешах вже є клас модедьки цмс пейджі, то метод getGroupedClassName() Його поверне
+
+				- $config = $this->_xml->global->{$groupType.'s'}->{$group}; - З конфігів візьметься нода модельки цмс пейджі - http://joxi.ru/823dpX3TJxGpRA
+
+				- $className = null;
+
+				- if (isset($config->rewrite->$class)) { $className = (string)$config->rewrite->$class; - Перевіряє чи cms/page нє зареврайчений у моїй Кампінії у конфігах. Тобто він шукає  Якщо так, візьметься зареврайчений клас і поставиться у змінну $className. По ходу, зареврайчені класи будуть хранитись у обєкті конфігів у змінній $rewrite, але я про це поки нічого не знаю  
+
+				- if (empty($className)) { - Якщо зареврайченого класу немає і змінна $className пуста
+
+					- $className = $config->getClassName(); - просто поверне ноду class (Mage_Cms_Model) з ноди $config. Якщо ноди class не має, поверне ноду model
+
+					- І ще там є строчка де назва модуля Mage пыдставляэться автоматом. Тобто якщо не має конфігів для модельки у зареврайченосу класі, підcтавиться mage. Наприклад із цього Mage::getModel('cms/page') попробує скласти клас Modyf_Cms_Model_Page, але якщо конфігів у моєму модулі не буде, побудується Mage_Cms_Model_Page. Це означає що у app/code/core/Mage/Module/etc/config.xml вказувати шлях до класа у конфігах не треба, головне щоб він фізично лежав по правильному шляху і він мав би знайтись.
+			
+				- потім ще до Mage_Cms_Model додається page 
+
+				- В ітозі getGroupedClassName() поверне Modyf_Cms_Model_Page. З цього класу створиться обєкт $obj = new $className($constructArguments); Це був розжований курс про те що вираз  Mage::getModel('cms/page'); поверне обєкт з класа Modyf_Cms_Model_Page . 
+
+					- Але ще перед ретюрном цей клас кешується - $this->_classNameCache[$groupRootNode][$group][$class] = $className; - http://joxi.ru/p27a7yxIo16YDr
+
+	- $pageId = $page->checkIdentifier($identifier, Mage::app()->getStore()->getId()); - Береться айдішка цмс сторінки. У цьому методі дуже багато коду. Я пройшовся дебагегом і тут оприділялось стор, айдішка цмс сторінки бралась з бази...  
+
+	- if (!$pageId) { return false; } - ЯКЩО є айдішка цмс сторінки, продовжую
+
+	- Назначаю модуль контролер екшн обєкту $request
+   	- $request->setModuleName('cms') - 
+            ->setControllerName('page')
+            ->setActionName('view')
+            ->setParam('page_id', $pageId (айдішку цмс сторінки теж передаю) ); 
+
+		- Тобто http://magento.example.com/home = http://magento.example.com/cms/page/view/page_id/3
+
+	--------------------------------------------------------------------------------------
+
+ - Як я вже писав у файлі де Вова розказував про мадженту, то що я метод match() обєкта цмс повернув тру, ще нічого не означає. Коли match() повертає тру, то мене викидує з циклу foreach ($this->_routers as $router) { але я ще знаходжусь у циклі while (!$request->isDispatched() && $i++ < 100) { і цей цикл буде працювати поки реквест не задіспатчений. А так як код який я розглядував до цього не діспатчив реквест, то мене знов кидає у цикл  foreach ($this->_routers as $router) {
+
+	- І так я знов у циклі foreach ($this->_routers as $router) { провіряю роутер адмін, він не підходить, переходжу у стандартний роутер
+
+	- Стандартний роут підходить так як в нього в залежностях вказано <routers><cms><use>standard</use> і він знаходиться у арії <frontend>
+
+	- У описі стандартного роута, я писав про ці 3 методи. Тоді я не знав що вони роблять і писав що кондішний не пройдуть і код перейде в else. На цей раз кондішни пройдуть і код в else не буде виконуватись. $request->setModuleName('cms')->setControllerName('page')->setActionName('view')->setParam('page_id', $pageId); Я писав про цей код трохи вище. Він установив обєкту $request модуль контролер екшн. І якраз це і перевіряли ці кондішни. 
+
+		if ($request->getModuleName()) {
+		    $module = $request->getModuleName();
+
+		...
+
+		if ($request->getControllerName()) {
+		    $controller = $request->getControllerName();
+
+		...
+
+
+
+		if ($request->getActionName()) { - class Mage_Cms_PageController extends Mage_Core_Controller_Front_Action - public function viewAction() - цей екшн обробляє цмс сторінки по дефолту
+		    $action = $request->getActionName();
+
+ ---------------------------------------- Dispatch Time! ----------------------------------
+
+	- $request->setDispatched(true); - Просто установлює обєкту $request свойство _dispatched = true. І як я писавв вверху, у контроллера теж є свойство у якому храниться обєкт $request. А враховуючи що це обєкт, то якщо я поміняю з контролера свойство _dispatched, то воно поміняється і в обєкті $request
+
+	- $controllerInstance->dispatch($action); - це вже загрузка сторінки, наскільки я зрозумів. Алан нічого про це не писав
+
+
+ --------------- Все. задіспатчилось. Виходжу з циклу - while (!$request->isDispatched() && $i++ < 100) {
+
+
+
+
+
+ ------------------------- The Default Router Object ------------------------
+
+ - У обєкті фронтконтроллера у кінці метода init() добавляється дефолтний роутер - 	$default = new Mage_Core_Controller_Varien_Router_Default();
+        										$this->addRouter('default', $default);
+	
+	- Це вже після того як через обсервер додався роутер цмс пейджі
+
+	- Якщо він не знайшов дефолтні контроллер екшн у конфігах, то назначить index. Модуль буде core
+
+		$noRoute        = explode('/', $this->_getNoRouteConfig());
+		$moduleName     = isset($noRoute[0]) && $noRoute[0] ? $noRoute[0] : 'core';
+		$controllerName = isset($noRoute[1]) && $noRoute[1] ? $noRoute[1] : 'index';
+		$actionName     = isset($noRoute[2]) && $noRoute[2] ? $noRoute[2] : 'index';
+
+		- Ці значення задані в адмінці - Admin -> System -> Configuration -> Web -> Default Pages -> Default No-route URL (cms/index/noRoute) 
+
+			- Это означает, что большинство страниц Magento 404 будут направлены в метод noRouteAction Mage_Cms_IndexController.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
