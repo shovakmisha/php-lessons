@@ -249,7 +249,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
             $request->setParam($p[$i], isset($p[$i+1]) ? urldecode($p[$i+1]) : '');
         }
 
-        // dispatch action
+        // dispatch actionhelloworld/
         $request->setDispatched(true);
         $controllerInstance->dispatch($action);
 

@@ -153,10 +153,51 @@
 
 	- $request->setDispatched(true); - Просто установлює обєкту $request свойство _dispatched = true. І як я писавв вверху, у контроллера теж є свойство у якому храниться обєкт $request. А враховуючи що це обєкт, то якщо я поміняю з контролера свойство _dispatched, то воно поміняється і в обєкті $request
 
-	- $controllerInstance->dispatch($action); - це вже загрузка сторінки, наскільки я зрозумів. Алан нічого про це не писав
+	- $controllerInstance->dispatch($action); - це вже загрузка сторінки, наскільки я зрозумів. Алан нічого про це не писав. Як бачу метод dispatch() це метод текущого контроллера. Тобто dispatch() виконується у контексті текущого контролера. 
 
 
  --------------- Все. задіспатчилось. Виходжу з циклу - while (!$request->isDispatched() && $i++ < 100) {
+
+	- public function dispatch($action ('view')) - Опишу як діспатчиться цмс сторінка . Нагадаю що модуль_контроллер_екшн - cms_page_view
+
+		- $actionMethodName = $this->getActionMethodName($action); - return 'view' . 'Action'; змінній $actionMethodName присвоїться імя екшна viewAction
+
+		- if (!method_exists($this, $actionMethodName)) { $actionMethodName = 'norouteAction'; } - Якщо у контролера Mage_Cms_PageController не має метода viewAction() назначиться екшн norouteAction
+
+		- $this - це клас Mage_Cms_PageController. Тобто метод виконується у контексті даного контролера 
+
+		- $this->preDispatch(); - тут установлюється арія. Арія скоріш за все мається на увазі для лейаута, так як лейаут і конфіги це 2 різні системи
+
+			- $this->getLayout()->setArea($this->_currentArea);
+
+				- $this->getLayout() - return Mage::getSingleton('core/layout'); - // Mage_Core_Model_Layout . Досі я не бачив щоб йшла мова про лейаут. По ходу тут він перший раз встановився
+
+				- setArea($this->_currentArea); - Цей метод буде виконуватись в контексті класу Mage_Core_Model_Layout. Встановлюється арія. Це мабуть не та арія що в конфігах. по ходу це аріядля лейаутів. Так як конфіги і лейаути це 2 різні системи
+
+					- $this->_area = $area; - Тобто обєкту лейаута Mage_Core_Model_Layout встановлюється арія 'frontend' і буде хрвнитись у свойстві _area. 'frontend' тому що змінна _currentArea у обєкта контролера дорівнює 'frontend'. У самому обєкті контролера Mage_Cms_PageController не має свойства _currentArea, але це свойство є у обєкта Mage_Core_Controller_Front_Action від якого наслідуються всі фронтові контролери
+
+			- parent::preDispatch(); - Тут теж саме йде провірка чи встановлена маджента.
+
+				- if (!$this->getFlag('', self::FLAG_NO_START_SESSION)) { - тут йде перевірка чи встановлені сесії
+
+				- $session = Mage::getSingleton('core/session', array('name' => $this->_sessionNamespace))->start(); - Тут встановились сесії
+
+				- Mage::app()->loadArea($this->getLayout()->getArea()); - встановилась арія ('frontend')
+
+				- Кароче тут ще йде перевірка на якісь редіректи, типу якшо в куках записані якісь значення що треба редіректити на іншу сторінку, то тут це перевіряється. Я це до того що якщо мене буде перенаправляти на якусь іншу сторінку по непонятним причинам, може якраз в цьому коді воно це робить
+
+				- І вкінці відправляються івенти 'controller_action_predispatch', 'controller_action_predispatch'.$this->getRequest()->getRouteName(), 'controller_action_predispatch_' . $this->getFullActionName(),
+
+			- $this->$actionMethodName(); - Виклик екшна. Типу $this це обєкт текушого контролера, і у нього викликається метод текушого екшна, (типу той, що у адресній строці)
+
+				- Ці строчки рендерять цмс сторінку home - $pageId = $this->getRequest()->getParam('page_id', $this->getRequest()->getParam('id', false)); - беру айдішку сторінки
+											if (!Mage::helper('cms/page')->renderPage($this, $pageId)) { - по ходу ця строчка і рендерить
+											    $this->_forward('noRoute');
+											}
+
+					- Тут установлюються і хендли, але я не буду розписувати установку хендлів для цмс сторінки, так як Вова розписував установку 
+
+
 
 
 

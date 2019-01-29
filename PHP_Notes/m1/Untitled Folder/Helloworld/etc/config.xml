@@ -6,18 +6,18 @@
 		</Alanstormdotcom_Helloworld>
 	</modules>
 	<global>
-		<!--models>
-			 standard model section
+		<models>
+			<!-- standard model section -->
 			<roimagic>
 				<class>Companyname_RoiMagic_Model</class>
 			</roimagic>
-			 new checkout section
+			<!-- new checkout section -->
 			<checkout>
 				<rewrite>
 					<cart>Companyname_RoiMagic_Model_Cart</cart>
 				</rewrite>
 			</checkout>
-		</models-->
+		</models>
 	</global>
 	<frontend>
 		<routers>
