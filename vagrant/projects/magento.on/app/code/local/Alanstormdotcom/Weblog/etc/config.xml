@@ -2,7 +2,7 @@
 <config>
     <modules>
          <Alanstormdotcom_Weblog>
-             <version>0.1.0</version>
+             <version>0.2.0</version>
          </Alanstormdotcom_Weblog>
      </modules>
     <frontend>
@@ -34,6 +34,7 @@
         </models>
 
         <resources>
+
             <weblog_write>
                 <connection>
                     <use>core_write</use>
@@ -44,6 +45,17 @@
                     <use>core_read</use>
                 </connection>
             </weblog_read>
+
+            <weblog_setup>
+                <setup>
+                    <module>Alanstormdotcom_Weblog</module>
+                    <class>Alanstormdotcom_Weblog_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </weblog_setup>
+
         </resources>
     </global>
 </config>
