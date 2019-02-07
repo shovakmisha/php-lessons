@@ -1,4 +1,270 @@
 
  --------------------------- Magento ORM: Entity Attribute Value; Part 1 https://alanstorm.com/magento_advanced_orm_entity_attribute_value_part_1/ ------------
 
- 1) 
+ - Модель EAV – Сущность-Атрибут-Значение, или же модель значения атрибута объекта и открытая схема – это модель данных, которая используется в тех случаях, когда количество атрибутов (свойств, параметров), которые могут быть использованы для описания вещей («сущности» или «объекта») является потенциально очень широким, но число, которое будет на самом деле относиться к данному объекту, является относительно небольшим. В математике эта модель известна как разреженная матрица.
+
+ - Каждый отдельный товар имеет строку в catalog_product_entity. Все доступные атрибуты системы в целом (не только для товаров) хранятся в eav_attribute, а фактические значения атрибутов хранятся в таблицах с такими названиями как: catalog_product_entity_attribute_varchar, catalog_product_entity_attribute_decimal, catalog_product_entity_attribute_etc.
+
+	- Когда вы добавляете новый атрибут к своим товарам, новая строка вставляется в таблицу eav_attribute. 
+
+ - EAV це не з програмування, це взагалі з математики. По аналогії з бабл сортуваннями масивів. Маю на увазі що EAV це спосіб роботи з базою даних.
+
+	- Щоб було понятніше - Мадженто построили систему EAV из объектов PHP, которые используют MySQL в качестве хранилища данных. Иными словами, они создали систему базы данных EAV над традиционной реляционной базой данных.
+
+ 1) Наявність ресурсної моделі у модельки якраз і робить з простої модельки ресурсною
+
+ 2) Всі ресурсні модельки мають предка Mage_Core_Model_Mysql4_Abstract. Типу у своєму прикладі де я робив ПРОСТУ ресурсну модельку, моя ресурсна моделька екстендилась від Mage_Core_Model_Mysql4_Abstract, який в свою чергу має предка Mage_Core_Model_Resource_Abstract
+
+		- class Alanstormdotcom_Weblog_Model_Mysql4_Blogpost 
+
+			-> extends Mage_Core_Model_Mysql4_Abstract 
+
+				-> extends Mage_Core_Model_Resource_Db_Abstract 
+
+					-> extends Mage_Core_Model_Resource_Abstract
+
+	- ресурсні модельки EAV екстендяться від Mage_Core_Model_Resource_Abstract який в свою чергу має предка Mage_Core_Model_Resource_Abstract
+
+ - Щоб краще зрозуміти! Мені не треба самому створювати таблиці EAV. І потім якось звязувати їх між собою. Це все робить маджента. Наприклад у цьому уроці я створював нову ентіті і створював для неї таблиці. Але я не створював їх вручну, просто написав код createEntityTables($this->getTable('complexworld/eavblogpost')); (створи таблиці для моєї ентіті) і всі таблиці які потрібні були - створились. Тобто Маджента працює з таблицями по шаблону, який треба дотримувати
+
+ 3) В традиционной базе данных EAV таблицы имеют фиксированное количество столбцов. любая Модель, использующая ресурс EAV, имеет свои атрибуты, распределенные по нескольким таблицам MySQL.
+
+	- https://alanstorm.com/2009/img/magento-book/eav.png
+
+	- entity - У каждой entity есть тип (type). Типы, помимо прочего, позволяют системе EAV знать, какие атрибуты использует Модель, и позволяют системе ссылаться на таблицы, в которых хранятся значения для атрибутов. Типи entity хранаться у таблиці eav_entity_type. Як бачу з архітектури (https://alanstorm.com/2009/img/magento-book/eav.png), eav_entity_type знаходиться на вищому рівні
+
+	- mysql> select * from eav_entity_type\G
+	*************************** 1. row ***************************
+		  entity_type_id: 1
+		entity_type_code: customer
+		    entity_model: customer/customer
+		 attribute_model: 
+		    entity_table: customer/entity
+	      value_table_prefix: 
+		 entity_id_field: 
+		 is_data_sharing: 1
+		data_sharing_key: default
+	default_attribute_set_id: 1
+		 increment_model: eav/entity_increment_numeric
+	     increment_per_store: 0
+	    increment_pad_length: 8
+	      increment_pad_char: 0
+
+	- Все доступные атрибуты во всей системе (не только для продуктов) хранятся в eav_attribute, а фактические значения атрибутов хранятся в таблицах с такими именами, как catalog_product_entity_attribute_varchar, catalog_product_entity_attribute_decimal, catalog_product_entity_attribute_etc. - https://alanstorm.com/2009/img/magento-book/eav.png
+
+	- Когда вы добавляете новый атрибут для ваших продуктов, новая строка вставляется в eav_attribute
+
+	- $1
+
+ -----------------------------
+
+	- Далі я буду створювати модельку EAV для роботи з базою мадженти. Типу в мадженті є 2 види модельок для роботи з базою - проста (така як я створював раніше) і EAV (ця що описую)
+
+	- Трюк. У звязку з тим що у першій мадженті важко запутатись у конфігах і де створювати файл по цих конфігах, Алан спеціально спочатку створював базові штуки для модуля щоб він зявився, прописував у конфігах дані для ресурсної модельки і просив цю модельку у контроллері (мабуть можні і у інших файлах) - Mage::getModel('complexworld/eavblogpost'); - викидувався ексепшн де описувалось шо йому не хватає. У ексепшні був і імя класа і шлях де він має бути - Warning: include(Alanstormdotcom/Complexworld/Model/Eavblogpost.php) [function.include]: failed to open stream: No such file or directory  in /Users/alanstorm/Sites/magento.dev/lib/Varien/Autoload.php on line 93
+
+		 Если бы мы были предупреждены следующим: Warning: include(Mage/Complexworld/Model/Eavblogpost.php) [function.include]: failed to open stream: No such file or directory in /lib/Varien/Autoload.php on line 93 - мы знали бы, что наша модель была неправильно настроена (config.xml), поскольку Magento искал бы модель в code/core/Mage вместо code/local/Alanstormdotcom.
+ -----------------------------
+
+ - <global>
+        <models>
+	<complexworld>
+		<class>Alanstormdotcom_Complexworld_Model</class>
+		<resourceModel>complexworld_resource_eav_mysql4</resourceModel> - це тільки рекомендації так писати щоб було понятно що це таке
+	</complexworld>
+
+	<complexworld_resource_eav_mysql4>
+		<class>Alanstormdotcom_Complexworld_Model_Resource_Eav_Mysql4</class>
+		<entities>
+		    <eavblogpost> - Не знаю чи це правильно, але надіюсь що так. Хоч таблиць у мадженті і багато, але по суті вони звязані між собою і відносяться до якихось груп, А груп не так і багато. Ну продукти, категорії, ордери... І ось за що хочу сказати. У цьому місці, я кажу мадженті з якою групою хочу працювати. Наприклад з продуктами. Тут  я і напишу таблицю catalog_product яка звязана з усіма продуктами і все що звязано з продуктами. І викликати цю модельку я буду якось так Mage::getModel('catalog/product')/ 
+			<table>eavblog_posts</table>
+		    </eavblogpost>
+
+		    <category> - Може це й не правильно, алу скоріш за все тут можна додати ще одну ентіті, через яку я буду працювати з категоріями. Це буде типу Mage::getModel('catalog/category')
+
+					- По суті у конфігах не так багато модельок можна вказати з якими працювати, так як 'груп', не так багато.
+
+		</entities>
+	</complexworld_resource_eav_mysql4>
+
+	<resources>
+
+	    <complexworld_write>
+	        <connection>
+	            <use>core_write</use>
+	        </connection>
+	    </complexworld_write>
+	    <complexworld_read>
+	        <connection>
+	            <use>core_read</use>
+	        </connection>
+	    </complexworld_read>
+
+		- На даний момент це виглядає як звичайна ресурсна моделька
+
+	- Створюю клас по тому що я написав у конфігах 
+
+		#Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost.php
+		- class Alanstormdotcom_Complexworld_Model_Resource_Eav_Mysql4_Eavblogpost extends Mage_Eav_Model_Entity_Abstract {
+			public function _construct() { - тут теж є _construct() як і в простій ресурсній модельці, але вже метода _init() не має і медод _construct() вже не абстрактний. Це означає що мені самому треба вказати опції конекта з базою. Також має передатись в ручну унікальний ідентифікатор. Ці 3 строчки внизу, це якраз воно і є. 
+
+				$resource = Mage::getSingleton('core/resource');
+				$this->setType('complexworld_eavblogpost'); - Виходить що у простій ресурсній модельці цей тип передається при методі init() Але де він використовується хз. Приблизно зрозуміло, але точно не можу сказати.
+
+					- Кароче це я встановив новий тип ентіті. Цей тип ентіті має бути у таблиці eav_entity_type - колонка entity_type_code. Інакше буде помилка при підключенні до бази. Після цього буде зрозуміл з яким типом працює моделька. Але і в таблиці бази має бути цей. Внизу я створював рядок б базі eav_entity_type з цим типом http://joxi.ru/GrqjgkwHQal3Qm
+
+				$this->setConnection( $resource->getConnection('complexworld_read'), $resource->getConnection('complexworld_write') );
+			}
+		}
+
+	- Створюю Setup Resource (інстал скріпт). Це створить нові таблиці. Потім поясню для чого.
+
+		<complexworld_setup>
+		    <setup>
+		        <module>Alanstormdotcom_Complexworld</module> - Дивно що Алан не помістив цю модельку у папку Model, а просто у папку модуля Entity.
+		        <class>Alanstormdotcom_Complexworld_Entity_Setup</class> -  цей клас і буде виступати в ролі $this для інстал скріптів.
+		    </setup>
+		    <connection>
+		        <use>core_setup</use>
+		    </connection>
+		</complexworld_setup> 
+
+		- Створюю клас по тому що я написав у конфігах ($this для інстал скріптів)
+
+			- File: app/code/local/Alanstormdotcom/Complexworld/Entity/Setup.php
+			class Alanstormdotcom_Complexworld_Entity_Setup extends Mage_Eav_Model_Entity_Setup {} - Від цього класу(Mage_Eav_Model_Entity_Setup) екстендяться всі ресурсні EAV модельки інстал скріптів
+
+		- Створюю сам інстал скріпт, щоб добавити в базу новий тип ентіті
+
+			$installer = $this;
+			$installer->addEntityType('complexworld_eavblogpost',Array( - цей рядок означає що у таблиці буде тип complexworld_eavblogpost. Він буде хранитись у колонці entity_type_code таблиці eav_entuty_type
+			    'entity_model'            =>'complexworld/eavblogpost', //entity_model это URI, которое передается в вызов Mage::getModel()
+			    'attribute_model'        =>'',
+			    'table'            	=>'complexworld/eavblogpost', //таблица относится к URI ресурса complexworld/eavblogpost
+			    'increment_model'        =>'',
+			    'increment_per_store'    =>'0'
+			));
+
+		- Це я ще в інстал скріпті. Ще його не запускав - http://joxi.ru/J2bglQGfXZZvMA
+
+		- !!!Якщо зразу запустити цей інстал, скріпт виличе помилку SQLSTATE[42S02]: Base table or view not found: 1146 Table 'magento.eavblog_posts' doesn't exist - не має таблиці eavblog_posts в базі, а вона має бути, так як я її вказав - 'table' => 'complexworld/eavblogpost'
+
+			- В інстал скріпті я написав цей код $installer->createEntityTables($this->getTable('complexworld/eavblogpost'));  - Після цього в базі зявились пусті таблиці. І не було помилки
+
+																					eavblog_posts
+																					eavblog_posts_datetime
+																					eavblog_posts_decimal
+																					eavblog_posts_int
+																					eavblog_posts_text
+																					eavblog_posts_varchar
+
+				- EAV Атрибуты: Атрибуты не ограничиваются типами datetime, decimal, int, text и varchar. Вы можете создать собственные файлы классов, чтобы смоделировать различные атрибуты. В этом вам поможет свойство сущности attribute_model.
+
+				----------------------------------
+
+					- Чому створились ці нові таблиці. Ось чому - мы сказали Magento о новом типе сущности (complexworld_eavblogpost). необходимо добавить таблицы MySQL, которые будут использоваться для хранения всех значений сущностей, а также настроить систему таким образом, чтобы она знала об этих таблицах. ТОбто коли я створюю якийсь тип ентіті, має також створюватись у базі таблиці, які будуть звязані з цим ентіті
+
+				----------------------------------
+
+
+				- Але якщо запустити ще раз скріпт з цим кодом буде помилка, маджента не зможе створити ще раз нові таблиці. Алан каже що це не просто пробується створити нова таблиці, а спочатку видаляється стара таблиці і потім створюється нова. Як я вже писав цей код створив декілька таблись і eavblog_posts головна. А так як маджнета спочатку хоче видалити eavblog_posts то із за цього і помилка, так як від неї залежать інші. МОЖЕ ЦЕ Й НЕ ГОЛОВНА ТАБЛИЦЯ, АЛЕ СУТЬ У ТОМУ ЩО ВОНИ ЗВЯЗАНІ 
+
+			- Алан каже що помимо eav_entity_type, дані про новий тип ентіті також добавились в таблиці eav_attribute_group, eav_attribute_set. У таблиці eav_entity_type можна подивити що додався новий тип- http://joxi.ru/eAOz1oKixYq152. А цих інших двох я не встиг подивити що було до того як інстал скріпт відпрацював. Тож не можу точно сказати так як там тільки айдішки в основному хранятся
+
+-------
+
+ - Трохи поясню що я зробив. Коли я створював інстал скріпти у другій мадженті, то писав шось питу цього - http://joxi.ru/VrwElJwuOxxeZ2 . У метода $this->eavSetup->addAttribute( першим атрибутом йде ентіті, для якої я створюю цей атрибут. В даному випадку це ентіті 'catalog_product' - тобто це ентіті продукта. Тобто я створюю атрибут для продукта. - малюнок з 2-ї мадженти, але не суть - https://alanstorm.com/2009/img/magento-book/eav.png
+
+	- То це що я описував, це створив новий ентіті. Типу продукта.
+
+------
+
+-----------------------------------------------------------------------------
+
+ - До цього я створював нову ентіті, тепер я буду її конфігурувати
+
+----------------------------------------------------------------------------
+
+	-  $installer->installEntities(); - Установлює ентіті в базу. (Алан каже, що то що я робив до цього, тільки добавляв ентіті в базу, а код який я буду описувати - установить ентіті) Перед тим як їх установити, треба знати що установлювати. для цього є метод getDefaultEntities() в якому прописуються конфіги для цієї ентіті. Конфіги для ентіт можна задати і в installEntities(), але це не по феншую
+
+		- Метод getDefaultEntities() має лежати у файлі Setup.php який виступає $this для інстал скріпта. Його не треба запускати в інстал скріпті або десь інде, метод installEntities() побачить конфіги, які я передавав у методі getDefaultEntities()
+
+			public function getDefaultEntities() {            
+				return array (
+				    'complexworld_eavblogpost' => array( - http://joxi.ru/EA4LvxOiwWlJyA
+					'entity_model'      => 'complexworld/eavblogpost', - Як бачу, перші 3 строчки такі самі, як і у метода $installer->addEntityType( . Алан каже, вони і мають бути одинакові. Скоріш за все щоб понятно було, якому ентіті я це роблю.
+					'attribute_model'   => '',
+					'table'             => 'complexworld/eavblogpost',
+					'attributes'        => array(
+					    'title' => array(
+						//the EAV attribute type, NOT a mysql varchar
+						'type'              => 'varchar', - Це не тип даних mysql, Алан казав, що тепер цей атрибут буде звязаний з таблицею eavblog_posts_varchar
+						'backend'           => '',
+						'frontend'          => '',
+
+				- Також дані нового атрибуту попадуть у таблиці eav_attribute і eav_entity_attribute
+
+
+
+------------------------- Готово ----------------------------
+
+
+	- Цим кодом я добавив нові записі в мою таблицю 
+
+		for($i=0;$i<10;$i++) {    
+			$weblog2 = Mage::getModel('complexworld/eavblogpost');
+			$weblog2->setTitle('This is a test '.$i);
+			$weblog2->save();
+		    } 
+
+	- Ці таблиці заповнились:
+
+		eavblog_posts - http://joxi.ru/KAxB9qwcMkJdam
+
+		eavblog_posts_varchar - http://joxi.ru/5mdgM6EfkXRear
+-----------------------------------------------------------
+
+ - Ось як я зрозумів EAV. З того коду що я написав, ентіті це буде один запис (рядок) у таблиці eavblog_post, атрибут цього ентіті буде лежати у таблицях eav_attribute і eav_entity_attribute, а значення цього ентіті буде лежати у таблиці eavblog_post_varchar. Це по дуже великому рахунку!!!
+
+-----------------------------------------------------------
+
+ - З колекціями ($weblog2 = Mage::getModel('complexworld/eavblogpost');  $weblog2->getCollection()) у EAV так само як і в простих моделях. Просто створити клас щоб був з класом як і EAV моделька + _Collection - Alanstormdotcom_Complexworld_Model_Resource_Eav_Mysql4_Eavblogpost_Collection (File: Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost/Collection.php) І там ініціалізувати колекцію
+
+	class Alanstormdotcom_Complexworld_Model_Resource_Eav_Mysql4_Eavblogpost_Collection extends Mage_Eav_Model_Entity_Collection_Abstract {
+	    protected function _construct() {
+		$this->_init('complexworld/eavblogpost');
+	    }
+	}
+
+ - Mage::getModel('complexworld/eavblogpost')->getCollection()->addAttributeToSelect('title')->load(); - цим способом я вибираю атрибут 'title', який належить до типу ентіті 'complexworld/eavblogpost'
+
+	- Mage::getModel('complexworld/eavblogpost')->getCollection()->addAttributeToSelect('*')->load(); - вибираю всі атрибути які належать до типу ентіті 'complexworld/eavblogpost'. Звичайно це не дуже ок х точки зору проізводітельності
+
+ --------------------- 
+
+
+ Метод addAttribute() тут теж є 
+
+	$this->addAttribute('complexworld_eavblogpost (це тип ентіті)', 'title (это код атрибута. Он должен быть уникальным в пределах данной сущности)', array(
+	  'type'       => 'varchar',
+	  'label'       => 'Title',
+	  'input'       => 'text',
+
+		- Щоб взнати які значення атрибутів назначаться за замовчуванням, можна подивити в цей метод - _prepareValues($attr) // Mage_Eav_Model_Entity_Setup
+
+			protected function _prepareValues($attr) {
+				$data = array(
+				'backend_model'   => $this->_getValue($attr, 'backend'),
+				'backend_type'    => $this->_getValue($attr, 'type', 'varchar'),
+				'backend_table'   => $this->_getValue($attr, 'table'),
+
+				- Второй аргумент метода вызывает _getValue – это ключ массива нашего аргумента addAttribute, а третий – значение по умолчанию. Итак, по умолчанию Magento будет считать, что вы добавляете атрибут varchar для текстового ввода.
+
+ - Фильтрация коллекции: фильтрация коллекции EAV данных может быть сложным делом, особенно если вы работаете с вышеупомянутыми непростыми атрибутами. Перед загрузкой коллекции вам нужно использовать метод addAttributeToFilter.
+
+
+
+
+
+
+
+

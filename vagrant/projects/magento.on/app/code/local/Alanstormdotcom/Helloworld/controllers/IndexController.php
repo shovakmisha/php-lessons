@@ -6,18 +6,24 @@
 class Alanstormdotcom_Helloworld_IndexController extends Mage_Core_Controller_Front_Action {
 
     public function indexAction() {
-        // echo 'Hello Index!';
+
+        header('Content-Type: text/plain');
+        echo $config = Mage::getConfig()
+            ->loadModulesConfiguration('system.xml')
+            ->getNode()
+            ->asNiceXml();
+        exit;
+
+         // echo 'Hello Index!';
 
         //remove our previous echo
         //echo 'Hello Index!';
 
         // echo Mage::helper('catalog')->__('Text here');
 
-         $this->loadLayout();
-
-         $xxx = Mage::getConfig();
-
-         $this->renderLayout();
+         // $this->loadLayout();
+         // $xxx = Mage::getConfig();
+         // $this->renderLayout();
 
     }
 

@@ -2,7 +2,7 @@
 <config>    
     <modules>
         <Alanstormdotcom_Complexworld>
-            <version>0.1.0</version>
+            <version>0.1.3</version>
         </Alanstormdotcom_Complexworld>
     </modules>
 
@@ -17,4 +17,48 @@
             </complexworld>
         </routers>
     </frontend>
+
+    <global>
+        <models>
+            <complexworld>
+                <class>Alanstormdotcom_Complexworld_Model</class>
+                <resourceModel>complexworld_resource_eav_mysql4</resourceModel>
+            </complexworld>
+
+            <complexworld_resource_eav_mysql4>
+                <class>Alanstormdotcom_Complexworld_Model_Resource_Eav_Mysql4</class>
+                <entities>
+                    <eavblogpost>
+                        <table>eavblog_posts</table>
+                    </eavblogpost>
+                </entities>
+            </complexworld_resource_eav_mysql4>
+        </models>
+
+        <resources>
+
+            <complexworld_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </complexworld_write>
+            <complexworld_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </complexworld_read>
+
+            <complexworld_setup>
+                <setup>
+                    <module>Alanstormdotcom_Complexworld</module>
+                    <class>Alanstormdotcom_Complexworld_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </complexworld_setup>
+
+        </resources>
+    </global>
+
 </config>

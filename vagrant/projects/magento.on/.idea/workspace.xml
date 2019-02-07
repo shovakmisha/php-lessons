@@ -2,21 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="253443ba-0529-4b67-8a49-2bf498049ec9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Mysql4/Blogpost/Collection.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource/Mysql4/Setup.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-0.1.0.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-1.0.0.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.0-0.1.5.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.5-0.2.0.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/etc/modules/Alanstormdotcom_Complexworld.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/1" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Eavblogpost.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Entity/Setup.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost/Collection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/sql/complexworld_setup/mysql4-install-0.1.3.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/2" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c349a28f-feb6-46fb-b1f9-ac8208c365b7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c349a28f-feb6-46fb-b1f9-ac8208c365b7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/errors/local.xml.sample" beforeDir="false" afterPath="$PROJECT_DIR$/errors/local.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,13 +53,6 @@
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="vagrant@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="mysql: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="blog_posts: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="vagrant@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="collations" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
     </expand>
@@ -70,46 +61,60 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
+        <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_entity_type">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Api/controllers/IndexController.php">
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Entity/Setup.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+            <state relative-caret-position="85">
+              <caret line="5" column="74" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="74" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml">
+        <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_entity_attribute">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+            <state relative-caret-position="612">
+              <caret line="36" column="21" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Eav/Model/Entity/Abstract.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/system.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eavblog_posts_varchar">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Blogpost.php">
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost/Collection.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+            <state relative-caret-position="34">
+              <caret line="2" column="83" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -118,18 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>FLAG_SHOW_LAYOUT</find>
-      <find>if (!$this-&gt;getFlag('', self::FLAG_NO_START_SESSION)) {</find>
-      <find>$session = Mage::getSingleton</find>
-      <find>default/template/catalog/product/list.phtml</find>
-      <find>app/design/frontend/base/default/template/catalog/product/list.phtml</find>
-      <find>Mage_Catalog_Block_Product_List</find>
-      <find>getLoadedProductCollection</find>
-      <find>Mage_Core_Controller_Varien_Router_Standard</find>
-      <find>getConfig</find>
-      <find>getPackageLayout</find>
-      <find>checkForLayoutDisplayRequest</find>
-      <find>name=&quot;root&quot;</find>
       <find>name=&quot;top.links</find>
       <find>http://joxi.ru/MAjqkEnH4PgJO2</find>
       <find>&lt;resourceModel&gt;</find>
@@ -145,9 +138,21 @@
       <find>shovak.txt</find>
       <find>public function startSetup()</find>
       <find>Значение, то что будет в файле</find>
-      <find>startSetup</find>
-      <find>Mage_Core_Model_Resource_Abstract</find>
       <find>Mage_Eav_Model_Entity_Abstract</find>
+      <find>Mage_Core_Model_Resource_Abstract</find>
+      <find>Mage_Core_Model_Mysql4_Abstract</find>
+      <find>extends Mage_Eav_Model_Entity_Abstract</find>
+      <find>complexworld_setup</find>
+      <find>comple</find>
+      <find>comp</find>
+      <find>complex</find>
+      <find>title</find>
+      <find>Varien_Db_Adapter_Pdo_Mysql</find>
+      <find>startSetup</find>
+      <find>addAttribute</find>
+      <find>$installer-&gt;addEntityType(</find>
+      <find>$installer-&gt;addEntityType('cala</find>
+      <find>$installer-&gt;addEntityType('c</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/app/design/frontend/base/default/layout</dir>
@@ -187,12 +192,23 @@
         <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-0.1.0.php" />
         <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.0-0.1.5.php" />
         <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.0-0.2.0.php" />
-        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml" />
         <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.5-0.2.0.php" />
         <option value="$PROJECT_DIR$/app/etc/modules/Alanstormdotcom_Complexworld.xml" />
-        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php" />
-        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml" />
         <option value="$PROJECT_DIR$/app/code/core/Mage/Eav/Model/Entity/Abstract.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Eavblogpost.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Setup.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Entity/Setup.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Setup.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/sql/complexworld_setup/mysql4-install-0.1.0.php" />
+        <option value="$PROJECT_DIR$/app/code/core/Mage/Eav/Model/Entity/Setup.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/sql/complexworld_setup/mysql4-install-0.1.1.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/sql/complexworld_setup/mysql4-install-0.1.2.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Entity/Setup.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost/Collection.php" />
+        <option value="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php" />
       </list>
     </option>
   </component>
@@ -216,10 +232,10 @@
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.0" />
   <component name="PhpXdebugProxy" ide_key="PHPSTORM" host="127.0.0.1" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1975" />
+    <option name="x" value="1985" />
     <option name="y" value="34" />
-    <option name="width" value="1853" />
-    <option name="height" value="1076" />
+    <option name="width" value="1855" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -227,6 +243,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -250,51 +267,6 @@
               <item name="magento.on" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="Mage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="Mage" type="462c0819:PsiDirectoryNode" />
-              <item name="Eav" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="Mage" type="462c0819:PsiDirectoryNode" />
-              <item name="Eav" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="Mage" type="462c0819:PsiDirectoryNode" />
-              <item name="Eav" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
-              <item name="Entity" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -312,7 +284,7 @@
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
               <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Complexworld" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
@@ -321,17 +293,7 @@
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
               <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Complexworld" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Complexworld" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
               <item name="etc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -343,26 +305,12 @@
             <path>
               <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
               <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="etc" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="locale" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="var" type="462c0819:PsiDirectoryNode" />
+              <item name="errors" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -385,10 +333,11 @@
       <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource/Mysql4" />
-      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource" />
-      <recent name="$PROJECT_DIR$/app/etc/modules" />
-      <recent name="$PROJECT_DIR$/app/code/local/Package/Module/etc" />
+      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Entity" />
+      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model" />
+      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource" />
+      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Entity" />
+      <recent name="$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -440,16 +389,32 @@
       <workItem from="1548835121439" duration="23424000" />
       <workItem from="1549266194309" duration="2746000" />
       <workItem from="1549268966181" duration="462000" />
+      <workItem from="1549352556596" duration="2762000" />
+      <workItem from="1549355947717" duration="214000" />
+      <workItem from="1549357361588" duration="14000" />
+      <workItem from="1549357408279" duration="5753000" />
+      <workItem from="1549369147531" duration="14161000" />
+      <workItem from="1549439551968" duration="23672000" />
+      <workItem from="1549526859697" duration="3457000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="199657000" />
+    <option name="totallyTimeSpent" value="268337000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1984" y="27" width="1857" height="1092" extended-state="6" />
+    <frame x="1985" y="34" width="1855" height="1084" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20121615" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16804865" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -458,20 +423,20 @@
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4997236" weight="0.3646813" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3291536" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="8" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" visible="true" weight="0.5318704" />
+      <window_info anchor="bottom" id="Database Changes" order="8" weight="0.3291536" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3291536" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" weight="0.5182863" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002764" side_tool="true" weight="0.5736677" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.3291536" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.15257049" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.13266999" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18684356" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17855169" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -480,17 +445,17 @@
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4997236" weight="0.3646813" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3291536" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="8" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" weight="0.2998955" />
+      <window_info anchor="bottom" id="Database Changes" order="8" weight="0.3291536" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3291536" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" weight="0.5182863" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002764" side_tool="true" weight="0.5736677" />
-      <window_info anchor="bottom" id="Database Console" order="12" weight="0.3291536" />
+      <window_info active="true" anchor="bottom" id="Database Console" order="12" visible="true" weight="0.3291536" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.13045882" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.15035932" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,143 +471,14 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Controller/Varien/Router/Standard.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="253" column="34" selection-start-line="253" selection-start-column="34" selection-end-line="253" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/App.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-374">
-          <caret line="344" column="20" selection-start-line="344" selection-start-column="20" selection-end-line="344" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Controller/Varien/Action.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="443" column="24" lean-forward="true" selection-start-line="443" selection-start-column="24" selection-end-line="443" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="52" column="12" lean-forward="true" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Layoutviewer/Model/Layout/Update.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="17" column="74" lean-forward="true" selection-start-line="17" selection-start-column="74" selection-end-line="17" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Layoutviewer/Model/Observer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="63" column="37" lean-forward="true" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/etc/modules/Alanstormdotcom_Weblog.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="38" lean-forward="true" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/etc/modules/Alanstormdotcom_Layoutviewer.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="9" lean-forward="true" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Layoutviewer/etc/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/design/frontend/base/default/template/persistent/customer/form/register.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="32" column="37" selection-start-line="32" selection-start-column="37" selection-end-line="32" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/design/frontend/base/default/template/simple_page.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Customer/Block/Form/Register.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="31" column="6" selection-start-line="31" selection-start-column="6" selection-end-line="31" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Cms/Model/Page.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="71" column="58" lean-forward="true" selection-start-line="71" selection-start-column="58" selection-end-line="71" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/design/adminhtml/default/default/layout/main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="55" column="57" selection-start-line="54" selection-start-column="46" selection-end-line="55" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Controller/Varien/Front.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="174" column="13" selection-start-line="174" selection-start-column="13" selection-end-line="174" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/design/frontend/base/default/layout/local.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Abstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="33" column="15" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/api_role">
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eavblog_posts_text">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Wishlist/etc/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/api_user">
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/core_email_template">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
@@ -656,132 +492,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/admin_role">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Varien/Object.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="697" column="41" selection-start-line="697" selection-start-column="41" selection-end-line="697" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Varien/Db/Adapter/Interface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="664" column="6" lean-forward="true" selection-start-line="664" selection-start-column="6" selection-end-line="664" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.0-0.1.5.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="100" selection-start-line="2" selection-start-column="100" selection-end-line="2" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/core_resource">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/etc/modules/Alanstormdotcom_Configviewer.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="9" lean-forward="true" selection-end-line="7" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/controllers/IndexController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="24" selection-end-line="39" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Configviewer/etc/config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="63" lean-forward="true" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Varien/Db/Adapter/Pdo/Mysql.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="2868" selection-start-line="2868" selection-end-line="2868" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-1.0.0.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/blog_posts">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-0.1.0.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Abstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="34" column="15" selection-start-line="34" selection-start-column="15" selection-end-line="34" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Setup.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="33" column="6" selection-start-line="33" selection-start-column="6" selection-end-line="33" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource/Mysql4/Setup.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="97" lean-forward="true" selection-start-line="5" selection-start-column="97" selection-end-line="5" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Db/Abstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="29" column="2" lean-forward="true" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Mysql4/Abstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="33" column="3" lean-forward="true" selection-start-line="33" selection-start-column="3" selection-end-line="33" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Admin/data/admin_setup/data-install-1.6.0.0.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="44" column="27" lean-forward="true" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
+        <state relative-caret-position="238">
+          <caret line="14" column="48" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -792,17 +506,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-upgrade-0.1.5-0.2.0.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/core_resource">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php">
+    <entry file="file://$PROJECT_DIR$/app/etc/local.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="361">
+          <caret line="40" column="27" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -813,54 +527,231 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php">
+    <entry file="file://$PROJECT_DIR$/lib/Varien/Db/Adapter/Interface.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="34" lean-forward="true" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+        <state relative-caret-position="182">
+          <caret line="646" column="59" lean-forward="true" selection-start-line="646" selection-start-column="59" selection-end-line="646" selection-end-column="59" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Mysql4/Blogpost.php">
+    <entry file="file://$PROJECT_DIR$/lib/Varien/Db/Adapter/Pdo/Mysql.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
+        <state relative-caret-position="38051">
+          <caret line="2860" column="30" selection-start-line="2860" selection-start-column="20" selection-end-line="2860" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Setup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="935" column="7" lean-forward="true" selection-start-line="935" selection-start-column="7" selection-end-line="935" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource/Mysql4/Setup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="80" selection-start-line="5" selection-start-column="80" selection-end-line="5" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-0.1.0.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="66" lean-forward="true" selection-start-line="18" selection-start-column="66" selection-end-line="18" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Eav/Model/Entity/Setup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="29" column="2" lean-forward="true" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
+          <folding>
+            <element signature="e#6#938#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Api/controllers/IndexController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        <state relative-caret-position="293">
+          <caret line="28" column="29" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Blogpost.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+        <state relative-caret-position="85">
+          <caret line="5" column="66" lean-forward="true" selection-start-line="5" selection-start-column="66" selection-end-line="5" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Abstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="34" column="15" selection-start-line="34" selection-start-column="15" selection-end-line="34" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Mysql4/Blogpost.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="73" lean-forward="true" selection-start-line="5" selection-start-column="73" selection-end-line="5" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Mysql4/Abstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="34" column="80" selection-start-line="34" selection-start-column="80" selection-end-line="34" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Db/Abstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="34" column="52" lean-forward="true" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Eavblogpost.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Eav/Model/Entity/Abstract.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+        <state relative-caret-position="187">
+          <caret line="34" column="80" selection-start-line="34" selection-start-column="80" selection-end-line="34" selection-end-column="80" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Core/Model/Resource/Abstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="33" column="15" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/catalog_product_entity_int">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/catalog_product_entity">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eavblog_posts_int">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Catalog/Model/Product.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/etc/config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="45" column="28" selection-start-line="45" selection-start-column="28" selection-end-line="45" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_entity">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_entity_type">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_attribute_set">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/sql/complexworld_setup/mysql4-install-0.1.3.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="56" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Entity/Setup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="74" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eavblog_posts_varchar">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eavblog_posts">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_attribute">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c349a28f-feb6-46fb-b1f9-ac8208c365b7/schema/mysql/table/eav_entity_attribute">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/Model/Resource/Eav/Mysql4/Eavblogpost/Collection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="83" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Complexworld/controllers/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="21" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/system.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
