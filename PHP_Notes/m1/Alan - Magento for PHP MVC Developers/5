@@ -1,0 +1,240 @@
+
+ --------------------------------------- Varien Data Collections - https://alanstorm.com/magento_collections/ --------------------------------------
+
+ 1) Любой объект, который расширяется от Varien_Object имеет магические getter и setter методы, которые могут быть использованы для установления свойств данным. 
+	
+	- $thing_1 = new Varien_Object(); $thing_1->setName('Richard'); $thing_1->getName();
+
+	- Если вы не знаете точное имя свойства, вы можете извлечь все данные в виде массива: var_dump($thing_1->getData());
+
+ 2) Колекції. Varien_Data_Collection – это Коллекция, от которой наследуются большинство Коллекций в Magento. Помните, что Коллекция – это все же массив, но который настраивается PHP программистом.
+
+	- Наприклад у мене є 3 обєкти
+
+		- $thing_1 = new Varien_Object(); $thing_1->setName('Richard'); $thing_1->setAge(24);
+
+		- $thing_2 = new Varien_Object(); $thing_2->setName('Jane'); $thing_2->setAge(12);
+
+		- $thing_3 = new Varien_Object(); $thing_3->setName('Spot'); $thing_3->setLastName('The Dog'); $thing_3->setAge(7);
+
+	- Обєднаю ці 3 обєкти в колекцію - $collection_of_things = new Varien_Data_Collection(); $collection_of_things->addItem($thing_1)->addItem($thing_2)->addItem($thing_3);
+
+		1) Колекцію можна пропустити через цикл - foreach($collection_of_things as $thing) { ...
+
+		2) Также есть быстрые методы для извлечения первой($thing_1) и последней детали($thing_3 ) (item)
+
+			- var_dump($collection_of_things->getFirstItem()->getData());
+			- var_dump($collection_of_things->getLastItem()->getData());
+
+		3) Вам нужна ваша Коллекция данных в формате XML? Есть такой способ:
+
+			- var_dump( $collection_of_things->toXml() );
+
+				<collection>
+				   <totalRecords></totalRecords>
+				   <items><item>
+					<name><![CDATA[Richard]]></name>
+					<age><![CDATA[24]]></age>
+					</item>
+					.......
+
+		4) Вам нужен доступ только к определенному свойству?
+
+			- var_dump($collection_of_things->getColumnValues('name'));
+
+		5) Команда Magento даже дала нам некоторые рудиментарные возможности фильтрации:
+
+			- var_dump($collection_of_things->getItemsByColumnValue('name','Spot'));
+
+ 3) Так як Маджента побудована на моделях колекції, то це що я описував вверху використовується скрізь. Наприклад з товарами я теж працюю через модель колекції
+
+	- $collection_of_products = Mage::getModel('catalog/product')->getCollection();		var_dump($collection_of_products->getFirstItem()->getData());
+
+ 4) Большинство объектов Моделей в Magento имеют метод под названием getCollection, который будет возвращать коллекцию, которая, по умолчанию, инициализирована возвращать каждый Объект этого типа в системе.
+
+ 5) Так як робота колекції з наними дуже важка (індексація, кеш, eav), то не треба за 1 раз робити багато функціоналу або брати багато даних. Чим проще, тим краще
+
+ 6) Коллекция товаров, как и многие другие Коллекции Мадженто, также имеет класс Varien_Data_Collection_Db в своих предках. Что дает нам много полезных методов. Например, если вы хотите увидеть используемый запрос Коллекции:
+
+	- $collection_of_products = Mage::getModel('catalog/product')->getCollection();
+ 	- var_dump($collection_of_products->getSelect()); // может привести к ошибке сегментации
+
+		что выведет примерно такое:
+
+			object(Varien_Db_Select)[94] - Тобто виведеться обєкт Varien_Db_Select. Це означає що у свойстві select хранится обєкт Varien_Db_Select, який відповідає за то щоб взяти дані з БД
+			 protected '_bind' =>
+			  array
+			   empty
+			 protected '_adapter' =>
+
+			- Я так зрозумів що коли я беру дані з бази, за це відповідає обєкт Varien_Db_Select (предок колекції моделі (може не тільки колекції а й ресурсної моделі)). Після того як він взяв дані з бази, він покладе дані у свойство $_data. Як я бачив по коду, свойство $_select хранить у собі метод, який підключається до бази і бере дані. потім ретурниться обєкт з даними а не самі дані. Якщо мені треба самі дані, то їх можна витягти з обєкта методом $collection_of_products->getData(); - У мене був 1 продукт, то мені і виплюнувся цей масив з цим продуктом - http://joxi.ru/DmB8DjGUweg65A
+		
+				- var_dump( (string) $collection_of_products->getSelect() ); - 'SELECT `e`.* FROM `catalog_product_entity // дивно що він бере продукти з бази catalog_product_entity. Це ж не нативна таблиця EAV. Коли я створював базові таблиці, які треба для EAV, у мене не добавилась таблиця з цим закінченням. Скоріш за все її вручну добавили. І скоріш за все у цій таблиці хранятся всі продукти, так як в ній я бачу і айдішку і ску продукта.
+
+ 7) По умолчанию, EAV Коллекция не будет включать в себя все атрибуты Объекта. Вы можете добавить их все с помощью метода addAttributeToSelect:
+
+	- $collection_of_products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');  // звездочка это SQL запрос типа SELECT * FROM ...
+	- $collection_of_products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('meta_title');
+	- $collection_of_products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('meta_title')->addAttributeToSelect('price'); // добавить в выборку несколько атрибутов
+
+ 8) ----------------------- Отложенная Загрузка ----------------------
+
+	- Маджента не робить запрос зразу після того як я ініціалізував обєкт, який буде общатись з базою. Тобто не має такого, що я ініціалізував обєкт і він зразу заповнився даними з таблиці.
+
+		- Это означает, что когда вы делаете что-то подобное: $collection_of_products = Mage::getModel('catalog/product')->getCollection(); Magento на самом деле не заходит в базу данных. И вы можете смело добавлять нужные атрибуты позже:   $collection_of_products = Mage::getModel('catalog/product')->getCollection(); 
+						$collection_of_products->addAttributeToSelect('meta_title'); - и не нужно беспокоиться, что Magento делает запрос к базе данных каждый раз, когда добавляется новый атрибут. Запроса к базе данных не будет, пока вы не попробуете получить доступ к элементу Коллекции (По ходу поки я не напишу шось типу getData(), запроса не буде).
+
+ 9) ---------- Фильтрация Коллекции базы данных -------------------
+
+	- Наиболее важным методом Коллекции базы данных является addFieldToFilter. Он добавляет свои WHERE-условия для SQL запроса, которые остаются за кулисами.
+
+		 $collection_of_products = Mage::getModel('catalog/product')->getCollection(); $collection_of_products->addFieldToFilter('sku','1');
+															WHERE 		  sku ="1"
+
+			- Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('sku','1')->getSelect()); -> SELECT `e`.* FROM `catalog_product_entity` AS `e` WHERE (e.sku = '1')'
+
+		 - другая хорошая вещь для коллекции – это то, что вы можете передать ее в функцию count - echo "Наша коллекция сейчас насчитывает " . count($collection_of_products) . ' позицию(й)';
+
+---------------------------------------------------------------------------------------
+
+ Имейте в виду, что это может очень быстро осложниться, если вы используете атрибут EAV
+
+ var_dump(  (string) Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('meta_title','my title')->getSelect()); - и получите что-то очень невнятное:
+
+SELECT `e`.*, IF(_table_meta_title.value_id>0, _table_meta_title.value, _table_meta_title_default.value) AS `meta_title`
+FROM `catalog_product_entity` AS `e`
+INNER JOIN `catalog_product_entity_varchar` AS `_table_meta_title_default`
+ON (_table_meta_title_default.entity_id = e.entity_id) AND (_table_meta_title_default.attribute_id='103')
+AND _table_meta_title_default.store_id=0
+LEFT JOIN `catalog_product_entity_varchar` AS `_table_meta_title`
+ON (_table_meta_title.entity_id = e.entity_id) AND (_table_meta_title.attribute_id='103')
+AND (_table_meta_title.store_id='1')
+WHERE (IF(_table_meta_title.value_id>0, _table_meta_title.value, _table_meta_title_default.value) = 'my title')
+
+Старайтесь не думать слишком много о SQL, если у вас поджимают сроки сдачи проекта.
+
+---------------------------------------------------------------------------------------
+
+ 10) Другие операторы сравнения. Не буду їх описувати. Їх справді дуже багато і варіантів які елементи вибрати з бази дуже багато. (масиви потрібних елементів можна писати. Можна вибрати тільки айдішки тих елементів, які більші за якесь число). Кароче на любий вкус - https://sebweo.com/ru/magento-dlya-php-mvc-razrabotchikov-kollektsii-varien-data-ch-9-11/ - тут все описано 
+
+
+
+
+ -------------------------------- Magento System Overrides and Upgradability - https://alanstorm.com/magento_upgrade_rewrite_override/ ------------------------------------
+
+ 1) Бля, так просто і я забув про це. якщо я екстенджу метод і мені треба добавити туди свій додатковий функціонал, і при тому наптивний мені теж треба, то можна визвати нативний і дописати своє 
+
+	public function validate() {
+	    //здесь кастомный код валидации
+	    return parent::validate();
+	  }
+
+	public function getName($param=false) {
+	    $original_return = parent::getName();
+	    if($param == self::SOMECONST) {
+	      $original_return = $this->getSomethingElse();
+	    }
+	    return $original_return;
+	  }
+
+	- Поэтому, когда я делаю контроль архитектуры решения, я стараюсь свести мое переопределение к минимуму. Когда мне нужно переопределение, я всегда стараюсь завершать свои методы с: return parent::originalMethod();
+
+	- Если для моих изменений нужно сначала запустить оригинальный метод, я использую конструкцию типа:
+
+		public function someMethod() {
+		  $original_return = Mage::getModel('mymodule/immutable')->setValue('this is a test');
+		  //мой пользовательский код здесь
+		  return $original_return->getValue();
+		}
+
+	- Наконец, есть моменты, когда вы хотите (или думаете, что хотите) изменить возвращение значения core метода. Когда возникает в этом потребность, я считаю, что гораздо безопаснее будет определить новый метод, который вызывает оригинал, а затем изменить свою тему, чтобы вызвать этот новый метод:
+
+class Mage_Catalog_Model_Original extends Mage_Core_Model_Abstract {
+  protected function getSomeCollectionOriginal() {
+     return Mage::getModel('foo/bar')->getCollection()->addFieldToFilter('some_field', '42');
+  }
+}
+
+class Myp_Mym_Model_New extends Mage_Catalog_Model_Original {
+  public function getSomeCollectionWithAdditionalItems() {
+    $collection = $this->getSomeCollectionOriginal();
+    //теперь измените или переоцените $collection собственным кодом
+    return $collection;
+  }
+}
+
+ -------------------------------- Magento Default System Configuration Values - https://alanstorm.com/magento_default_system_configuration_values/ ---------------------------
+
+ 1) Візьму до прикладу цей код
+
+	<!-- Файл: app/code/core/Mage/Page/etc/config.xml -->
+	<default> - Це звичайна нода default глобальних конфігів $_xml; Это узел верхнего уровня, в котором вы будете хранить значения по умолчанию.
+	 <design>
+	  <head translate="default_description" module="page">
+	    <default_title>Magento Commerce</default_title>
+	    <default_description>Default Description</default_description>
+	    <default_keywords>Magento, Varien, E-commerce</default_keywords>
+	    <default_robots>*</default_robots>
+	    <default_media_type>text/html</default_media_type>
+	    <default_charset>utf-8</default_charset>
+	  </head>
+	  <header translate="welcome" module="page">
+	   <logo_src>images/logo.gif</logo_src>
+	   <logo_alt>Magento Commerce</logo_alt>
+	   <welcome>Default welcome msg!</welcome>
+	  </header>
+	  <footer translate="copyright" module="page">
+	    <copyright>&amp;copy; 2008 Magento Demo Store. All Rights Reserved.</copyright>
+	  </footer>
+	 </design>
+	</default>
+
+	- файл system.xml де я конфігурував пункти мено і сторінку айтема меню адмінки. Його можна конфігурувати також з файлу config.xml. Це називається встановка дефолнтих значень. Ці дефолнті значення звичайно можна буде витягнути з глобальних конфігів так як вони знаходяться у файлі config.xml. Алан каже що це типу значення які використовуються частіше всього. Я так і не поняв як вони звязані, це ж вроді 2 різні системи конфігів, але вони звязані http://joxi.ru/RmzEkMwu0oGLpr . Як бачу вони знаходяться за шляхом <global><default> - скоріш за все вони там завжди мають знаходитись.
+
+		- Я пошукав по файлах system.xml, де там налаштована нода <design> і знайшов в цьому ж модулі у файлі system.xml (взагалі то я знайшов у декількох модулів цю ноду. Не думаю що в кожного модуля різні конфіги, так як це налаштування адмінки і на досить низькому рівні. Скоріш за все який модуль останній загрузився, ті конфіги і переписали інші (імя нод яких співпадало))
+
+		- Суть у тому, що якщо я прошу якусь ноду  - Mage::getStoreConfig('design/footer/copyright'); то воно буде шукати і у system.xml і у config.xml. () Хоча нод з файла system.xml не має у глобальних конфігах. 
+
+		- Ось до прикладу копірайт 
+
+			1) Налаштовується в файлі system.xml - http://joxi.ru/823dpX3TJeKZPA
+
+			2) Значення задається у файлі config.xml - http://joxi.ru/Dr8RE7kC4enVl2 - Звичайно у файлі config.xml має бути правильний шлях щоб маджента знала що змінити <global><default><design><footer><copyright>
+
+			- Ну і на фронт він витягнувся якось так - echo Mage::getStoreConfig('design/footer/copyright');
+
+
+	- Тут можна згадати модельку Alanstormdotcom_Helloworld_Model_Words у якій я робив метод toOptionArray() щоб заповнити значення селекта, який я створив в адмінці. По ходу в самому файлі system.xml не можна задати ці значення. То щоб цього не робити і існують дефолтні значення які можна задати у файлі config.xml
+
+
+
+
+
+
+
+
+
+
+
+
+
+ вроді після цьго уроку буду краще розуміти метод getStoreConfig(); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
