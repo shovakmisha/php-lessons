@@ -1,0 +1,383 @@
+
+ ------------ Custom Magento System Configuration - https://alanstorm.com/custom_magento_system_configuration/ -------------------
+
+ - Помимо config.xml, маджента має і інші конфігураційні файли. Наприклад system.xml. В ньому теж є конфіги, які можна подивити - Mage::getConfig()->loadModulesConfiguration('system.xml')        
+->getNode(). Як я поняв це система конфігів адмінки. Але це не точно
+
+ 1) добавить собственную «вкладку» к конфигурации системы. Вкладки – это заголовки навигации в левом меню админки System -> Configuration (Система -> Конфигурация). 
+
+	Файл: app/code/local/Alanstormdotcom/Helloworld/etc/system.xml
+
+	<config>
+	  <tabs>
+	    <helloconfig translate="label" module="helloworld"> - Название узла <helloconfig/> является произвольным, но должно быть уникальным среди вкладок. Оно будет служить идентификатором вашей вкладки, которую мы используем позже в конфигурации.  Атрибут module="helloworld" определяет, какому модулю эта вкладка «принадлежит»
+	     
+		<label>Hello Config</label> - определяет имя, которое будет использоваться для вкладки
+	     
+		<sort_order>99999</sort_order> - определяет, как отображается вкладка по отношению к другим вкладкам в левом меню.
+	    </helloconfig>
+	  </tabs>
+	</config>
+
+		- Після того як я створю ці конфіги - Вы получите ошибку типа: Fatal error: Class 'Mage_Helloworld_Helper_Data' not found in - потому, что Helloworld не имеет  Хелпер, но система пыталась его использовать. Після того як я добавив хелпер в мій модуль, помила пропала, но новая вкладка так и не появится.
+
+ 2) Добавлю Хелпер
+
+	<global>
+	  <helpers>
+	    <helloworld>
+	       <class>Alanstormdotcom_Helloworld_Helper</class> - тег <class/> должен содержать базовое название всех Helper классов. Типу так само як і з моделями.
+	    </helloworld>
+	  </helpers>
+	</global>
+
+ 3) Добавление новой секции «вкладки»
+
+	- Каждая вкладка имеет ряд секций. Например, вкладка Расширенное имеет (по умолчанию) следующие секции: «Администратор», «Система», ... Если вкладка настроена без секций, она не будет отображаться
+
+	- Добавляю секцію (system.xml)
+
+		<config>
+		  <tabs>
+		    <helloconfig translate="label" module="helloworld">
+		      <label>Hello Config</label>
+		      <sort_order>99999</sort_order>
+		    </helloconfig>
+		  </tabs>
+		  <sections> - розділ секцій 
+		    <helloworld_options translate="label" module="helloworld"> - похож на тег <helloconfig/>, который определен выше. Он с помощью произвольного имени определяет опции нового раздела (секции). Це типу і є секція. Головний її вузел
+		      <label>Hello World Config Options</label> - название секции
+		      <tab>helloconfig</tab> - ця секція буде відображатись у вкладці <helloconfig>
+		      <frontend_type>text</frontend_type> - не знаю точно що це, але так як він пишеться у всіх вкладках, то і я його сюди написав
+		      <sort_order>1000</sort_order> - порядок відображення у даній вкладці
+		      <show_in_default>1</show_in_default>
+		      <show_in_website>1</show_in_website>
+		      <show_in_store>1</show_in_store>
+		    </helloworld_options>
+		  </sections>
+		</config>
+
+ 4) приложение Adminhtml пока не может найти запись для новой секции (helloworld_options) в Списке Контроля Доступа (ACL).
+
+	- ACL((Access Control List) — это набор текстовых выражений, которые что-то разрешают, либо что-то запрещают) - Есть определенные ресурсы, которые требуют, чтобы пользователь был авторизован перед их использованием. Ресурс здесь – это абстрагированный термин. Это может быть страница администратора, или это может быть доступ к определенной функции. Группа разработчиков Magento решила, что разделы System Config должны иметь защиту ACL.
+
+		- Тобто на наний момент я не маю доступ до helloworld_options - http://joxi.ru/MAjElawu45nab2 . Це я клацнув на секцію helloworld_options
+
+	- Ресурсы определяются через URI. Например, раздел «веб-конфигурация» (web) (http://joxi.ru/ZrJzyo5i9pqvVr) (на вкладке «Общие») определяется URI: admin/system/config/web
+
+		- Виходить, що наша секция helloworld_options будет иметь следующее URI: admin/system/config/helloworld_options
+
+	- Приложение для Администрирования (часто называется adminhtml) построено с использованием того же фреймворка, что и приложение для Магазина (приложение для Магазина часто называется приложением frontend).  В контроллере действий Adminhml, когда пользователю нужно получить доступ к ресурсу, защищенному ACL, разработчик Adminhtml должен:
+
+		1) Определить URI для любого ресурса, к которому пользователь пытается получить доступ
+
+		2) Проверить, указано ли это URI в системе ACL, которая будет определять, имеет ли залогиненный пользователь право доступа к этому конкретному ресурсу
+
+		3) Если пользователь имеет правильные права доступа, продолжить выполнение приложения. Если нет – отклонить выполнение, или сделать что-то подобное (например, остановить отображения меню и контента)
+
+		- Для тех, кто интересуется этим больше, данная процедура определяется для разделов System Config с помощью метода _isSectionAllowed в следующем контроллере:
+
+app/code/core/Mage/Adminhtml/controllers/System/ConfigController.php
+
+			- Если вы перейдете в Система -> Разрешения -> Роли и нажмете кнопку «Добавить новую роль», вы сможете увидеть графическое представление дерева всех ресурсов роли - http://joxi.ru/12MzjodiMjpJQA
+
+	- Мы должны определить ресурс ACL для нашего нового раздела(helloconfig). Вам нужно делать это только, если вы добавляете новый раздел. Если вы добавляете параметры настройки к существующему разделу, не нужно вмешиваться в ACL.
+
+		Файл: app/code/local/Alanstormdotcom/Helloworld/etc/config.xml
+
+		<config>
+		  <adminhtml>
+		   <acl>
+		    <resources>
+		     <admin>
+		      <children>
+		       <system>
+			<children>
+			 <config>
+			  <children>
+			   <helloworld_options> - Як бачу, це я просто сказав acl захисту, по якому шляху выдкрити доступ до ноди. Можна зробити висновок що вся адмінка - це xml 
+			    <title>Store Hello World Module Section</title>
+			   </helloworld_options>
+			  </children>
+			 </config>
+			</children>
+		       </system>
+		      </children>
+		     </admin>
+		    </resources>
+		   </acl>
+		  </adminhtml>
+		</config>
+
+		- Після цього секція заработає. Коли клікну на неї - http://joxi.ru/p27a7yxIoBMBdr . Система -> Разрешения -> Роли http://joxi.ru/J2bglQGfXZ3QyA . Тут теж зявилась, тобто ACL дозволив працювати з цією секцією.  
+
+ 4) Добавление групп
+
+	    <groups>
+	     <messages translate="label">
+	      <label>Demo Of Config Fields</label>
+	      <frontend_type>text</frontend_type> - не знаю точно що це, але так як він пишеться у всіх вкладках, то і я його сюди написав
+	      <sort_order>1</sort_order>
+	      <show_in_default>1</show_in_default>
+	      <show_in_website>1</show_in_website>
+	      <show_in_store>1</show_in_store>
+	     </messages>
+	    </groups>
+	   </helloworld_options>
+	  </sections>
+	</config>
+
+	- http://joxi.ru/a2XzQoki1bxwpr
+
+ 5) Добавление полей конфигурации
+
+		 <fields>
+		  <hello_message>
+		   <label>Message</label>
+		   <frontend_type>text</frontend_type> -  на этот раз действительно делает полезную вещь, указывая системе, какой элемент формы нам нужен (це інпут) - http://joxi.ru/KAxB9qwcMkWKGm
+
+			- <frontend_type>time</frontend_type> - http://joxi.ru/DrlgV3efvPMGjA
+
+		   <sort_order>1</sort_order>
+		   <show_in_default>1</show_in_default>
+		   <show_in_website>1</show_in_website>
+		   <show_in_store>1</show_in_store>
+		  </hello_message>
+		 </fields>
+	</messages>
+
+ 6) Звязування моделі з цими конфігами.
+
+	<hello_message>
+	  <label>Message</label>
+	  <frontend_type>select</frontend_type> - Поки це звичайний пустий селект
+  	  <source_model>helloworld/words</source_model> - Цю модельку треба додати, інакше буде помилка. Вона має відповідати шляхк Mage:getModel('helloworld/words'); 
+	  <comment>My comment</comment> - комент до селекта - http://joxi.ru/LmG9DozueV4JdA
+	  <sort_order>1</sort_order>
+	  <show_in_default>1</show_in_default>
+	  <show_in_website>1</show_in_website>
+	  <show_in_store>1</show_in_store>
+	</hello_message>
+
+		- Навіть якщо <show_in_default/>, <show_in_website/>, <show_in_store/> будуть 0 вроді, вони всерівно будуть видні (коли я буду їх витягувати (getStoreConfig()) або в адмінці). Тож мабуть треба буде робити додаткові перевірки 
+
+	Файл: app/code/local/Alanstormdotcom/Helloworld/Model/Words.php
+
+	class Alanstormdotcom_Helloworld_Model_Words {
+	  public function toOptionArray() { - Так має називатись метод, який буде повертати опшни у селект
+	   return array( - цей масив буде відображатись у цьому селекті - <source_model>helloworld/words</source_model>
+	    array('value'=>1, 'label'=>Mage::helper('helloworld')->__('Hello')), - Тобто ці значення будуть перекладатись на різні мови
+	    array('value'=>2, 'label'=>Mage::helper('helloworld')->__('Goodbye')),
+	    array('value'=>3, 'label'=>Mage::helper('helloworld')->__('Yes')),
+	    array('value'=>4, 'label'=>Mage::helper('helloworld')->__('No')),
+	   );
+	  }
+	}
+
+ 7) Добавление полей к существующим разделам/группам конфигурации
+
+	<sections>
+		<general> добавляю нову групу полів у вкладку System Config General - 
+		    <groups>
+		        <example>
+		            <label>Example of Adding a Group</label> - http://joxi.ru/12MzjodiMj3yPA
+		            <frontend_type>text</frontend_type>
+		            <sort_order>1</sort_order>
+		            <show_in_default>1</show_in_default>
+		            <show_in_website>1</show_in_website>
+		            <show_in_store>1</show_in_store>
+		        </example>
+		    </groups>
+		</general>
+
+
+ 8) Получение значений
+
+	- Mage::getStoreConfig('helloworld_options/messages/hello_message');
+
+	- Mage::getStoreConfig('helloworld_options/messages');
+
+	- Mage::getStoreConfig('helloworld_options');
+
+	- Наконец, если вам нужно получить значение для магазина, который не используется в текущей сессии, getStoreConfig принимает второй параметр, — идентификатор магазина:
+
+		- Mage::getStoreConfig('helloworld_options',1 (це id стора по ходу) );
+
+	- Типу var_dump( Mage::getStoreConfig('helloworld_options/messages') );
+
+		array (size=3)
+		  'hello_input' => string 'name' (length=4)
+		  'hello_time' => string '12,08,19' (length=8)
+		  'hello_message' => string '2' (length=1)
+
+		- http://joxi.ru/DmB8DjGUwbXVRA
+
+
+
+ -------------- In Depth Magento System Configuration - https://alanstorm.com/magento_system_configuration_in_depth_tutorial/ --------------
+
+ 1) <frontend_type/> - типи полів. Ось декілька основних значень
+
+	image
+	label
+	multiselect
+	password
+	select
+	text
+	textarea
+	time
+
+	Значение этого поля используется в паттерне стиля для создания экземпляра класса в формате: Varien_Data_Form_Element_Type
+
+		class Varien_Data_Form_Abstract extends Varien_Object {
+			//...
+			public function addField($elementId, $type, $config, $after=false) {
+			.....
+
+ 2) Також є нода <frontend_class/> - задасть клас селекту для стилів // <frontend_class>free-method</frontend_class> - будет выглядеть так: <select class="free-method">
+
+ 3) Є ще нода <validate/> - На первый взгляд <validate/> кажется чем-то очень сложным. Но этот тег всего лишь добавляет CSS класс полю формы. 
+
+	Такая конфигурация: <validate>validate-email</validate> добавит следующий CSS-класс элементу формы: <input type="text" class="validate-email" /> - Наличие этого CSS класса у элемента будет инициировать процедуру проверки на клиентской стороне. Например, вышеупомянутый код приведет к тому, что будет запущена JavaScript проверка электронной почты в этом поле. Если данные в этом поле не проходят проверку, пользователь не сможет сохранить форму конфигурации.
+
+	- Вы можете ознакомиться с доступными процедурами JavaScript проверки в файле: js/prototype/validation.js - и вот так выглядит вышеуказанная процедура проверки электронной почты в этом файле:
+
+		['validate-email', 'Please enter a valid email address. For example johndoe@domain.com.', function (v) {
+		  return Validation.get('IsEmpty').test(v) || /^[a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]+(\.[a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,})/i.test(v)
+		}],
+		которая выглядит ужасно, но она является весьма полезным регулярным выражением проверки эл.почты.
+
+ 4) Тег <can_be_empty/> используется в полях multiselect -  <frontend_type>multiselect</frontend_type>
+
+	- <can_be_empty>1<can_be_empty/> - Мультиселект у якого не вибрано жодного опшина, пройде валідацію (Ну типу форму можна буде зберегти)
+
+	- Маджента згенерує пустий інпут $html .= '<input type="hidden" name="' . parent::getName() . '" value="" />'; і відішле його замість мультиселекта по ходу
+
+		Файл: lib/Varien/Data/Form/Element/Multiselect.php
+
+		if ($this->getCanBeEmpty()) {
+		  $html .= '<input type="hidden" name="' . parent::getName() . '" value="" />';
+		}
+
+ 5) <depends/> - позволяет указать, что ваше поле конфигурации будет отображаться только тогда, когда другое поле конфигурации в той же группе имеет определенное значение.
+
+	Например, конфигурация системы Paypal Express имеет следующую определенную зависимость:
+
+	<specificcountry translate="label">
+	  <label>Countries Payment Applicable From</label>
+	  <frontend_type>multiselect</frontend_type>
+	  <sort_order>110</sort_order>
+	  <source_model>adminhtml/system_config_source_country</source_model>
+	  <show_in_default>1</show_in_default>
+	  <show_in_website>1</show_in_website>
+	  <show_in_store>0</show_in_store>
+	  <depends><allowspecific>1</allowspecific></depends> - Он говорит системе, что если есть поле <allowspecific> имеет значение «1», тогда поле «specificcountry» должно отображаться. Это происходит мгновенно с помощью определенного кода JavaScript.
+	</specificcountry>
+
+		- Хотя это работает с любыми полями, которые присылают события onchange, система core Magento использует эту функцию только тогда, когда родительский узел <select>.
+	
+			- Або ще може бути переклад що родительский узел вибраний (але що це значить вибраний - хз. Типу як доступний чи шось таке)
+
+ 6) Тег <source_model/> указывает на класс Модели (в формате URI/Сгруппированное Имя Класса) для заполнения полей параметрами по умолчанию
+
+	- В дополнение к стандартному Сгруппированному Имени Класса Magento, расширенный поддерживаемый синтаксис выглядит так: module/modelname::methodName - Система будет делать экземпляр модели с getModel('module/modelname') и вызывать его метод methodName для получения массива пар значение/заголовок для использования в качестве источника. Если имя метода отсутствует, будет вызван метод toOptionArray по умолчанию.
+
+ 7) <frontend_model/> - По умолчанию Элементы формы Magento рендерятся с помощью класса Блока: Mage_Adminhtml_Block_System_Config_Form_Field
+
+	- если вы хотите использовать специальный рендер для поля «System Configuration», вы можете указать другой класс блока (в формате URI/Сгруппированное Имя Класса) используя тег <frontend_model/>
+
+		- Например, поле last_update в группе adminnotification (цей конфіг є в дефолтній мадженті) указывает, что следует использовать для рендеринга поле adminhtml/system_config_form_field_notification. 
+
+		<last_update translate="label">
+		    <label>Last update</label>
+		    <frontend_type>label</frontend_type>
+		    <frontend_model>adminhtml/system_config_form_field_notification</frontend_model>
+		    <sort_order>3</sort_order>
+		    <show_in_default>1</show_in_default>
+		    <show_in_website>0</show_in_website>
+		    <show_in_store>0</show_in_store>
+		</last_update>
+
+		- Типу це э в дефолтній мадженті. Дефолтна маджента використовує надстройку для цієї форми щоб побудувати форму.
+
+			Файл: app/code/core/Mage/Adminhtml/Block/System/Config/Form/Field/Notification.php
+
+			class Mage_Adminhtml_Block_System_Config_Form_Field_Notification extends Mage_Adminhtml_Block_System_Config_Form_Field {
+			  protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) { - Метод _getElementHtml обеспечивает отображение введенной даты с таким же форматом.
+			    $element->setValue(Mage::app()->loadCache('admin_notifications_lastcheck'));
+			    $format = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);
+			    return Mage::app()->getLocale()->date(intval($element->getValue()))->toString($format);
+			  }
+			}
+
+ 8) <backend_model/> - После того, как форма будет отправлена Magento, ее значения должны быть сохранены в базе данных. В полях «System Configuration», как правило, это касается класса Модели: Mage_Core_Model_Config_Data
+
+	- Однако могут быть случаи, когда вам нужно, чтобы ваша конфигурация системы использовала другую модель бэкэнда. Тег <backend_model/> позволяет указать другой класс модели (с помощью формата URI/Сгруппированное Имя Класса).
+
+	- Чаще всего это нужно для того, чтобы выполнить дополнительные действия, когда поле сохранено. Расширяя класс Mage_Core_Model_Config_Data вашей собственной моделью и определяя метод _beforeSave и/или _afterSave в вашей модели, вы можете применять дополнительные действия, когда изменяется значение конфигурации.
+
+ 9) <upload_dir/> и <base_url/> - Оба этих тега используются в полях «System Configuration», которые используют поле <frontend_type>image</frontend_type> с моделью бэкенда <backend_model>adminhtml/system_config_backend_image</backend_model>
+
+	Они определяют:
+
+		1) <upload_dir/> Где загружается файл с изображением
+		2) <base_url/> Базовый путь URI, который используется при воспроизведении тега <img>
+
+	- давайте рассмотрим тег <upload_dir/>
+
+		<upload_dir 
+			config="system/filesystem/media" - Базовый путь для загрузки изображения - То есть это значение системной конфигурации Magento - которая относится к {{root_dir}}/media
+			
+			scope_info="1" - Следует ли добавлять текущую конфигурацию к пути. если для атрибута scope установлено значение «1», текущий контекст конфигурации будет преобразован в путь. Если вы загружали изображения в контексте default, то вы получите путь типа: {root-magento}/media/sales/store/logo/default Однако, если вы загрузили изображение в контексте определенного магазина, вы получите путь типа: {root-magento}/media/sales/store/logo/stores/5 где «5» – это идентификатор магазина, из которого вы сейчас редактируете настройки.
+			>
+			sales/store/logo -  Путь, от базового, по которому нужно загружать это конкретное поле изображения - це вже значення підкаталогу, яке додасться до базового - {root-magento}/media/sales/store/logo
+		</upload_dir> 
+			
+
+	<image_test_upload>
+            <label>Image upload</label>
+            <frontend_type>image</frontend_type>
+            <backend_model>adminhtml/system_config_backend_image</backend_model>
+            <upload_dir config="system/filesystem/media" scope_info="1">tmp/catalog/product</upload_dir> - сюди буде загружатись картинка
+            <base_url type="media" scope_info="1">tmp/catalog/product</base_url> - звідси буде братись картинка. Атрибут type це - age::getBaseUrl('media'). Але Алан каже що цей base_url служить тільки щоб показати картинку в адмінці. Для фронта мабуть треба буде свій шлях писати
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+        </image_test_upload>
+
+	Вы можете увидеть весь код в классе Mage_Adminhtml_Block_System_Config_Form_Field_Image.
+
+	class Mage_Adminhtml_Block_System_Config_Form_Field_Image extends Varien_Data_Form_Element_Image {
+	//...
+	  protected function _getUrl() {
+	    $url = parent::_getUrl();
+	    $config = $this->getFieldConfig();
+	    /* @var $config Varien_Simplexml_Element */
+	    if (!empty($config->base_url)) {
+	      $el = $config->descend('base_url');
+	      $urlType = empty($el['type']) ? 'link' : (string)$el['type'];
+	      $url = Mage::getBaseUrl($urlType) . (string)$config->base_url . '/' . $url;
+	    }
+	    return $url;
+	  }
+	//...
+	}
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

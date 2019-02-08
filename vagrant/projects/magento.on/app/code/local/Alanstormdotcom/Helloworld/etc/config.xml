@@ -6,19 +6,46 @@
 		</Alanstormdotcom_Helloworld>
 	</modules>
 	<global>
-		<!--models>
-			 standard model section
-			<roimagic>
+		<models>
+			<!--roimagic>
 				<class>Companyname_RoiMagic_Model</class>
 			</roimagic>
-			 new checkout section
 			<checkout>
 				<rewrite>
 					<cart>Companyname_RoiMagic_Model_Cart</cart>
 				</rewrite>
-			</checkout>
-		</models-->
+			</checkout-->
+			<helloworld>
+				<class>Alanstormdotcom_Helloworld_Model</class>
+			</helloworld>
+		</models>
+		<helpers>
+			<helloworld>
+				<class>Alanstormdotcom_Helloworld_Helper</class>
+			</helloworld>
+		</helpers>
 	</global>
+	<adminhtml>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<helloworld_options>
+											<title>Store Hello World Module Section</title>
+										</helloworld_options>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+	</adminhtml>
 	<frontend>
 		<routers>
 			<helloworld>

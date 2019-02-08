@@ -7,12 +7,12 @@ class Alanstormdotcom_Helloworld_IndexController extends Mage_Core_Controller_Fr
 
     public function indexAction() {
 
-        header('Content-Type: text/plain');
-        echo $config = Mage::getConfig()
-            ->loadModulesConfiguration('system.xml')
-            ->getNode()
-            ->asNiceXml();
-        exit;
+        // header('Content-Type: text/plain');
+        // echo $config = Mage::getConfig()
+        //     ->loadModulesConfiguration('system.xml')
+        //     ->getNode()
+        //     ->asNiceXml();
+        // exit;
 
          // echo 'Hello Index!';
 
@@ -24,6 +24,10 @@ class Alanstormdotcom_Helloworld_IndexController extends Mage_Core_Controller_Fr
          // $this->loadLayout();
          // $xxx = Mage::getConfig();
          // $this->renderLayout();
+
+        var_dump( Mage::getStoreConfig('helloworld_options/messages') );
+
+        // var_dump(Mage::getStoreConfig('helloworld_options',1));
 
     }
 
