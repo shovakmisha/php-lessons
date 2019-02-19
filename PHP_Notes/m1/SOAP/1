@@ -1,0 +1,74 @@
+
+ ------------------------------- Scrubbing Bubbles for Magento’s SOAP - https://alanstorm.com/magento_soap_api_shell_scripts/ --------------------------------
+
+ 1)  SOAP - это серия протоколов, которые, с одной точки зрения, предназначены для того, чтобы программисты могли вызывать функцию на одном компьютере и запускать ее на другом компьютере
+
+ 2) Нет способа написать программу, которая использует Magento API. Вместо этого основная команда написала «adapters» (также известные как «connectors»)
+
+ 3) Вызов, выполняемый через API, всегда будет медленнее, чем вызов, сделанный через собственный код PHP.
+
+
+ ------------------------------------------------
+
+	- 
+Каждый вызов Magento API состоит из ресурса и метода. Думайте о ресурсах API как о классе, а о методах API как о методах этих классов.
+
+Например, чтобы создать клиента с помощью API, вы используете ресурс customer и метод create. Каждая из этих пар ресурсов / методов преобразуется в пару модель / метод в специальном объекте модели ресурсов API Magento. Эти объекты модели ресурсов отделены от моделей ресурсов Magento CRUD. Вы можете использовать расширение «Руководство разработчика», чтобы быстро перейти к определениям этих методов. Тем не менее, полезно знать, как разрешаются эти методы. Ниже мы рассмотрим, как ресурс API
+
+ ------------------------------------------------
+
+ 4) customer.create = $results = Mage::getModel('customer/customer_api')->create(...);
+
+ 5) $ find app/code/core -name 'api.xml'
+	app/code/core/Mage/Api/etc/api.xml
+	app/code/core/Mage/Catalog/etc/api.xml
+	app/code/core/Mage/CatalogInventory/etc/api.xml
+	app/code/core/Mage/Checkout/etc/api.xml
+	app/code/core/Mage/Core/etc/api.xml
+	app/code/core/Mage/Customer/etc/api.xml
+	app/code/core/Mage/Directory/etc/api.xml
+	app/code/core/Mage/Downloadable/etc/api.xml
+	app/code/core/Mage/GiftMessage/etc/api.xml
+	app/code/core/Mage/Sales/etc/api.xml
+	app/code/core/Mage/Tag/etc/api.xml
+
+	- Эти файлы можно использовать для поиска модели Magento, которая используется для реализации вызова API. В каждом файле узлы в <api><resources><...></resources></api> представляют ресурс API. 
+
+ 5) Я буду розбирати customer.create - он может быть найден в
+
+	<!-- File: app/code/core/Mage/Customer/etc/api.xml -->
+	<config>
+	    <api> - В общем, имя ресурса API (customer) обычно указывает, в каком модуле Magento будет находиться его файл api.xml 
+		<resources>
+		    <customer translate="title" module="customer">
+		        <!-- ... -->
+			<model>customer/customer_api</model> - В каждом узле ресурса вы найдете узел <model>. Этот узел модели содержит псевдоним класса для модели Magento, которую использует этот конкретный ресурс. Это говорит нам о том, что клиентский ресурс Magento Core API реализован с помощью Mage::getModel('customer/customer_api');
+
+				- Если вы использовали самую раннюю версию Magento Core API, возможно, вы сделали вызов API - category.info
+
+					<methods>
+					    <list translate="title" module="customer">
+						<title>Retrieve customers</title>
+						<method>items</method>
+						<acl>customer/info</acl>
+
+		    </customer>
+		</resources>
+	    </api>
+	</config>
+
+ 6) В дополнение к узлу <resource /> каждый файл api.xml может также содержать узел <resource_alias />.
+
+	<api>
+		<resources_alias>
+			    <!-- ... -->
+		</resource_alias>
+	</api>
+
+
+
+
+
+
+
+

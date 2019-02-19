@@ -1,15 +1,12 @@
 <?php
-    require_once "NewsDB.class.php";
-    $news = new NewDB();
-
-    if( $_SERVER["REQUEST_METHOD"] == "POST" ){
-        require_once('save_news.inc.php');
-    }
-
-    require_once "get_news.inc.php";
-    $posts = $news->getNews();
-
-    $errMsg = "";
+    // require_once "NewsDB.class.php";
+    // $news = new NewDB();
+    // if( $_SERVER["REQUEST_METHOD"] == "POST" ){
+    //     require_once('save_news.inc.php');
+    // }
+    // require_once "get_news.inc.php";
+    // $posts = $news->getNews();
+    // $errMsg = "";
 
 ?>
 <!DOCTYPE>
@@ -23,11 +20,11 @@
 
 <h1>Последние новости</h1>
 <?php
-    if($errMsg){
-        echo "<h3> $errMsg </h3>";
-    }
+    // if($errMsg){
+    //     echo "<h3> $errMsg </h3>";
+    // }
 ?>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="" method="post">
 
     Заголовок новости:<br />
     <input type="text" name="title" /><br />
@@ -61,27 +58,7 @@
         <th>Удалить новость</th>
     </tr>
 
-<?php
 
-foreach ( $posts as $post ){ ?>
-
-    <tr>
-        <td><?php echo $post['title']; ?></td>
-        <td><?php echo $post['category']; ?></td>
-        <td><?php echo $post['description']; ?></td>
-        <td><?php echo $post['source']; ?></td>
-        <td><?php echo date('d-m-y', $post['datetime']); ?></td>
-        <td><a href="delete_news.inc.php?id=<?php echo $post['id']; ?>">Удалить</a></td>
-    </tr>
-
-<?php
-}
-
-//echo '<pre>';
-//print_r($posts);
-//echo '</pre>';
-
-?>
 
 </table>
 </body>

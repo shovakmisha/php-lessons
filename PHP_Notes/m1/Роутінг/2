@@ -1,5 +1,7 @@
 ---------------- https://alanstorm.com/magento_dispatch_admin_cms_default_routers/ ---------
 
+ - http://www.aschroder.com/2012/04/introduction-to-the-magento-rest-apis-with-oauth-in-version-1-7/ - Magento REST API 
+
  - Адмінський роут. Я важе писав у розборі стандартного роута, що адмінський роут розбирає стандартний роут, з декількома розлічеями. Адмінський роут екстендиться від стандартного і якщо у нього не має якогось метода, то цей метод візьметься з стандарного роута 
 
  - Розбираю розлічія у методі match()
