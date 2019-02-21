@@ -1,4 +1,7 @@
 <?php
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == "PUT"){ 
 
   $exists = false;
@@ -8,16 +11,21 @@ if ($_SERVER['REQUEST_METHOD'] == "PUT"){
   if(file_exists($file))
     $exists = true;
 
+
   $dest = fopen($file, "w");
+
 
   if (!$dest) {
     header("HTTP/1.1 409 Create error");
     exit;
   }
 
-  $src = fopen("php://input", "r");
-  while($kb = fread($src, 1024)){ 
-    fwrite($dest, $kb, 1024); 
+    echo 44;
+
+
+  $src = fopen("php://input", "r"); // php://input является потоком только для чтения, который позволяет вам читать необработанные данные из тела запроса  php://input недоступен с типом содержимого enctype="multipart/form-data".
+  while($kb = fread($src, 1024)){
+    fwrite($dest, $kb, 1024);
   }
   fclose($dest);
   fclose($src);

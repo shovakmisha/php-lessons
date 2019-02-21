@@ -2,78 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="253443ba-0529-4b67-8a49-2bf498049ec9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../../php3/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/stock.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/php3.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/gd/image.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/gd/image_create.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/soap/client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/soap/server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/soap/stock.wsdl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/soap/stock.wsdl.tmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/socket/dummy.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/socket/get_dummy.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml-rpc/client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml-rpc/server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/111" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/catalog.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/catalog.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/catalog.xsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/dom.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/reader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/sax.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/simplexml.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/writer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/demo/xml/xslt.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/fonts/bellb.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/fonts/georgia.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/images/noise.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/images/sunset.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/images/winter.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/noise-picture.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/gd/registration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/INewsDB.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/NewsDB.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/NewsDB.class2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/delete_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/get_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/news.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/news.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/rss.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/rss.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/rss_reader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/save_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/news/test.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/abstract.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/classes/ISuperUser.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/classes/SuperUser.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/classes/User.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/classes/UserAbstract.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/extend.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/new.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/red.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/oop/users.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/soap/news.wsdl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/soap/soap-client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/soap/soap-server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/xml-rpc/xml-rpc-client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../stock/php3/xml-rpc/xml-rpc-server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Роутінг/2" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Роутінг/2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../php3/demo/soap/server.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../../php3/demo/soap/server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../php3/news/news.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../../php3/news/news.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../html/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stock/php4/demo/curl/upload/test.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/SOAP/1" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/SOAP/1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 3/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 3/3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/4" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/5" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/Неназваний документ 6" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/Неназваний документ 6" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php3/demo/soap/client.php" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php3/demo/soap/client.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php4/demo/curl/08-PUT.php" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php4/demo/curl/08-PUT.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php4/demo/curl/upload/put.php" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php4/demo/curl/upload/put.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php4/demo/curl/zip.php" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php4/demo/curl/zip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php4/rest/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php4/rest/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stock/php4/rest/rest.db" beforeDir="false" afterPath="$PROJECT_DIR$/../stock/php4/rest/rest.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -122,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+            <state relative-caret-position="381">
+              <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
             </state>
           </provider>
         </entry>
@@ -326,10 +270,10 @@
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.0" />
   <component name="PhpXdebugProxy" ide_key="PHPSTORM" host="127.0.0.1" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="-4" />
-    <option name="width" value="1855" />
-    <option name="height" value="1084" />
+    <option name="x" value="1984" />
+    <option name="y" value="27" />
+    <option name="width" value="1857" />
+    <option name="height" value="1092" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -337,7 +281,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -345,10 +288,56 @@
               <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
               <item name="magento.on" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="local" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="local" type="462c0819:PsiDirectoryNode" />
+              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="local" type="462c0819:PsiDirectoryNode" />
+              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="local" type="462c0819:PsiDirectoryNode" />
+              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -356,7 +345,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="/lxc/modyf/home/smile/modyf/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -439,11 +428,12 @@
       <workItem from="1549870527899" duration="9312000" />
       <workItem from="1549957403123" duration="1400000" />
       <workItem from="1550044017988" duration="733000" />
+      <workItem from="1550737690519" duration="4240000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="311288000" />
+    <option name="totallyTimeSpent" value="315528000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,9 +445,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="1985" y="34" width="1855" height="1084" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16030957" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16196793" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -470,13 +460,13 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" weight="0.3291536" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3291536" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" weight="0.25182864" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4997236" visible="true" weight="0.36050156" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002764" side_tool="true" weight="0.5736677" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.3291536" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.21882086" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.21835268" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17855169" />
@@ -744,8 +734,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+        <state relative-caret-position="381">
+          <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
         </state>
       </provider>
     </entry>

@@ -2,83 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3d82a2f-194b-46e9-a07e-e4eb9b89a997" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../../php3/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/stock.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/php3.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/gd/image.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/gd/image_create.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/gd/image_create_sample.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/soap/client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/soap/server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/soap/stock.wsdl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/soap/stock.wsdl.tmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/socket/dummy.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/socket/get_dummy.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml-rpc/client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml-rpc/server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/111" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/catalog.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/catalog.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/catalog.xsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/dom.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/reader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/sax.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/simplexml.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/writer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/demo/xml/xslt.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/fonts/bellb.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/fonts/georgia.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/images/noise.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/images/sunset.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/images/winter.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/noise-picture.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/gd/registration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/INewsDB.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/NewsDB.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/NewsDB.class2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/delete_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/get_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/new.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/news.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/news.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/rss.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/rss.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/rss_reader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/save_news.inc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/news/test.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/abstract.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/classes/ISuperUser.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/classes/SuperUser.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/classes/User.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/classes/UserAbstract.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/extend.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/new.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/red.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/oop/users.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/soap/news.wsdl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/soap/soap-client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/soap/soap-server.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/xml-rpc/xml-rpc-client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php3/xml-rpc/xml-rpc-server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/Роутінг/2" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/Роутінг/2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php4/demo/curl/upload/test.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m1/SOAP/1" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m1/SOAP/1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 3/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 3/3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/4" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/5" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../php3/demo/soap/server.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../../php3/demo/soap/server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../php3/news/news.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../../php3/news/news.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/Неназваний документ 6" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/Специалист/Уровень 4/Неназваний документ 6" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../magento.on/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../magento.on/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php3/demo/soap/client.php" beforeDir="false" afterPath="$PROJECT_DIR$/php3/demo/soap/client.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php4/demo/curl/08-PUT.php" beforeDir="false" afterPath="$PROJECT_DIR$/php4/demo/curl/08-PUT.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php4/demo/curl/upload/put.php" beforeDir="false" afterPath="$PROJECT_DIR$/php4/demo/curl/upload/put.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php4/demo/curl/zip.php" beforeDir="false" afterPath="$PROJECT_DIR$/php4/demo/curl/zip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php4/rest/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/php4/rest/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php4/rest/rest.db" beforeDir="false" afterPath="$PROJECT_DIR$/php4/rest/rest.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -122,84 +61,76 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="new.db" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="rest" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="rest" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="rest" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+      </path>
     </expand>
     <select />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/04-HEADER-2.php">
+        <entry file="file://$PROJECT_DIR$/php4/demo/curl/09-func.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="25" />
+            <state relative-caret-position="170">
+              <caret line="10" column="4" selection-start-line="10" selection-end-line="10" selection-end-column="4" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/05-FILE-1.php">
+        <entry file="file://$PROJECT_DIR$/php4/rest/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="5" selection-start-line="6" selection-start-column="2" selection-end-line="10" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/test.txt">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/06-FILE-2.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="34" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/07-POST.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/posttest.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="14" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/08-PUT.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="22" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/put.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="19" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="19" />
+            <state relative-caret-position="595">
+              <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/.htaccess">
+        <entry file="file://$PROJECT_DIR$/php3/demo/soap/client.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/php4/demo/pdo/04-quote.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/php4/demo/pdo/06-fetch-modes.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
-              <caret line="2" column="37" lean-forward="true" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
+              <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://3a2e455f-f22c-4438-944c-844200176412/schema/main/table/books">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -213,6 +144,10 @@
       <find>$source</find>
       <find>put</find>
       <find>php</find>
+      <find>sqlite</find>
+      <find>insert</find>
+      <find>inser</find>
+      <find>get</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -226,7 +161,6 @@
         <option value="$PROJECT_DIR$/php3/soap/soap-client.php" />
         <option value="$PROJECT_DIR$/php3/soap/news.wsdl" />
         <option value="$PROJECT_DIR$/php3/demo/socket/get_dummy.php" />
-        <option value="$PROJECT_DIR$/php3/demo/soap/client.php" />
         <option value="$PROJECT_DIR$/php3/demo/soap/server.php" />
         <option value="$PROJECT_DIR$/php3/news/NewsDB.class.php" />
         <option value="$PROJECT_DIR$/php3/news/news.php" />
@@ -236,14 +170,23 @@
         <option value="$PROJECT_DIR$/php4/demo/curl/test.php" />
         <option value="$PROJECT_DIR$/php4/demo/curl/_header.php" />
         <option value="$PROJECT_DIR$/php4/demo/curl/01-simple.php" />
+        <option value="$PROJECT_DIR$/php4/demo/curl/08-PUT.php" />
+        <option value="$PROJECT_DIR$/php4/demo/curl/upload/test.php" />
+        <option value="$PROJECT_DIR$/php4/demo/curl/upload/put.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/rest.tmp/index.php" />
+        <option value="$PROJECT_DIR$/php4/demo/curl/zip.php" />
+        <option value="$PROJECT_DIR$/php4/rest/NotORM/Result.php" />
+        <option value="$PROJECT_DIR$/php4/rest/index.php" />
+        <option value="$PROJECT_DIR$/php3/demo/soap/client.php" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="64" />
-    <option name="y" value="-11" />
-    <option name="width" value="1857" />
-    <option name="height" value="1092" />
+    <option name="x" value="65" />
+    <option name="y" value="-4" />
+    <option name="width" value="1855" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -275,7 +218,7 @@
               <item name="stock" type="462c0819:PsiDirectoryNode" />
               <item name="php3" type="462c0819:PsiDirectoryNode" />
               <item name="demo" type="462c0819:PsiDirectoryNode" />
-              <item name="socket" type="462c0819:PsiDirectoryNode" />
+              <item name="soap" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="stock" type="b2602c69:ProjectViewProjectNode" />
@@ -286,22 +229,19 @@
               <item name="stock" type="b2602c69:ProjectViewProjectNode" />
               <item name="stock" type="462c0819:PsiDirectoryNode" />
               <item name="php4" type="462c0819:PsiDirectoryNode" />
-              <item name="demo" type="462c0819:PsiDirectoryNode" />
+              <item name="favorites" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="stock" type="b2602c69:ProjectViewProjectNode" />
               <item name="stock" type="462c0819:PsiDirectoryNode" />
               <item name="php4" type="462c0819:PsiDirectoryNode" />
-              <item name="demo" type="462c0819:PsiDirectoryNode" />
-              <item name="curl" type="462c0819:PsiDirectoryNode" />
+              <item name="news" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="stock" type="b2602c69:ProjectViewProjectNode" />
               <item name="stock" type="462c0819:PsiDirectoryNode" />
               <item name="php4" type="462c0819:PsiDirectoryNode" />
-              <item name="demo" type="462c0819:PsiDirectoryNode" />
-              <item name="curl" type="462c0819:PsiDirectoryNode" />
-              <item name="upload" type="462c0819:PsiDirectoryNode" />
+              <item name="rest" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -313,17 +253,20 @@
     <property name="DatabaseDriversLRU" value="sqlite" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../magento.on" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.externalResources" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/php3/news" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/rest" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/php3/demo/soap" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/php3/news" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -355,17 +298,19 @@
       <workItem from="1550215786440" duration="119000" />
       <workItem from="1550399106650" duration="10838000" />
       <workItem from="1550431249830" duration="94000" />
-      <workItem from="1550563806265" duration="631000" />
+      <workItem from="1550563806265" duration="18441000" />
+      <workItem from="1550648349649" duration="24109000" />
+      <workItem from="1550735693133" duration="3063000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49641000" />
+    <option name="totallyTimeSpent" value="94623000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.118850194" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13432837" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -378,16 +323,16 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.22257054" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.20689656" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" order="12" weight="0.3291536" />
+      <window_info anchor="bottom" id="Database Console" order="12" visible="true" weight="0.21839081" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.13709232" />
+      <window_info active="true" anchor="right" id="Database" order="3" visible="true" weight="0.13709232" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19513543" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13266999" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -400,9 +345,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.22257054" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.20689656" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" order="12" weight="0.3291536" />
+      <window_info active="true" anchor="bottom" id="Database Console" order="12" visible="true" weight="0.21839081" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -413,76 +358,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/php3/soap/soap-server.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="43" column="2" selection-start-line="43" selection-start-column="2" selection-end-line="43" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/demo/soap/stock.wsdl.tmp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/soap/soap-client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://15f20c5e-693d-42e1-a520-57fce43cebc8/schema/main/table/category">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://15f20c5e-693d-42e1-a520-57fce43cebc8/schema/main/table/msg">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://15f20c5e-693d-42e1-a520-57fce43cebc8/schema/main/table/sqlite_master">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://15f20c5e-693d-42e1-a520-57fce43cebc8/schema/main/table/sqlite_sequence">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/news/save_news.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="73" selection-start-line="8" selection-start-column="73" selection-end-line="8" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/news/INewsDB.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/news/rss.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/php3/news/news.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="463">
@@ -513,13 +388,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/php3/demo/gd/test.gif">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php3/demo/soap/client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="10" selection-end-column="5" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php3/soap/news.wsdl">
       <provider selected="true" editor-type-id="text-editor">
@@ -553,13 +421,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="48" selection-start-line="30" selection-start-column="48" selection-end-line="30" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/_header.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -598,6 +459,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/10-options.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/04-HEADER-2.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/php4/demo/curl/test.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -605,16 +476,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/10-options.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/09-func.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/04-HEADER-2.php">
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="25" />
+        <state relative-caret-position="17">
+          <caret line="1" column="9" selection-start-line="1" selection-end-line="2" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/put.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="4" lean-forward="true" selection-start-column="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/_header.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -626,7 +512,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php4/demo/curl/test.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php4/demo/curl/06-FILE-2.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -635,10 +525,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/07-POST.php">
+    <entry file="file://$PROJECT_DIR$/rest.tmp/Slim/Http/Util.php" />
+    <entry file="file://$PROJECT_DIR$/rest.tmp/.htaccess" />
+    <entry file="file://$PROJECT_DIR$/php3/soap/soap-server.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        <state relative-caret-position="731">
+          <caret line="43" column="2" selection-start-line="43" selection-start-column="2" selection-end-line="43" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php3/soap/soap-client.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rest.tmp/index.php" />
+    <entry file="file://$PROJECT_DIR$/php4/rest/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/rest/NotORM.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="36" column="23" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/news/NewsDB.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="62" column="31" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/pdo/02-connect.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/pdo/03-exec.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php3/news/NewsDB.class2.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -649,24 +587,101 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/php4/rest/NotORM/Result.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="577">
+          <caret line="195" column="11" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/news/save_news.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/pdo/05-query.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="6" selection-end-line="9" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/zip.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="5" selection-start-column="5" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/07-POST.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/php4/demo/curl/08-PUT.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="22" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="22" />
+        <state relative-caret-position="238">
+          <caret line="14" column="41" lean-forward="true" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/rest/rest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="98" column="65" lean-forward="true" selection-start-line="98" selection-start-column="65" selection-end-line="98" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/put.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="19" />
+        <state relative-caret-position="323">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php4/demo/curl/upload/.htaccess">
+    <entry file="file://$PROJECT_DIR$/php4/demo/curl/09-func.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="4" selection-start-line="10" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/pdo/04-quote.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/demo/pdo/06-fetch-modes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" column="37" lean-forward="true" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
+          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://3a2e455f-f22c-4438-944c-844200176412/schema/main/table/books">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php4/rest/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php3/demo/soap/client.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
         </state>
       </provider>
     </entry>
