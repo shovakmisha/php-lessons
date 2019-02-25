@@ -9,13 +9,28 @@
 
  4) У мадженті методи для роботи з SOAP API і XML-RPC API називаються одинаково і роблять ідентичний функціонал, щоб не путатись.
 
+ 5) Створення кастомера через Соап customer.create реалізує код Mage::getModel('customer/customer_api')->create(...); Тобто коли я пишу
+
+	 $client = new SoapClient('https://modyf.lxc/api/soap/?wsdl');
+         $session = $client->login('test', '10846342');
+         $result = $client->call($session,'customer.create',array(array(
+                                                                         'email' => 'mail11@example.org',
+                                                                         'firstname' => 'Dough 111',
+                                                                         'lastname' => 'Deeks 111',
+                                                                         'password' => 'password111',
+                                                                         'website_id' => 0,
+                                                                         'store_id' => 0,
+                                                                         'group_id' => 0)));
+
+	починаю працювати цей метод Mage_Customer_Model_Customer_Api::create(аргументом буде дані масива (юзера), якого я буду створювати)
+
 
  ------------------------------------------------
 
 	- 
 Каждый вызов Magento API состоит из ресурса и метода. Думайте о ресурсах API как о классе, а о методах API как о методах этих классов.
 
-Например, чтобы создать клиента с помощью API, вы используете ресурс customer и метод create. Каждая из этих пар ресурсов / методов преобразуется в пару модель / метод в специальном объекте модели ресурсов API Magento. Эти объекты модели ресурсов отделены от моделей ресурсов Magento CRUD. Вы можете использовать расширение «Руководство разработчика», чтобы быстро перейти к определениям этих методов. Тем не менее, полезно знать, как разрешаются эти методы. Ниже мы рассмотрим, как ресурс API
+Например, чтобы создать клиента с помощью API, вы используете ресурс customer и метод create. Каждая из этих пар ресурсов (customer.create) / методов преобразуется в пару модель / метод в специальном объекте модели ресурсов API Magento. Эти объекты модели ресурсов отделены от моделей ресурсов Magento CRUD. Вы можете использовать расширение «Руководство разработчика», чтобы быстро перейти к определениям этих методов. Тем не менее, полезно знать, как разрешаются эти методы. Ниже мы рассмотрим, как ресурс API
 
  ------------------------------------------------
 
@@ -27,7 +42,7 @@
 	app/code/core/Mage/CatalogInventory/etc/api.xml
 	app/code/core/Mage/Checkout/etc/api.xml
 	app/code/core/Mage/Core/etc/api.xml
-	app/code/core/Mage/Customer/etc/api.xml
+	app/code/core/Mage/Customer/etc/api.xml - я створюю кастомера тепер, тож тепер я використовую його
 	app/code/core/Mage/Directory/etc/api.xml
 	app/code/core/Mage/Downloadable/etc/api.xml
 	app/code/core/Mage/GiftMessage/etc/api.xml
@@ -44,7 +59,7 @@
 		<resources>
 		    <customer translate="title" module="customer">
 		        <!-- ... -->
-			<model>customer/customer_api</model> - В каждом узле ресурса вы найдете узел <model>. Этот узел модели содержит псевдоним класса для модели Magento, которую использует этот конкретный ресурс. Это говорит нам о том, что клиентский ресурс Magento Core API реализован с помощью Mage::getModel('customer/customer_api');
+			<model>customer/customer_api</model> - В каждом узле ресурса вы найдете узел <model>. Этот узел модели содержит псевдоним класса для модели Magento, которую использует этот конкретный ресурс. Это говорит нам о том, что клиентский ресурс Magento Core API реализован с помощью Mage::getModel('customer/customer_api'); http://joxi.ru/n2Yg5o1foq6Dor
 
 				- Если вы использовали самую раннюю версию Magento Core API, возможно, вы сделали вызов API - category.info
 
@@ -59,13 +74,65 @@
 	    </api>
 	</config>
 
- 6) В дополнение к узлу <resource /> каждый файл api.xml может также содержать узел <resource_alias />.
+ 6) В дополнение к узлу <resource /> каждый файл api.xml может также содержать узел <resource_alias />. Це щоб поставити аліас. Наприклад щоб взяти інфу про категорії через соап, використовується category.info, але я не знайду ноду category в ноді <resources> а знайду її в ноді <catalog_category /> А вже в ноді <resource_alias> кажу що це за нода
+ 
+<!-- File: app/code/core/Mage/Catalog/etc/api.xml -->
+<config>
+    <api>
+	<resources>
+	    <catalog_category translate="title" module="catalog">
+	        <model>catalog/category_api</model>
+		<model>catalog/category_api</model>
+                <title>Category API</title>
+                <acl>catalog/category</acl>
+	    </catalog>
+	</resources>
 
-	<api>
-		<resources_alias>
-			    <!-- ... -->
-		</resource_alias>
-	</api>
+        <resources_alias>
+            <category>catalog_category</category>
+
+	Тобто category.info == catalog_category.info Ваще це дуже схоже на аліаси у лейаутах
+
+		- $api_resource_model = Mage::getModel('catalog/category_api');
+
+ 7) тобто з того що я бачу, в api.xml описується методи які доступні по соап. Типу wsdl. але це быльш схоже на маджентывську обгортку wsdl. Я вже розглянув як знайти клас до якого я звертаюсь через соап. Зараз опишу як знайти метод - $client->call($session,'customer.create',array(array( - маю на увазі метод create()
+
+	<!-- File: app/code/core/Mage/Customer/etc/api.xml -->
+	<config>
+	    <api>
+		<resources>
+		    <customer>                    
+		        <methods>
+		            <info> - це описується метод info() 
+				<!-- ... -->
+
+ 8) Нагадаю, за що то що соап у мадженті виглядає не так як звичайний, відповідає маджентівський адаптер. Але Алан поки нічого не казав за нього
+
+ 9) Звичайно ж я можу працювати з методами API, через який створюэться юзер через соап і без апі. Тобто я спокійно можу написати в коді
+
+	$model = Mage::getModel('customer/customer_api');
+	$results = $model->create($array_of_customer_data);
+	- і після цього створиться користувач
+
+ 10) Переоприділення методів.
+
+	<customer translate="title" module="customer">
+		        <model>customer/customer_api</model>
+		        <title>Customer API</title>
+		        <acl>customer</acl>
+		        <methods>
+		            <list translate="title" module="customer"> - тут логічно можна скзазати що я буду викликати метод list() щоб подивити на список користувачів. Але не можна називати методи іменем list, так як це зарезервована назва для метода в PHP. і якщо я напишу - $model = Mage::getModel('customer/customer_api'); $results = $model->list(); - буде помилка 
+		                <title>Retrieve customers</title>
+		                <method>items</method> - Після цього я буду звертатись до метода list() методом items(). І вже не буде помилки
+								$model = Mage::getModel('customer/customer_api');
+								$results = $model->items($filters);
+		                <acl>customer/info</acl>
+		            </list>
+
+
+
+
+
 
 
 

@@ -1,0 +1,192 @@
+
+ --------------- Magento API SOAP Adapaters and Handlers - https://alanstorm.com/magento_api_soap_adapaters_and_handlers/ --------------------------------
+
+ 1) Щоб подивити списод доступних методів, нічого нового - https://modyf.lxc/api/soap/index?wsdl - покажеться файл wsdl. Там знайомий код 
+
+	<service name="MagentoService">
+		<port name="Mage_Api_Model_Server_HandlerPort" binding="typens:Mage_Api_Model_Server_HandlerBinding">
+			<soap:address location="https://modyf.lxc/index.php/api/soap/index/"/> - Як бачу, э трохи різниця між цим юрл і тим, який використовується щоб подивити  wsdl (https://modyf.lxc/api/soap/index?wsdl) - index.php вказується і також є різниця у квері запросі ?wsdl
+		</port>
+	</service>
+
+ 2) Дефолтний адаптер - https://modyf.lxc/api/ - коли не вказано що це соап або щось інше. Якщо заглянути у wsdl, https://modyf.lxc/api/index?wsdl - буде соап - location="https://modyf.lxc/index.php/api/soap/index/"
+
+    <adapters>    
+        <!-- ... -->
+        <default>
+            <use>soap</use> - Ось чому соап
+        </default>
+    </adapters> 
+
+	Все із-за того що маджента збирає адаптери двома способами. Помимо getActiveAdapters(), є ще getAdapters()
+
+		#File: app/code/core/Mage/Api/Model/Server.php
+		public function getAdapters() {
+		    $adapters = array();
+		    foreach ($this->getNode('adapters')->children() as $adapterName => $adapter) {
+			if (isset($adapter->use)) { - Якщо в адаптера є тег use
+			    $adapter = $this->getNode('adapters/' . (string) $adapter->use); - то візьми цей адаптер. Тобто $this->_getServer()->init($this, 'soap')->run(); == $this->_getServer()->init($this)->run();
+			}
+			$adapters[$adapterName] = $adapter;
+		    }
+		    return $adapters;
+		} 
+
+ 3) Метод run() коли активний адаптер soap() (коли дефолтний теж)
+
+	class Mage_Api_Model_Server_Adapter_Soap
+	    extends Varien_Object
+	    implements Mage_Api_Model_Server_Adapter_Interface
+
+		public function run() {
+        		$apiConfigCharset = Mage::getStoreConfig("api/config/charset"); - тут так само як і в xml-rpc
+
+			if ($this->getController()->getRequest()->getParam('wsdl') !== null) { - Якщо в адресній строці є квері запрос ?wsdl - https://modyf.lxc/api/index?wsdl Цей код викине у браузер  wsdl файл
+
+			} else { - по суті обробка соап тут і відбувається. Принаймні мене зразу кинул в else, так як в адресній строців мене не було квері запроса ?wsdl
+				
+				- $this->_instantiateServer(); - Тут буде код який установить сервер (те що спеціаліст робив). нічого особливого. Якщо буде щось неясно, опишу
+
+					- $wsdlCacheEnabled = (bool) Mage::getStoreConfig('api/config/wsdl_cache_enabled'); за замовчуванням даны не кешуються
+
+						if ($wsdlCacheEnabled) { ini_set('soap.wsdl_cache_enabled', '1');
+						} else { ini_set('soap.wsdl_cache_enabled', '0'); }
+
+					- $this->_soap = new Zend_Soap_Server($this->getWsdlUrl(array("wsdl" => 1)), array('encoding' => $apiConfigCharset)); - Зенд просто створює обертку над пхп-шним соап класом сервера - new SoapServer
+
+						- getWsdlUrl() - Шукає файл wsdl.xml для цього модуля (він у папці etc цього модуля). Після цього назначиться лінка на wsdl - https://modyf.lxc/index.php/api/index/index/?wsdl=1
+
+						- $io = new Varien_Io_File(); - Varien_Io_File клас для роботи з файлами. Читання, запис
+
+            					- $io->open(array('path'=>Mage::getModuleDir('etc', 'Mage_Api'))); $wsdlContent = $io->read('wsdl.xml'); - прочитай wsdl.xml файл у модулі Mage_Api
+
+						- $template = Mage::getModel('core/email_template_filter'); - Бере обєкт для створення темплейтів для емайлів
+
+						- $wsdlConfig->setUrl(htmlspecialchars(Mage::getUrl('*/*/*', array('_query'=>$queryParams))));
+						    $wsdlConfig->setName('Magento');
+						    $wsdlConfig->setHandler($this->getHandler());
+
+							- це є wsdl файл. Це шаблон для соап (заготовка). Ці 3 строчки скажуть які дані поставити в шаблон - http://joxi.ru/xAeg0WjfpoN1qm . За це відповідає метод $template->filter($wsdlContent)
+						
+
+					- Кароче тут є ще що описувати (я бачив тут ще перевіряється логін пароль), але Алан не описував і я не буду
+
+					-  while ($retry && $tries < 5); - Буде пробувати стукатись до сервера 5 разів
+
+					- $this->_soap->setReturnResponse(true)->setClass($this->getHandler()); - це те саме що і в xml-rpc (подивити попередню статтю)
+
+				- $this->getController()->getResponse() - це те саме що і в xml-rpc
+					    ->clearHeaders()
+					    ->setHeader('Content-Type','text/xml; charset='.$apiConfigCharset)
+					    ->setBody(
+						    preg_replace(
+						        '/<\?xml version="([^\"]+)"([^\>]+)>/i',
+						        '<?xml version="$1" encoding="'.$apiConfigCharset.'"?>',
+						        $this->_soap->handle()
+						    )
+					    );
+
+			}
+
+ ------------------------- Debugging Magento API Method Calls - https://alanstorm.com/debugging_magento_api_method_calls/ ------------------------------
+
+ 1) І так, з самого початку 
+
+	$client = new SoapClient('http://mymagentohost/api/soap?wsdl');
+
+	// If somestuff requires api authentification, then get a session token
+	$session = $client->login('apiUser', 'apiKey'); - за те щоб залогынитись выдповыдає хендлер. У соапа хендлер - api/server_handler і в нього є метод ligin() - $session = Mage::getModel('api/server_handler')->login('apiUser','apiKey');
+
+		- login()
+
+			- return Mage::getSingleton('api/session'); стартує сессія для апі. Коли стукаюсь до апішки, не працює ні стандартні сесії ні кукі. Можна зробити висновок, що і сесії і кукі встановлюються у методі dispatch()
+
+			- $this->_getSession()->login($username, $apiKey); - Якщо все ок, повернеться ідентифікатор сесії. Цей ідентифікатор можна буде витягнути клієнту
+
+			- return $this->_fault('access_denied'); - Якщо не вдалось зареєструватись 
+
+				- $faults = $this->_getConfig()->getFaults($resourceName); - бере з конфігів всі помилки. Їх можна знайти у файлі api.xml
+
+						<config>
+						    <api>
+							<faults>
+								<access_denied>
+									<code>2</code> - код помилки
+									<message>Access denied.</message> - меседж помилки
+
+				- $this->_getServer()->getAdapter()->fault(... - Як бачу, тут спочатку береться адаптер а вже потім в нього викликається метод fault() Це щоб у кожного метода були свої помилки. У соапа свої, у xml-rpc свої
+
+					- Це помилка для соапа - #File: app/code/core/Mage/Api/Model/Server/Adapter/Soap.php
+
+					public function fault($code, $message) {
+					    if ($this->_extensionLoaded()) {
+						throw new SoapFault($code, $message); - Спробує повернути помилку нормально
+					    } else { - Якщо не вдасться, пошле цю самопись (так має виглядати інфа, яку віддає соап. Я писав про це у спеціаліста на уроці)
+						die('<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+						    <SOAP-ENV:Body>
+						    <SOAP-ENV:Fault>
+						    <faultcode>' . $code . '</faultcode>
+						    <faultstring>' . $message . '</faultstring>
+						    </SOAP-ENV:Fault>
+						    </SOAP-ENV:Body>
+						    </SOAP-ENV:Envelope>'); }
+
+							- Це по ходу тіло, яке повернеться клієнту
+
+ ------------ Вызов метода ресурса API ---------------
+
+ 1)  $session = $client->login('test', '10846342'); - Якщо я успішно зєднався - $result = $client->call($session, 'somestuff.method', $argument1( - це буде - Mage::getModel('api/server_handler')->call($session, 'somestuff.method', 'arg1');
+
+	- ТОбто маджента не дає клієнту всі методи, вона дає обертку call() який відповідає за 
+
+		- Подтверждение правильности переданного идентификатора сеанса - $session
+
+		- зробити з 'somestuff.method' назву метода, який має відробити
+
+		- Передати аргументи.
+
+		------------------------------------
+
+		- list($resourceName, $methodName) = explode('.', $apiPath); - взяти імя модуля і імя метода - somestuff і method
+
+		- if (empty($resourceName) || empty($methodName)) { return $this->_fault('resource_path_invalid'); } - Якщо метода або модуля не має, викинь помилку
+
+			- Як працює метод _fault, я вже описував
+	
+		- $resourcesAlias = $this->_getConfig()->getResourcesAlias(); - <config><resources_alias> - буде шукати і в глобальних конфігах. Я не дуже поняв навіщо resources_alias. Алан каже, що ресурси апі можуть змінюватись. Або щоб достукатись до ресурса, можна використати аліас (типу як в лейаутах). ТОж якщо я не можу зрозуміти що за ресурс використовується, треба пошукати в аліасах - $client->call($session, 'аліас.method',...);
+
+        	- $resources = $this->_getConfig()->getResources(); - <config><resources> - буде шукати і в глобальних конфігах - знайшов ці конфіги в модулі кастомера - http://joxi.ru/V2VbKoXUx96ox2 . Тут є імя модуля і доступні методи. По ходу це він шукає методи з якими може працювати апішка. по вигляду це звичайні конфіги і працювати з ними можна буде як зі звичайними конфігами Mage::getModel(...
+
+		- if (!isset($resources->$resourceName) || !isset($resources->$resourceName->methods->$methodName)) { Якщо в конфігах не має модуля(ресурса) або метода
+		    return $this->_fault('resource_path_invalid'); } - викине помилку
+
+		- if (!isset($resources->$resourceName->public) && isset($resources->$resourceName->acl) && !$this->_isAllowed((string)$resources->$resourceName->acl)) { - Алан не розписував тут все, сказав тільки що у мадженті є тег <public> який теж може давати доступ, як і <acl>. У моєму випадку у конфігах <acl>customer/info</acl> і цим я дав пермішити
+		    return $this->_fault('access_denied'); } - 
+
+		- $model = Mage::getModel('customer/customer_api'); - Створюю модель, у якої будуть методи, вказані у конфігах
+
+		- return call_user_func_array(array(&$model, $method), $args); - Якщо все ок, то це викличе метод, який запросив клієнт
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

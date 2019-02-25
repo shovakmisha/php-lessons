@@ -25,9 +25,38 @@ class Alanstormdotcom_Helloworld_IndexController extends Mage_Core_Controller_Fr
          // $xxx = Mage::getConfig();
          // $this->renderLayout();
 
-        var_dump( Mage::getStoreConfig('helloworld_options/messages') );
+        // var_dump( Mage::getStoreConfig('helloworld_options/messages') );
 
         // var_dump(Mage::getStoreConfig('helloworld_options',1));
+
+
+
+
+        // ---------
+        //
+
+        // phpinfo();
+        // exit;
+
+        // ini_set("soap.wsdl_cache_enabled", "0");
+        // libxml_disable_entity_loader(false);
+
+        // $client = new SoapClient('https://modyf.lxc/api/soap/?wsdl');
+        // $session = $client->login('test', '10846342');
+        // $result = $client->call($session,'customer.create',array(array(
+        //     'email' => 'mail@example1.org',
+        //     'firstname' => 'Dough 1',
+        //     'lastname' => 'Deeks 1',
+        //     'password' => 'password1',
+        //     'website_id' => 0,
+        //     'store_id' => 0,
+        //     'group_id' => 0)));
+        // var_dump ($result);
+
+        // If you don't need the session anymore
+        //$client->endSession($session);
+
+        // echo '555';
 
     }
 

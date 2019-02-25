@@ -1,0 +1,189 @@
+
+ -------------------------------- The Magento API - https://alanstorm.com/magento_api_tutorial/ ------------------------------------------
+
+ 1) Базовую архитектуру Magento API можно описать следующим образом
+
+	- HTTP-запрос отправляется на URL, и стандартная система маршрутизации Magento отправляет этот запрос действию контроллера в модуле Mage_Api.
+
+	- Это действие контроллера создает экземпляр объекта сервера Magento API, инициализирует этот объект с типом API (soap, XML-RPC и т. Д.), А затем вызывает метод run объекта сервера. (Mage_Api_Model_Server::run())
+
+	- Тобто викликаючи апішку, працює звиайна система роутінга. Ну але звичайно це не буде якась повна загрузка сторінки або щось у такому роді. Все трохи кастомізовано
+
+ 2) Mage_Api_Model_Server (це у нього викликається метод run()) - Апі обєкт мадженти. Коли я стукаюсь соапом до нього (до маджентівської апішки), запрос попадає на нього. Це як фронтконтролер для апішок
+
+	- При инициализации цього обєкта (це объект сервера API) на основе переданных параметров рассмотрит конфигурацию Magento, чтобы определить, какой объект адаптера API и объект-обработчик API следует создать
+
+ 3) В загальному, все чого хоче добитись маджентівська апішка, це:
+
+	- Запустите SOAP-сервер
+
+	- Разрешить клиентам SOAP вызывать определенный в настоящий момент функций
+
+	- «Обработать» запрос, то есть изучить входящий запрос для стандартного SOAP XML (або щось інше як соап) і якщо все ок, вызвать функции и вернуть результат.
+
+ 4) Про адаптер і обработчик соапа. Объект адаптера отвечает за включение и создание экземпляров библиотек и объектов API, а обработчик отвечает за преобразование вызова функции API в правильный класс и метод ресурса Magento API. Адаптеры и обработчики Magento API:
+
+	- Задача объекта адаптера заключается в создании экземпляров классов обработки API, таких как вышеупомянутый SoapServer, и обеспечении того, чтобы любой вывод отправлялся объекту ответа Magento, а не напрямую в основной буфер вывода PHP.
+
+	- Задача объекта-обработчика состоит в том, чтобы предоставить методы библиотеке API, созданной объектом адаптера. Приведенный выше пример SoapServer предоставляет функции test и someOtherFunction. Большинство из этих реализаций API также позволяют вам сказать что-то вроде
+
+		- Предоставьте (то есть, addFunction, как указано выше) все открытые методы для этого конкретного объекта в API
+
+		- Mage_Api_Model_Server_Handler - клас обработчика
+
+ -------------------------------- Magento API Adapters and Handlers - https://alanstorm.com/magento_api_adapater_xml_rpc/ ----------------------------------------
+
+ 1) Соап і XML-RPC запити обробляються як звичайні юрл запити. Якщо раніше я казав що клас Mage_Api_Model_Server це як фронтконтролер, то тепер я почну спочатку. Як у Алана була стаття про контроллер helloworld, це буде те саме тільки для соап
+
+	- $client = new SoapClient('https://modyf.lxc/api/xmlrpc/?wsdl'); (Алан писав без ?wsdl) щоб розыбратись який файл буде обробляти цей запрос, треба на це дивити як на звичайний юрл запрос - http://store.example.com/api(фронтнейм)/xmlrpc(контролер)/index(екшн) - http://joxi.ru/l2Z46oyTwpyzor
+
+		#File: app/code/core/Mage/Api/controllers/XmlrpcController.php
+		class Mage_Api_XmlrpcController extends Mage_Api_Controller_Action{ - все контроллеры Mage_Api используют базовый контроллер с именем Mage_Api_Controller_Action. В ньому є метод  _getServer() який повертає Апі обєкт мадженти (Mage_Api_Model_Server) - return Mage::getSingleton('api/server');
+		    public function indexAction(){
+			$this->_getServer()->init($this, 'xmlrpc')->run(); - цей метод викликається у обєкта класа Mage_Api_Model_Server. init теж. ТОЖ SOAP (або Xmlrpc) ІНІЦІАЛІЗОВУЄТЬСЯ У ЗВИЧАЙНОМУ КОНТРОЛЕРІ ТАК САМО ЯК І ІНШІ МОДУЛІ.
+
+ 2) Тепер з самого початку. У стандартному роуті Mage_Core_Controller_Varien_Router_Standard викликається метод dispatch(). Він викликається у обєкта текущого контролера $controllerInstance->dispatch($action);
+
+	- У методі dispatch() викликається метод $this->preDispatch(); у якому встановлюється арія. У контролера апішок, метод preDispatch() знаходиться тут 
+
+	#File: app/code/core/Mage/Api/Controller/Action.php - базовый контроллер апішок
+	public function preDispatch(){
+	    $this->getLayout()->setArea('adminhtml'); - арія бекенда. Алан каже що потім скаже для чого вона
+	    Mage::app()->setCurrentStore('admin'); - щоб не путатись в сторах, зразу вказати адмінський
+	    $this->setFlag('', self::FLAG_NO_START_SESSION, 1); // Do not start standart session. Алан не предлагав альтернативу стандартним сесіям. Не знаю що робити у випадках коли треба дані сесії
+	    parent::preDispatch(); - звичайний preDispatch() теж по ходу запускається
+	    return $this;}
+
+ 3) ПРИСЛАВУТИЙ МЕТОД run() -  public function run() {
+						$this->getAdapter()->run(); - Як бачу, запускає це все діло Адаптер API. Тобто обробкою API займається адаптер
+					       }
+
+						#File: app/code/core/Mage/Api/Model/Server.php
+						public function getAdapter(){ return $this->_adapter; }
+
+ 4) Як установлюється свойство _adapter у обєкта Mage_Api_Model_Server. Моделі Апішок, на відміну від інших моделей не наслідуються від Varien_Object і не метода _construct()
+
+	- Воно встановлюється в в методі ініт у контролері - $this->_getServer()->init($this, 'xmlrpc')->run();
+		
+		- public function init(Mage_Api_Controller_Action $controller, $adapter = 'default', $handler = 'default') {
+
+			$this->initialize($adapter, $handler); - Тут установлюється адаптер
+				
+				- $helper   = Mage::getSingleton('api/config'); // Mage_Api_Model_Config
+				  $adapters = $helper->getActiveAdapters();
+				  
+					.....
+
+
+			$this->_adapter->setController($controller);
+			return $this;}
+
+ 5) Про метод initialize(). Тут ініціалізується метод Mage_Api_Model_Config. У його конструкторі ініціалізується метод $this->_construct();
+
+	- У методі _construct() ініціалізується конфіги для апфшок. Це схоже на глобальні конфіги http://joxi.ru/82QB5lacjLoKJA, але як бачу тут головна нода називається <api> і збирає він файли api.xml
+
+		- Вони навіть добавляються в конфіги як звиайні конфіги, просто в дужках конкретизується які файли додавати в конфіги - $config = Mage::getConfig()->loadModulesConfiguration('api.xml'); Після цього конфіги для роботи з апішками можна буде витягти як звичайні конфіги. Її можна буде назвати апі конфігурацією
+
+	- У модулі Api у конфігах, є файл api.xml у якому вказані моделі для кожних адаптерів (для соап і для інших) http://joxi.ru/LmG9DozueqPL1A. Тобто це звичайні конфіги.  Щоб до них звернутись треба буде Mage::getModel(... 
+
+	- $adapters = $helper->getActiveAdapters(); - У змінній $adapters будуть всі активні адптери для роботи з апішками, що в мене вказані в конфігах
+
+	if (isset($adapters[$adapterCode])) { - $adapterCode це спосіб звязування з апішкою. Він передається у аргументом у метод  $this->initialize($adapter, ...) - $client = new SoapClient('https://modyf.lxc/api/soap/?wsdl'); - якщо буду звертатись так, це означає що я буду звертатись через соап
+
+		- $adapterModel = Mage::getModel((string) $adapters[$adapterCode]->model); - якщо є цей адаптер, то він ініціалізовується
+
+		- $this->_adapter = $adapterModel; - ТАК УСТАНОВИЛОСЬ СВОЙСТВО _adapter
+            	- $this->_api     = $adapterCode; - Тут буде 'soap' (Якби я звертався не соапом, було б шось інше)
+
+
+ ------------------------------------------------------- Адаптер установили. Установлюється хендлер ----------------------------------
+
+ 6) Теж саме в конфігах шукаю хендлер
+
+<config> - не путати з глобальними конфігами. Це конфіги для апі
+    <api>
+        <adapters>
+            <soap> - Умовно на даний момент я звертаюсь через соап. То він і буде активний.
+                <model>api/server_adapter_soap</model> - це буде моделька (адаптера), яка буде обробляти запрос - Mage::getModel(
+                <handler>default</handler> - це буде хендлер
+                <active>1</active>
+                <required>
+                    <extensions>
+                        <soap />
+                    </extensions>
+                </required>
+            </soap>
+
+	- Список хендлерів теж зназодиться в конфігах. 
+
+	<handlers>
+            <default> - Це мій на даний момент
+                <model>api/server_handler</model>
+            </default>
+            <soap_v2>
+                <model>api/server_v2_handler</model>
+            </soap_v2>
+            <soap_wsi>
+                <model>api/server_wsi_handler</model>
+            </soap_wsi>
+        </handlers>
+
+
+ 7) $handler = (string) $adapters[$adapterCode]->handler; - вибираю імя хендлера яке привязано до мого адаптера. В принципі може бути і декілька хендлерів, але у соапа тільки 1, дефолтний
+           
+ 8) $handlers = $helper->getHandlers(); - беру список хендлерів з конфігів
+
+ 9) if (!isset($handlers->$handler)) { Mage::throwException(Mage::helper('api')->__('Invalid webservice handler specified.')); } - Якщо даного хендлера не має, викинеться ексепшн
+
+ 10) $handlerClassName = Mage::getConfig()->getModelClassName((string) $handlers->$handler->model); - створиться клас - $handlerClassName = Mage_Api_Model_Server_Handler
+
+ 11) $this->_adapter->setHandler($handlerClassName); - Установити хендлер адаптеру - http://joxi.ru/L216bOac8P9pzA
+
+
+
+ ------------------- Установка контроллера Адаптеру---------------------------
+
+ 12) #File: app/code/core/Mage/Api/Model/Server.php - $this->_adapter->setController($controller); - Адаптер буде використовувати контролер, щоб взяти/віддати потрібну інфу
+
+
+ ------------------------ Далі буду описувати xml-rpc а не соап --------------------
+
+ 13) class Mage_Api_Model_Server_Adapter_Xmlrpc
+	    extends Varien_Object - Як бачу цей клас вже Varien_Object
+	    implements Mage_Api_Model_Server_Adapter_Interface - всі адаптери мають реалізовувати цей інтерфейс з класами які є в ньому. Це щоб не путатись і приблизно розуміти що роблять апішки
+
+ 	- Як я памятаю у контролері є цей код - $this->_getServer()->init($this, 'xmlrpc')->run(); - Ініт я вже розглянув, тепер розгляну run(). Цей метод є майже в кожномк адаптері
+
+
+	    public function run() {
+		$apiConfigCharset = Mage::getStoreConfig("api/config/charset"); вибираю з конфігів кодіровку для апі - http://joxi.ru/RmzEkMwu01440r - System -> Configuration -> Magento Core Api -> General Settings -> Default Response Charset
+
+		$this->_xmlRpc = new Zend_XmlRpc_Server(); - Маджента просто взяла зендівський клас для роботи з xml-rpc 
+		$this->_xmlRpc->setEncoding($apiConfigCharset)
+		    ->setClass($this->getHandler());
+		$this->getController()->getResponse()
+		    ->clearHeaders()
+		    ->setHeader('Content-Type','text/xml; charset='.$apiConfigCharset)
+		    ->setBody($this->_xmlRpc->handle());
+		return $this; }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
