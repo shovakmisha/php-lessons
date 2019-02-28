@@ -19,11 +19,28 @@
  * needs please refer to http://www.magento.com for more information.
  *
  * @category    Mage
- * @package     Mage
+ * @package     Mage_Adminhtml
  * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * Adminhtml cms blocks content block
+ *
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class IGN_Siteblocks_Block_Adminhtml_Siteblocks extends Mage_Adminhtml_Block_Widget_Grid_Container
+{
 
-#define('COMPILER_INCLUDE_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'src');
-#define('COMPILER_COLLECT_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'stat');
+    public function __construct()
+    {
+        $this->_controller = 'adminhtml_siteblocks';
+        $this->_blockGroup = 'siteblocks';
+        $this->_headerText = Mage::helper('siteblocks')->__('siteblocks');
+        $this->_addButtonLabel = Mage::helper('siteblocks')->__('Add New Block');
+        parent::__construct();
+    }
+
+}

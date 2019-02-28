@@ -45,4 +45,14 @@
 	  AllowOverride all
 	</Directory>
 </VirtualHost>
+
+sudo phpenmod xdebug - включити модуль дебагера в пхп
+
+
+ zend_extension=xdebug.so
+xdebug.remote_autostart=on
+xdebug.remote_enable=on
+xdebug.remote_port=9001
+xdebug.idekey="PHPSTORM"
+xdebug.remote_connect_back = 1
  

@@ -87,7 +87,7 @@ app/code/core/Mage/Adminhtml/controllers/System/ConfigController.php
 
 	- Мы должны определить ресурс ACL для нашего нового раздела(helloconfig). Вам нужно делать это только, если вы добавляете новый раздел. Если вы добавляете параметры настройки к существующему разделу, не нужно вмешиваться в ACL.
 
-		Файл: app/code/local/Alanstormdotcom/Helloworld/etc/config.xml
+		Файл: app/code/local/Alanstormdotcom/Helloworld/etc/config.xml (чквак створив їх у файлі etc/adminhtml.xml і теж работало )
 
 		<config>
 		  <adminhtml>
@@ -230,6 +230,10 @@ app/code/core/Mage/Adminhtml/controllers/System/ConfigController.php
 	text
 	textarea
 	time
+
+	- Щоб подивити всі типи - lib/Varien/Data/Form/Element - http://joxi.ru/82QB5lacjQyRdA
+
+	- http://joxi.ru/YmEzDoji04JvB2 - це стандартна моделька для yes/no (селекта по ходу) Можна тут ще пошукати для інших 
 
 	Значение этого поля используется в паттерне стиля для создания экземпляра класса в формате: Varien_Data_Form_Element_Type
 

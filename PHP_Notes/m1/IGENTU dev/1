@@ -1,0 +1,242 @@
+
+ -------------- https://habr.com/ru/post/312322/ ---------------------
+
+ ------------------- Модели, коллекции. Работа с базой данных. ----------------------------
+
+class IGN_Siteblocks_Model_Block extends Mage_Core_Model_Abstract {
+
+    public function _construct() {
+        parent::_construct(); - Він не казав чому і парента викликав. Вроді ж не треба. І в конструкторі колекції те саме робив
+        $this->_init('siteblocks/block'); //Все в соотвествии с указанными в config.xml параметрами
+    }
+}
+
+ IGN_Siteblocks_Block_Adminhtml.siteblocks_Grid
+
+---------------- 7 Admin интерфейс. Grid ------------------------
+
+ 1) Тут я створював новий пункт меню для адмінки (через конфіги. Сам пункт меню додавався через конфіги і через acl давались права). Іредагував дані в адмінці тієї таблиці, що створював на минудому уроці
+
+ 2) Я не створював свій форонтнейм, а привязався вже до існуючого
+
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ign_siteblocks before="Mage_Adminhtml">IGN_Siteblocks_Adminhtml</ign_siteblocks> - Добавив роут. before означає що я буду використовувати модуль Mage_Adminhtml
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+		<admin>
+		<routers>
+		    <adminhtml>
+		        <use>admin</use>
+		        <args>
+		            <module>Mage_Adminhtml</module>
+		            <frontName>admin</frontName> - У фронтнейма admin буде і мій роут, який знаходиться у модулі IGN_Siteblocks_Adminhtml. І якщо він підійде, то виконається перед Mage_Adminhtml
+		        </args>
+		    </adminhtml>
+		</routers>
+	    </admin>
+
+ 3) Контролер - class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Controller_Action {
+
+	    public function indexAction() { - може бути що мене не пустить зразу на сторінку http://magento.on/index.php/admin/siteblocks/index цього екшна. Треба буде розлогінитись і залогінитись. Але якщо клацнути на пункт меню в адмінці, який приведе на цей екшн, це буде працювати завжди. У індекс екшні зазвичає сторінка гріда з усіма записами таблиці
+
+		$this->loadLayout(); - це буде просто пуста сторінка адмінки. Цей чувак казав що можна і лейаут сюди підключити, але поки так
+
+		$this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks')); - після цього це вже не буде пуста сторінка адмінки. Це я додаю блок в сторінку адмінки. цей блок знаходиться в - app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks.php
+
+			- $this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks') - створить обєкт з цього класу - new IGN_Siteblocks_Block_Adminhtml_Siteblocks
+
+			- $this->_addContent(... - додасть цей блок на мою сторінку
+
+		$this->renderLayout(); - цей метод викличе toHtml()s
+	    }
+	}
+
+ 4) В принципі вся адмінка знаходиться у модулі Mage_Adminhtml. Тож якщо мені треба буде створити у адмінці кастомний блок, модуль, ... можна буде там глянути для приклад. Наприклад я робив свою сторінку, подібну до сторінки cms/block в адмінці і просто скопіював файли з папки core/Mage/Adminhtml/Block/Cms/Block і файл core/Mage/Adminhtml/Block/Cms/Block.php
+
+	- Єдине, що я сопіював їх у свій модуль у підпапку Adminhtml (Module/Block/Adminhtml) а у корі він не знаходився у цій підпапці
+
+ 5) Розберу як створюється цей блок в адмінці - createBlock('siteblocks/adminhtml_siteblocks').
+
+	- у файл config.xml не треба прописувати цей блок
+
+	- У IGN_Siteblocks_Block_Adminhtml_Siteblocks є конструктор, у якому я і скажу де шукати мій грід
+
+		$this->_controller = 'adminhtml_siteblocks'; - подивити внизу на метод _prepareLayout()
+		$this->_blockGroup = 'siteblocks'; - Імя модуля. подивити внизу на метод _prepareLayout()
+
+			- _controller і _blockGroup використовуються щоб скласти клас до файла гріда, який буде це оброблювати (працювати з з базою і тд, типу моделька)
+		-----------------------------------------------------------------------------------
+		$this->_headerText = Mage::helper('siteblocks')->__('siteblocks');
+		$this->_addButtonLabel = Mage::helper('siteblocks')->__('Add New Block');
+		parent::__construct();
+
+	- Щоб було більш понятно, розпишу воркфлоу
+
+		1) Попадаю на адмінський контролер - http://magento.on/index.php/admin/siteblocks/index - public function indexAction()
+
+		- Додаю блок на цю сторінку - $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks'));
+
+			- public function createBlock(
+
+				- $block = $this->_getBlockInstance($type, $attributes); - ініціалізує обєкт з цим класом - new IGN_Siteblocks_Block_Adminhtml_Siteblocks
+
+				- $block->setType($type);
+				- $block->setNameInLayout($name);
+				- $block->addData($attributes);
+				- $block->setLayout($this); - метод setLayout() буде запускатись у обєкта IGN_Siteblocks_Block_Adminhtml_Siteblocks, так як він і є $block
+
+					- $this->_prepareLayout() { - Це мене вже перекине у файл Mage_Adminhtml_Block_Widget_Grid_Container (Від нього екстендиться мій файл гріда), у ньому виконується цей метод
+
+						$this->setChild( 'grid', $this->getLayout()->createBlock( $this->_blockGroup.'/' 	-	 $this->_blockGroup = 'siteblocks';
+													. $this->_controller . '_grid', 	-	$this->_controller = 'adminhtml_siteblocks';
+						    							$this->_controller . '	-	$this->_controller = 'adminhtml_siteblocks';
+													.grid')->setSaveParametersInSession(true) );
+
+							- createBlock('siteblocks/adminhtml_siteblocks_grid', 'adminhtml_siteblocks.grid'); - створив блок з цього файлу - app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Grid.php('siteblocks/adminhtml_siteblocks_grid) з іменем - 'adminhtml_siteblocks.grid' Тобто в теорії можна б стягнути у свій блок якиїсь інший грід
+
+						return parent::_prepareLayout();
+
+ 6) Тепер я маю блок, який відображається в адмінці - app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Grid.php (мій грід, який екстендиться від Mage_Adminhtml_Block_Widget_Grid_Container)
+
+	- У ньому є ці методи, які малюють блоки - _prepareCollection() _prepareColumns().... Я пошукав де вони запускаються і виявилось що у методі toHtml() а точніше у beforeToHtml(). З цього можна зрозумыти що цы методи це чистина рендеригга адмінки і маджента сприймає їх як темплейти для адмінки
+
+	- Тобто це якісь зашиті методи які виконуються при рендерінгу адмінки. І ці що я описав це дуже мало. Якщо захочу собі на сторінку якиїсь функціонал як у іншої сторінки, треба знайти ці методи, якими відмальовуються ті блоки і скопфювати у свій файл
+
+ 7) Я по ходу поняв що таке ці гріди. Це спосіб вивести дані з таблиці бази у адмін панель з можливістю їх редагувати. http://joxi.ru/l2Z46oyTwbBEXr
+
+	- сам клас гріда app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Grid.php відповідає за відображення таблиць. І у ньому прописуються методи (вже майже готові(шаблонні), які запускаються при рендерінгу). Канешно можна писати і отсебятіну, але краще використати готові рішення
+
+		- Важно отметить, что доступные по-умолчанию типы колонок и принципы их построения можно посмотреть в папке app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/.
+
+	- _prepareColumns() - Тут я буду описувати які колонки з таблиці я буду мати у адмінці
+
+	- getRowUrl() - Коли клацну на рядок, то мене відправить на контролер - http://magento.on/index.php/admin/siteblocks/edit 
+
+		- return $this->getUrl('*/*/edit', array('block_id' => $row->getId())); - array('block_id' => $row->getId()) - це пост параметри які я передав на контролер - admin/siteblocks/edit   
+
+			- Тобто мене б відправило на сторінку редагування і без array('block_id' => $row->getId())
+
+ 8) Mage::register - Реестр переменных magento представляет собой отличный способ обмена и получения информации в любом месте вашего магазина. Другими словами реестр позволяет создавать новые глобальные переменные, которые могут быть доступны в любом месте вашего магазина.
+
+	- Mage::register('siteblocks_block',Mage::getModel('siteblocks/block')->load($id)); - Це по суті як сесії у яких можна хранити дані. Наприклад після цього у Mage::register('siteblocks_block') буде хранитись Mage::getModel('siteblocks/block')->load($id)
+
+		- unregister() – удаляет переменную из реестра. registry() – функция вызова переменной из реестра.
+
+		- https://www.mygento.ru/blog/mage-register/
+-----------------------
+		1) Добавляем переменную Mage::register('my_var', 'переменная в Magento');
+ 
+		2) Получим или прочитаем переменную - Mage::registry('my_var');
+ 
+		3) Удалим глобальную переменную Magento - Mage::unregister('my_var');
+ 
+		- Используя глобальные  переменные Magento, можно передавать значения между моделями, хелперами, блоками. Упрощается написание кода для Magento.
+
+ 9) Далі перехожу на сторінку едіт. У її контролері editAction() я працюю з блоком - app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit.php - $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit'));
+
+	- Страница редактирования так же будет состоять из 2х блоков: блок контейнер (app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit.php) и блок формы (app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Form.php).
+
+	- public function __construct() { - у конструкторі IGN_Siteblocks_Block_Adminhtml_Siteblocks_Edit
+
+		$this->_objectId = 'block_id';
+		$this->_controller = 'adminhtml_siteblocks'; - те саме що і у гріді
+		$this->_blockGroup = 'siteblocks'; - те саме що і у гріді
+
+		parent::__construct();
+
+		- $this->_updateButton('save', 'label', Mage::helper('siteblocks')->__('Save Block')); - ця кнопка і так була б . Вона є за замовчуванням
+        	- $this->_updateButton('delete', 'label', Mage::helper('siteblocks')->__('Delete Block')); - ця кнопка і так була б. Вона є за замовчуванням
+
+		$this->_addButton('saveandcontinue', array( - це я добавив кнопку. Її не має за замовчуванням
+		    'label'     => Mage::helper('adminhtml')->__('Save and Continue Edit'),
+		    'onclick'   => 'saveAndContinueEdit()', - Метод який сработає коли клацну на кнопку
+		    'class'     => 'save',
+		), -100);
+
+		$this->_formScripts[] = " - 
+		    function saveAndContinueEdit(){
+		        editForm.submit($('edit_form').action+'back/edit/'); - у файлі з формою редагуванння app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Form.php, я у мене є створена форма, яка буде зберігати дані у таблицю і у якій будуть виводитись дані таблиці. Айдішка її буде - edit_form
+		    }
+		";
+	}
+
+	- public function getHeaderText() { Це відповідає за текст який буде над формою редагування - http://joxi.ru/GrqjgkwHQedPbm
+		if (Mage::registry('siteblocks_block')->getId()) { - Це я встановлював у едіт контролері - Mage::register('siteblocks_block',Mage::getModel('siteblocks/block')->load($id)); Mage::register('siteblocks_block') буде хранити у собі текущий рядок таблиці. На скільки я зрозумів метод getHeaderText() запусkається і на сторінці редагування і на сторінці створення нового рядка гріда. 
+		    return Mage::helper('siteblocks')->__("Edit Block '%s'", $this->escapeHtml(Mage::registry('siteblocks_block')->getTitle()));
+		} else {
+		    return Mage::helper('siteblocks')->__('New Block');
+		}
+	    }
+
+------------- І все. У файлі едіт більше нічого не робиться. За виведення форми відповідає файл - app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Form.php
+
+	- public function __construct() {
+		parent::__construct();
+		$this->setId('block_form'); - не знаю навіщо ця айдішка
+		$this->setTitle(Mage::helper('siteblocks')->__('Block Information')); }
+
+	- protected function _prepareForm() - тут задається дані форми
+
+		$model = Mage::registry('siteblocks_block'); // В конролері едіта я встановлював, що Mage::registry('siteblocks_block'); це текущий рядок текущої таблиці
+		$form = new Varien_Data_Form( - це буде моя текуща форма
+		    array(
+			'id' => 'edit_form', - Айдішка форми
+			'action' => $this->getUrl('*/*/save',array('block_id'=>$this->getRequest()->getParam('block_id'))),
+			'method' => 'post'
+		    )
+
+	- addField() - додати поле для форми
+
+ ----------------- mass екшни ------------------
+
+ 1) це коли можна вибирати декілька записів у гріді і шось з ними робити
+
+ 2) Щоб це можна було зробити, у файлі гріда треба пропиcати метод protected function _prepareMassaction()
+
+
+ ------ Крони ---
+
+ 1) Крони в убунті - https://help.ubuntu.ru/wiki/cron	 
+
+	- cron.sh запускає cron.php у якому є код, який спочатку загружає всі крони(<crontab>) з гонфігів і діспатчить івенти. Тобто по суті крони це обсервери і мають лежати у папці обсервер
+
+ 2) Mage_Cron_Model_Observer - головний клас обсервера у якою прописана логыка обсервера
+
+ 3) Крон можна запустити так - magento.on/cron.php - не рекомендується
+
+ 4) cron_schedule - у ції таблиці є всі крон задачі. І їх свойства (коли вони будуть виконуватись і т д)  - http://joxi.ru/VrwElJwuOlQBZ2
+
+	- Поки я не запустив крон - sh cron.sh - таблиця не зявилась
+
+ 5) class Mage_Cron_Model_Schedule extends Mage_Core_Model_Abstract { - тут можна знайти статуси задач
+    const STATUS_PENDING = 'pending';
+    const STATUS_RUNNING = 'running';
+    const STATUS_SUCCESS = 'success';
+    const STATUS_MISSED = 'missed';
+    const STATUS_ERROR = 'error';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -206,6 +206,10 @@ class Myp_Mym_Model_New extends Mage_Catalog_Model_Original {
 
 	- Тут можна згадати модельку Alanstormdotcom_Helloworld_Model_Words у якій я робив метод toOptionArray() щоб заповнити значення селекта, який я створив в адмінці. По ходу в самому файлі system.xml не можна задати ці значення. То щоб цього не робити і існують дефолтні значення які можна задати у файлі config.xml
 
+	- Можна прям з коду змінити ці значення в адммінці - Mage::app->getConfig()->saveConfig('siteblocks/settings/enabled', '0')
+
+		- Mage::app->getConfig()->deleteConfig('siteblocks/settings/enabled', '0') - Видалити конфіг
+
 
 
 

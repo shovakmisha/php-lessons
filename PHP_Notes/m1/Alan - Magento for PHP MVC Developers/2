@@ -238,7 +238,7 @@
 														- Алан каже що це якісь базові настройки sql
 		
 				    $installer->run(" - Може бути і декілька запросів у цьому методі.
-					CREATE TABLE `{$installer->getTable('weblog/blogpost')}` (
+					CREATE TABLE `{$installer->getTable('weblog/blogpost')}` ( - Краще робити через обертку getTable(), так як якщо будуть проефікси, воно його врахує
 					  `blogpost_id` int(11) NOT NULL auto_increment,
 					  `title` text,
 					  `post` text,

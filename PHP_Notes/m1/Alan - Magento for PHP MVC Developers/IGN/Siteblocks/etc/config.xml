@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <IGN_Siteblocks>
+            <version>1.0.0</version>
+        </IGN_Siteblocks>
+    </modules>
+    <global>
+        <models>
+            <siteblocks> <!-- Как правило тут namespace_modulename или просто modulename -->
+                <class>IGN_Siteblocks_Model</class>
+                <resourceModel>siteblocks_resource</resourceModel>
+            </siteblocks>
+            <siteblocks_resource>
+                <class>IGN_Siteblocks_Resource</class>
+                <entities>
+                    <block> <!-- наименование модели -->
+                        <table>ign_siteblock</table> <!-- название таблицы к которой будет "привязана" модель -->
+                    </block>
+                </entities>
+            </siteblocks_resource>
+        </models>
+        <resources>
+            <siteblocks_setup> <!-- именно в папку с таким названием нужно складывать install и upgrade скрипты -->
+                <setup>
+                    <module>IGN_Siteblocks</module>
+                </setup>
+            </siteblocks_setup>
+        </resources>
+        <helpers>
+            <siteblocks>
+                <class>IGN_Siteblocks_Helper</class>
+            </siteblocks>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <siteblocks>
+                <use>standard</use>
+                <args>
+                    <module>IGN_Siteblocks</module>
+                    <frontName>siteblocks</frontName><!-- любое название, не конфликтуйте с существующими роутерами -->
+                </args>
+            </siteblocks>
+        </routers>
+        <translate>
+            <modules>
+                <IGN_Siteblocks>
+                    <files>
+                        <default>IGN_Siteblocks.csv</default>
+                    </files>
+                </IGN_Siteblocks>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <siteblocks before="Mage_Adminhtml">IGN_Siteblocks_Adminhtml</siteblocks>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <defalut>
+        <siteblocks>
+            <settings>
+                <enabled>1</enabled>
+                <block_count>10</block_count>
+            </settings>
+        </siteblocks>
+    </defalut>
+</config>
