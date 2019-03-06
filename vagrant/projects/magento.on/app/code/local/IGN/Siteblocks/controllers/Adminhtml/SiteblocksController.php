@@ -30,6 +30,10 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
         // У змінній $id нічого не має. Тобто після клацання на "Add new block" я перехожу у $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit')
 
         $this->loadLayout();
+
+        #вывод блока вкладок на странице
+        $this->_addLeft($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tabs'));
+
         $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit'));
         $this->renderLayout();
     }
@@ -52,10 +56,32 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
 
             $block = Mage::getModel('siteblocks/block')->load($id); // у змінній $block по любому буде обєкт моделі - http://joxi.ru/a2XzQoki1n9WNr
 
+
+
+
+            #ниже следует участок для сохранения условий
+            $data = $this->getRequest()->getParams();
+            if (isset($data['rule']['conditions'])) {
+                $data['conditions'] = $data['rule']['conditions'];
+            }
+            unset($data['rule']);
+#вместо setData используем loadPost
+            $block
+                ->loadPost($data);
+
+
+            /**
+             * це для картинок
+             *
+             * используем метод загрузки файлов
+             */
+            $this->_uploadFile('image', $block);
+
             // Кароче че лайфхак. Якщо я передав через медіаквері айдішку рядка який треба редагувати, то вона відредагується. Якщо не передав, стровиться новий рядок з новою айдішкою
             $block
                 ->setTitle($this->getRequest()->getParam('title'))
                 ->setContent($this->getRequest()->getParam('content'))
+                ->setImage($block->getImage())
                 ->setBlockStatus($this->getRequest()->getParam('block_status'))
                 ->setCreatedAt(Mage::app()->getLocale()->date())
                 ->save();
@@ -146,6 +172,44 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
 
         return $this->_redirect('*/*/');
 
+    }
+
+    /**
+     * @param $fieldName
+     * @param $model
+     * @return bool
+     *
+     * метод загрузки файлов
+     */
+    protected function _uploadFile($fieldName,$model)
+    {
+
+        if( ! isset($_FILES[$fieldName])) {
+            return false;
+        }
+        $file = $_FILES[$fieldName];
+
+        if(isset($file['name']) && (file_exists($file['tmp_name']))){
+            if($model->getId()){
+                unlink(Mage::getBaseDir('media').DS.$model->getData($fieldName));
+            }
+            try
+            {
+                $path = Mage::getBaseDir('media') . DS . 'siteblocks' . DS;
+                $uploader = new Varien_File_Uploader($file);
+                $uploader->setAllowedExtensions(array('jpg','png','gif','jpeg'));
+                $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(false);
+
+                $uploader->save($path, $file['name']);
+                $model->setData($fieldName,$uploader->getUploadedFileName());
+                return true;
+            }
+            catch(Exception $e)
+            {
+                return false;
+            }
+        }
     }
 
 }

@@ -224,7 +224,17 @@ class IGN_Siteblocks_Model_Block extends Mage_Core_Model_Abstract {
     const STATUS_ERROR = 'error';
 
 
+ ------------- Обсервери ---------------
 
+ 1) https://magento2.atlassian.net/wiki/spaces/m1wiki/pages/14024852/Magento+1.x+Events+Reference - список івентів. У стандартних івентів часто разом з івентом передаються і важливі параметри які можна витягнути в обсервері 
+
+ 2) Mage_Core_Model_App::dispatchEvent()
+
+	- foreach ($this->_events as $area=>$events) { - проходиться по всіх обсерверах у конфігах
+
+	- Шукає який тип у обсервера - <type>model</type>, робить з класа обєкт - Mage::getModel()
+
+	- Викликає його метод
 
 
 

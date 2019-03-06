@@ -28,6 +28,16 @@ class IGN_Siteblocks_Block_Adminhtml_Siteblocks_Grid extends Mage_Adminhtml_Bloc
             'index'     => 'title',
         ));
 
+        // Це звичайна картинка. Не перероблена. Мабуть можна кастомізувати її вказавши їй інший рендер як для картинки у формі. Але цей чувак не робив цього
+        $this->addColumn('image', array(
+            'header'     => Mage::helper('siteblocks')->__('Image'),
+            'index'      => 'image', // після цього дані картинки підтянуться з бази, з колонки image. Але це підтянеться прям те що в базі. Тобто імя картинки
+            'renderer'   => 'IGN_Siteblocks_Block_Adminhtml_Siteblocks_Grid_Renderer_Image', // Щоб у гріді показувалось не імя картинки, а показувалась картинка, треба указати клас, який це буде рендерити. Я зробив свій клас, але можна використати стандартні. Вони знаходяться у app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/ Я взяв звідти Text.php і на основі нього зробив свій
+            //         'renderer'  => 'siteblocks/adminhtml_siteblocks_grid_renderer_image' #альтернативный способ
+            'filter' => false, // Картинки мы не сможем фильтровать
+            'sortable'   => false // и не сможем их сортировать
+    ));
+
         $this->addColumn('block_status', array(
             'header'    => Mage::helper('cms')->__('Status'),
             'align'     => 'left',

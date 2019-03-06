@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа: user</title>
+  <link rel='stylesheet' href='../style.css' />
+  <script src='../knockout.js'></script>
+</head>
+
+<body>
+  <div id="person">
+    <p>
+      Имя: <span data-bind="text:firstName">...</span>
+      <br/> 
+      Фамилия: <span data-bind="text:lastName">...</span>
+    </p>
+
+    <p>Полное имя: <strong data-bind="text:fullName"></strong></p>
+  </div>
+
+  <button data-bind="click:getName">Как вас зовут?</button>
+  
+  <script>
+    //
+    
+    function PersonViewModel() {
+
+      this.firstName = ko.observable('one');
+      this.lastName  = ko.observable('two');
+
+      this.fullName = ko.computed(function () {
+        // console.log(_this);
+        return "Привет " + this.firstName() + " из " + this.lastName();
+      }, this);
+
+      this.getName = function () {
+        var firstName = prompt('Where are you from?', this.firstName()); // у вікні промпт виведеться name
+        this.firstName(firstName); // зміниться name на то зо я ввів у промті
+      };
+
+    }
+
+    ko.applyBindings( new PersonViewModel() );
+    
+  </script>
+
+
+</body>
+
+</html>

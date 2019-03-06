@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout version="1.0.0">
+    <adminhtml_siteblocks_edit> <!-- это соответствует пути на страницу редактирования -->
+        <update handle="editor"/> <!-- Благодаря этой строке загрузится handle в котором включены все необходимые js и css ресурсы для редактора, а описан он в макете cms.xml -->
+
+        <!-- Что бы подгрузились нужные js ресурсы -->
+        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="setCanLoadRulesJs"><flag>1</flag></action>
+        </reference>
+    </adminhtml_siteblocks_edit>
+
+    <adminhtml_system_config_edit>
+        <update handle="editor"/>
+    </adminhtml_system_config_edit>
+</layout>

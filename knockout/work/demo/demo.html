@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Демонстрация: demo.html</title>
+  <meta charset='utf-8' />
+  <link rel='stylesheet' href='../style.css' />
+  <script src='../knockout.js'></script>
+</head>
+
+<body>
+  <!--h1>Привет, <span data-bind="text:name"></span> from <span data-bind="text:location"></span></h1-->
+
+  <h1><span data-bind="text:info"></span></h1>
+
+  <button id="btnName" data-bind="click:getName">Представтесь</button>
+
+  <button id="btnLocation" data-bind="click:getLocation">Откуда вы</button>
+
+
+
+
+  <table>
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Цена</th>
+    </tr>
+    </thead>
+    <tbody data-bind='foreach: coursesList'>
+    <tr>
+      <td data-bind='text: title'></td>
+      <td data-bind='text: price'></td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  
+  <script>
+
+    //document.getElementById('btnName').onclick = function () {
+    //  // Тобто як я клацнув на кнопку, вилетів промпт customer.name() - це моя модель вю з якої тянуться дані для цієї хтмл.
+    //  // Вона під наглядом observable, тож вона може змінюватись як зі скріпта, так з хтмл
+    //  // Це обєкт, тож якщо я поміняю дані в одному місці, зміняться всюди. Я поміняю її значення у вікні промпт, і воно зміниться всюди
+    //  var name = prompt('What is your name', customer.name()); // виведеться name
+    //  customer.name(name); // зміниться name на то зо я ввів у промті
+    //};
+
+    // вю модель
+    //var customer = {
+    //  name: ko.observable('Guest'),
+    //  location: ko.observable('Lutsk')
+    //};
+
+    // вю модель
+    function Customer() {
+      var self = this;
+      this.name = ko.observable('Guest');
+      this.location = ko.observable('Lutsk');
+
+      this.getName = function () {
+        var name = prompt('What is your name?', this.name()); // у вікні промпт виведеться name
+        this.name(name); // зміниться name на то зо я ввів у промті
+      };
+      this.getLocation = function () {
+        var location = prompt('Where are you from?', this.location()); // у вікні промпт виведеться name
+        this.location(location); // зміниться name на то зо я ввів у промті
+      };
+
+      this.info = ko.computed(function () {
+        // console.log(_this);
+        return "Привет " + this.name() + " из " + this.location();
+      }, this);
+
+
+// --------------------------------------------------------------
+
+
+      // Добавляем список в объект Customer (це до function Course)
+      this.coursesList = ko.observableArray([
+        new Course("HTML/CSS", 9150), // Тобто це створюється новий обєкт Course i йому передаються аргументи.
+        new Course("WebMastering", 13450),
+        new Course("JavaScript-ECMA", 8950)
+      ]);
+
+    };
+
+    // привязую вю модель до цієї вюшки
+    ko.applyBindings(new Customer());
+    // customer.name('New name');
+
+    // console.log(customer.name());
+
+
+
+
+    // -----------------------------------
+
+    // Цей обэкт служить екземпляром
+    function Course(title, price) {
+      this.title = ko.observable(title);
+      this.price = ko.observable(price);
+    }
+
+  </script>
+</body>
+
+</html>

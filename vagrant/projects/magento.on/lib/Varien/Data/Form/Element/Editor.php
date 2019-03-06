@@ -37,6 +37,12 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
     {
         parent::__construct($attributes);
 
+        // вся дополнительная логика в блоке ниже
+        if (Mage::getSingleton('cms/wysiwyg_config')->isEnabled()) {
+            Mage::app()->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
+            $this->setData('config',Mage::getSingleton('cms/wysiwyg_config')->getConfig());
+        }
+
         if($this->isEnabled()) {
             $this->setType('wysiwyg');
             $this->setExtType('wysiwyg');
@@ -44,6 +50,8 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
             $this->setType('textarea');
             $this->setExtType('textarea');
         }
+
+
     }
 
     public function getElementHtml()

@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа: meal</title>
+  <link rel='stylesheet' href='../style.css' />
+  <script src='../knockout.js'></script>
+</head>
+
+<body>
+  <h2>Наши заказы</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Имя</th>
+        <th>Блюдо</th>
+        <th>Цена</th>
+        <th>...</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script>
+    // Конструктор: отвечает за запись в таблице
+    function SeatReservation(name, initialMeal) {
+      var self = this;
+      self.name = name;
+      self.meal = ko.observable(initialMeal);
+    }
+
+    // ViewModel
+    function ReservationsViewModel() {
+      var self = this;
+
+      // Список блюд по-умолчанию
+      self.availableMeals = [
+        { mealName: "Стакан воды", price: 0 },
+        { mealName: "Стандарт (сэндвич)", price: 25 },
+        { mealName: "Премиум (лобстеры)", price: 257.95 },
+        { mealName: "Богема (филе жирафа)", price: 3720.99 }
+      ];    
+
+      // Редактируемые данные
+      self.seats = ko.observableArray([
+        new SeatReservation("Вася", self.availableMeals[0]),
+        new SeatReservation("Петя", self.availableMeals[0])
+      ]);
+    }
+
+    ko.applyBindings(new ReservationsViewModel());
+  </script>
+
+
+</body>
+
+</html>

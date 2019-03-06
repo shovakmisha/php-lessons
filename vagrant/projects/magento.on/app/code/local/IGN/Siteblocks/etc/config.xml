@@ -2,7 +2,7 @@
 <config>
     <modules>
         <IGN_Siteblocks>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </IGN_Siteblocks>
     </modules>
     <global>
@@ -64,7 +64,27 @@
                 </IGN_Siteblocks>
             </modules>
         </translate>
+        <events>
+            <checkout_cart_product_add_after> <!-- название события говорит само за себя-->
+                <observers>
+                    <siteblocks>
+                        <class>siteblocks/observer</class>
+                        <method>checkout_cart_product_add_after</method> <!-- я предпочитаю использовать название метода по названию события -->
+                        <type>model</type>
+                    </siteblocks>
+                </observers>
+            </checkout_cart_product_add_after>
+        </events>
     </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <siteblocks module="siteblocks">
+                    <file>siteblocks.xml</file> <!-- Це лейаут для адмінки у якому я добавив до сторінки едіта функціонал для візівіка -->
+                </siteblocks>
+            </updates>
+        </layout>
+    </adminhtml>
     <admin>
         <routers>
             <adminhtml>
@@ -88,7 +108,7 @@
         <jobs>
             <siteblocks_clear_cache> <!-- Произвольное название задачи-->
                 <schedule>
-                    <cron_expr>*/10 * * * *</cron_expr> <!-- каждые 10 минут -->
+                    <cron_expr>*/1 * * * *</cron_expr> <!-- каждые 10 минут -->
                 </schedule>
                 <run>
                     <model>siteblocks/cron::siteblocks_clear_cache</model> <!-- модель и метод, который мы хотим запустить -->
