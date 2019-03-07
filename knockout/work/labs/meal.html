@@ -11,24 +11,58 @@
 <body>
   <h2>Наши заказы</h2>
 
-  <table>
+  <table style="border: none">
     <thead>
       <tr>
         <th>Имя</th>
         <th>Блюдо</th>
         <th>Цена</th>
-        <th>...</th>
+        <th>Удалить</th>
       </tr>
     </thead>
-    <tbody>
+
+    <tbody data-bind="foreach:seats()">
+      <tr>
+        <td style="padding: 10px;">
+          <input type="text" data-bind="value: name">
+        </td>
+        <td style="padding: 10px;"> <!-- data-bind="text: meal().mealName" -->
+
+          <select name="" id=""  data-bind="foreach:meal()" >
+            <option data-bind="text:mealName"></option>
+          </select>
+
+        </td>
+
+        <td style="padding: 10px;" data-bind="text: $data.formattedPrice"></td>
+
+        <td style="padding: 10px;"><a href="#" data-bind="click: $root.removeSeat">Удалить</a></td>
+      </tr>
     </tbody>
+
   </table>
+
+  <br>
+
+  <h3>Всего заказов на: <span data-bind="text: totalPrice().toFixed(2)">
+</span> руб.</h3>
+
+  <br>
+
+
+  <button data-bind="click: addSeat">Заказать место</button>
+
   <script>
     // Конструктор: отвечает за запись в таблице
     function SeatReservation(name, initialMeal) {
       var self = this;
-      self.name = name;
+      self.name = ko.observable(name);
       self.meal = ko.observable(initialMeal);
+
+      self.formattedPrice = ko.computed(function() {
+        return self.meal().price + ' руб';
+      });
+
     }
 
     // ViewModel
@@ -41,13 +75,38 @@
         { mealName: "Стандарт (сэндвич)", price: 25 },
         { mealName: "Премиум (лобстеры)", price: 257.95 },
         { mealName: "Богема (филе жирафа)", price: 3720.99 }
-      ];    
+      ];
 
       // Редактируемые данные
       self.seats = ko.observableArray([
-        new SeatReservation("Вася", self.availableMeals[0]),
-        new SeatReservation("Петя", self.availableMeals[0])
+        new SeatReservation("Вася", self.availableMeals),
+        new SeatReservation("Петя", self.availableMeals)
       ]);
+
+
+
+      this.addSeat = function () {
+
+
+        // var name = prompt('name?');
+        // var number = prompt('number?');
+
+        self.seats.push(new SeatReservation(name, self.availableMeals[0]));
+
+      };
+      
+      self.removeSeat = function () {
+        self.seats.remove(this);
+      }
+
+      this.totalPrice = function () {
+        var totalPrice = 0;
+        for(var i = 0; i < self.seats().length; i++) {
+          totalPrice+= self.seats()[i].meal().price;
+        }
+
+        return totalPrice;
+      };
     }
 
     ko.applyBindings(new ReservationsViewModel());

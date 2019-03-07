@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа: user</title>
+  <link rel='stylesheet' href='../style.css' />
+  <script src='../knockout.js'></script>
+</head>
+
+<body>
+
+  <form id="f" action="" method="post"></form>
+
+  <div>
+    <label for="name">Імя: </label><br>
+    <input id="name" type="text" form="f" data-bind="value:firstName" />
+  </div>
+
+  <br>
+
+  <div>
+    <label for="lastname">Фамилия: </label><br>
+    <input id="lastname" type="text" form="f"  data-bind="value:lastName" />
+  </div>
+
+  <br><br>
+
+  <div>
+    <button data-bind="click:showData">Нажать</button>
+    <button data-bind="click:getInfo">Показать</button>
+    <button data-bind="click:setInfo">Изменить</button>
+  </div>
+
+  <script>
+    //
+    
+    function User() {
+      var self = this;
+      this.firstName = ko.observable('John');
+      this.lastName  = ko.observable('Smith');
+
+      this.showData = function (model, event) {
+        console.log(model.firstName(), "нажал на кнопку");
+        console.log("Событие ", event.target);
+      };
+
+      this.getInfo = function (model) {
+        console.log(model.firstName());
+      };
+
+      this.setInfo = function () {
+        console.log(this.firstName('Mike'));
+      };
+    }
+
+    ko.applyBindings( new User() );
+    
+  </script>
+
+
+</body>
+
+</html>

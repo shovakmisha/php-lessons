@@ -33,6 +33,8 @@
 
 		- console.log(customer.name()); - виведе 'New name'. Тобто щоб дістати значення вказую пусті дужки, щоб засетити значення, пишу в дужках це значення.
 
+		- var announsedCourse = ko.observable( new Course("Super course", 2000) ); - обєкти теж мо
+
  5) Але писати до кожного атрибуту отдільний метод не удобно. Щоб це все обєднати, є метод computed
 
 	- <span data-bind="text:info"> - this.info = ko.computed(function () { - після цього 
@@ -46,14 +48,127 @@
 	- Другим аргументом у ф-ції computed йде обєкт у контексті якого буде виконуватись ф-ція, яка передана першим аргументом. Допомагає з заморочками this і тд...
 					    
  
- 
+
+ -------- Далі я переніс частину першого уроку ц файл demo2.html --------
+
+ Методы наблюдаемых массивов. Тобто обєкт observableArray буде мати ці методи
+	deleteItem = function(item) {
+		observableArray.remove(item);
+		observableArray.destroy(item);
+	};
+
+	push(), pop(), unshift(), shift(), 
+
+	remove() - видалить елемент
+
+	removeAll(), 
+
+	destroy() - це теж видалить елемент, але це більш схоже на те що це буде скритий елемент. Суть у тому що у кнокаут елементів є свойство __destкoy. І якщо воно = тру, то елемент буде ніби виделений. Наприклад елемент у якого свойство дестрой було тру, не виводився вже у таблиці у якій я форічом виводив всі елементи масива у якому були елементи нокаута.
+
+		- можна щоб дестроєні елементи виводились в форічі. Для цього треба переробити з цього <tbody data-bind='foreach: coursesList'> на <tbody data-bind='foreach:coursesList'> 
+
+	destroyAll(), sort(), reversed(), slice(), indexOf()
+
+
+ --------------- Привязки -------------------
+
+ 6) За $root я вже писав у коді
+
+	- $parent - вище стоящий контекст (типу батько текущої області)
+
+ 7) $data - це як this. але краще підходить як $value з пхпшного foreach($key => $value) - тобто текуще значення даного контекста. Контекст може бути і цикл (елементи масива)
+
+	- <td data-bind='text: title'></td> виведе те саме що і <td data-bind='text: $data.title'></td> так як $data це і є this. область у якому знаходиться title
+
+	- А з масивами ваще агонь. в нокауті масив виглядає так foreach:regs - тут не має $key => $value щоб вивести значення масива типу regs[key]. Тут знадобиться привязка $data. 
+		<ul data-bind='foreach:regs'>
+                	<li data-bind='text:$data'></li> - виведе текуще значення масива regs
+
+ 8) $index - хранить у собі порядковий номер ітерації цикла. Але якщо його змінити data-bind='text: $index +1' - буде помилка, а так вже норм - data-bind='text: $index()+1'. Це із за того що $index - обсервабл. Приклад візьму з іншої змінної - this.discount = ko.observable(discount); - console.log(this.discount()) - this.discount - це метод, а this.discount() виклик цього метода
+
+ 9) Умови - <td data-bind="if:discount() > 0"> - discount це обсервабл свойство контекста з якого тянуться дані в хтмл, тому discount()
+
+	- ifnot: теж є
+
+ 10) with - звязати обєкт з нокаутом, який не привязаний до цієї вюшки. Тобто можна звязатись з любим обєктом. Типу як ko.applyBindings.
+
+	- var announsedCourse = ko.observable( new SomeObject("property") ); - <p data-bind="with:announsedCourse"> <span data-bind='text: property'></span> </p>
+
+--------------------------------------
+
+Типы "видовых" привязок
+
+	text: <value>
+		<strong data-bind = 'text: methodName'></strong> - аналог скріптового innerText 
+
+	html: <value>
+		<strong data-bind='html: methodName'></strong> - аналог скріптовог innerHtml
+
+	visible: <condition>
+		<td data-bind='visible: returnNumber() > 0'> - аналог display:none; Можна ставити кондішни при яких умовах елемент не виведеться
+
+			- visible взагалі не виведе ячейку. Якби я написав if замість visible, то не вивелося б содержиме ячейки, але саму ячейку було б видно
+
+	css: <object>
+		<span data-bind = "css:{className: returnNumber() > 0}">Paint it!</span> - добавити якиїсь клас елементу, якщо умови підходять (returnNumber() > 0). Схоже на тернарний оператор
+
+			- css:{className: returnNumber() > 0} + з синаксису можна зрозуміти що класи хранятся в обєкті
+
+			- <span data-bind="text:discountFormat, css:{discount: discount() > .15}"></span> - весь функціонал елемента можна писати в одній строці. Тобто і виводити якусь інфу в елементі і давати клас елементу
+
+	style: <object>
+		<span data-bind="style:{color: returnNumber() > 0 ? 'red' : 'black'}">Paint it!</span> - прописує стилі інлайном. 
+
+	attr: <object>
+		<a data-bind = 'attr: {href: link}'>Some link</a> - додасть атрибут href.
+
+		- ЩЕ ДУЖЕ ВАЖЛИВО. ЩОБ РОЗЩИРИТИ ОБЭКТ НОКАУТА НАХОДУ МОЖНА ТУДИ ДОБАВЛЯТИ ШОСЬ НОВЕ ЯК В СКРІПТІ - object.someNew = 'new'. Якщо нокаут обэкт обсервабл, то object().someNew = 'new'
 
 
 
+ Интерактивные привязки
+	click: <method>
+		<button data-bind='click: someMethod'>Нажать</button>
+
+	value: <property>
+		<input type="text" data-bind='value: someValue' /> - фція someValue() буде віддавати велью. Це підходить для інпутів, textaria, ... Я думаю це те саме що attr{value: someValue()}  
+
+	event: <object>
+		<div data-bind='event:{mouseover: methodOne, mouseout: methodTwo}'>...</div>
+
+			- Кароче тут все як в скріпті <button data-bind="click:showData">Нажать</button>
+
+									this.showData = function (model, event) {
+										console.log(model.firstName(), "нажал на кнопку"); - model це this. як бачу назва не мусить бути model, просто перший аргуметн це this
+										console.log("Событие ", event.target); - event - це другий аргумент. як бачу назва не мусить бути event, просто другий аргуметн це івент. Це наскільки я зрозумів звичайний скріптровський івент і в нього є ці всі ф-ції - e.type, e.target...
+									};
+	​
+	submit: <method>
+		<form data-bind = "submit: doSomething">
+
+	enable: <property>
+		<input type="text" data-bind='value: val1' />
+		<input type="text" data-bind='value: val2, enable: val1' />
+	​
+	disable: <property>
+	checked: <property>
+		<input type="checkbox" data-bind='checked: val' />
+
+	options: <array>
+		<select data-bind='options: value, value: currentValue'></select>
+		<select data-bind='options:list, optionsText:"Text", optionsValue:"Value"'></select>
+
+	selectedOptions: <array>
+		<select data-bind = "options: coursesList, selectedOptions: currentCourse"></select>
+
+	hasfocus: <property>
+		<input data-bind = 'value: val, hasfocus: true' />
 
 
+ ----------------------------------
 
- ----------------
+	Обратите внимание на то, что свойство self.meal является массивом объектов, а доступ к свойству объекта можно получить как: array().property
 
+ ---------------------------------
 
 

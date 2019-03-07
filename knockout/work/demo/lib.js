@@ -1,3 +1,4 @@
+// Це типу моделька
 var list = [
   {
     "title": "JavaScript-2",
@@ -42,13 +43,14 @@ var list = [
 
 function getCourse() {
   if (list.length > 0) {
-    return list.splice(array_rand(list, 1), 1)[0];
+    return list.splice( array_rand(list, 1), 1 )[0]; // splice - отже елементи будуть видалятись з масива
   } else {
     alert('Курсов больше нет');
     return {};
   }
 }
 
+// рандомно вибирає елемент (обєкт) з масива
 function array_rand(input, num_req) {
   //  discuss at: http://phpjs.org/functions/array_rand/
   //  original by: Waldo Malqui Silva

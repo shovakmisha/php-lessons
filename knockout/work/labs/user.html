@@ -16,7 +16,10 @@
       Фамилия: <span data-bind="text:lastName">...</span>
     </p>
 
-    <p>Полное имя: <strong data-bind="text:fullName"></strong></p>
+    <input id="one" type="text" data-bind="value:firstName">
+    <input id="two" type="text" data-bind="value:lastName">
+
+    <p data-bind="visible: isFullName() == true">Полное имя: <strong data-bind="text:fullName"></strong></p>
   </div>
 
   <button data-bind="click:getName">Как вас зовут?</button>
@@ -25,6 +28,7 @@
     //
     
     function PersonViewModel() {
+      self = this;
 
       this.firstName = ko.observable('one');
       this.lastName  = ko.observable('two');
@@ -37,6 +41,13 @@
       this.getName = function () {
         var firstName = prompt('Where are you from?', this.firstName()); // у вікні промпт виведеться name
         this.firstName(firstName); // зміниться name на то зо я ввів у промті
+      };
+
+      this.isFullName =function () {
+        if(self.firstName().length && self.lastName().length) {
+          return true;
+        }
+        return false;
       };
 
     }

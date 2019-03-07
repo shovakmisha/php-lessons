@@ -6,6 +6,7 @@
   <meta charset='utf-8' />
   <link rel='stylesheet' href='../style.css' />
   <script src='../knockout.js'></script>
+
 </head>
 
 <body>
@@ -18,25 +19,6 @@
   <button id="btnLocation" data-bind="click:getLocation">Откуда вы</button>
 
 
-
-
-  <table>
-    <thead>
-    <tr>
-      <th>Название</th>
-      <th>Цена</th>
-    </tr>
-    </thead>
-    <tbody data-bind='foreach: coursesList'>
-    <tr>
-      <td data-bind='text: title'></td>
-      <td data-bind='text: price'></td>
-    </tr>
-    </tbody>
-  </table>
-
-
-  
   <script>
 
     //document.getElementById('btnName').onclick = function () {
@@ -74,17 +56,6 @@
       }, this);
 
 
-// --------------------------------------------------------------
-
-
-      // Добавляем список в объект Customer (це до function Course)
-      this.coursesList = ko.observableArray([
-        new Course("HTML/CSS", 9150), // Тобто це створюється новий обєкт Course i йому передаються аргументи.
-        new Course("WebMastering", 13450),
-        new Course("JavaScript-ECMA", 8950)
-      ]);
-
-    };
 
     // привязую вю модель до цієї вюшки
     ko.applyBindings(new Customer());
@@ -94,14 +65,6 @@
 
 
 
-
-    // -----------------------------------
-
-    // Цей обэкт служить екземпляром
-    function Course(title, price) {
-      this.title = ko.observable(title);
-      this.price = ko.observable(price);
-    }
 
   </script>
 </body>
