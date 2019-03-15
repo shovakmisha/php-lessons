@@ -62,11 +62,9 @@
 
     var announsedCourse = ko.observable( new Course("Super course", 2000) );
 
-    console.log(announsedCourse());
-
     announsedCourse().link = "https://pocketbook-dev2.smile-magento.com/de_de/customer/account/create/";
 
-
+    console.log(announsedCourse()); // link теж є
 
 
     // привязую вю модель до цієї вюшки

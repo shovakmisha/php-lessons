@@ -28,13 +28,15 @@
         </td>
         <td style="padding: 10px;"> <!-- data-bind="text: meal().mealName" -->
 
-          <select name="" id=""  data-bind="foreach:meal()" >
+          <!--select name="" id=""  data-bind="foreach:meal()" >
             <option data-bind="text:mealName"></option>
-          </select>
+          </select-->
+
+          <select class="newSelect" data-bind="options:meal(), optionsText: 'mealName', optionsValue: 'id'"></select>
 
         </td>
 
-        <td style="padding: 10px;" data-bind="text: $data.formattedPrice"></td>
+        <td style="padding: 10px;">0 руб</td>
 
         <td style="padding: 10px;"><a href="#" data-bind="click: $root.removeSeat">Удалить</a></td>
       </tr>
@@ -56,12 +58,30 @@
     // Конструктор: отвечает за запись в таблице
     function SeatReservation(name, initialMeal) {
       var self = this;
-      self.name = ko.observable(name);
-      self.meal = ko.observable(initialMeal);
 
-      self.formattedPrice = ko.computed(function() {
-        return self.meal().price + ' руб';
-      });
+      self.name = ko.observable(name);
+      self.meal = ko.observableArray(initialMeal);
+
+      // this.foo = function () {
+      //   console.log(9);
+      // };
+
+
+      window.onload = function(){
+        self.selecters =  ko.observableArray(document.getElementsByClassName('newSelect'));
+        for (var i = 0; i < self.selecters().length; i++) {
+          self.selecters()[i].addEventListener('change', function () {
+             this.parentNode.nextSibling.nextSibling.innerHTML = self.meal()[this.selectedIndex].price + ' руб';
+          });
+
+        }
+      };
+
+      console.log(self.meal().selected );
+
+
+      // self.selectedOption.addEventListener('change', function () {})
+
 
     }
 
@@ -69,12 +89,14 @@
     function ReservationsViewModel() {
       var self = this;
 
+      var rot = this;
+
       // Список блюд по-умолчанию
       self.availableMeals = [
-        { mealName: "Стакан воды", price: 0 },
-        { mealName: "Стандарт (сэндвич)", price: 25 },
-        { mealName: "Премиум (лобстеры)", price: 257.95 },
-        { mealName: "Богема (филе жирафа)", price: 3720.99 }
+        { id:"1", mealName: "Стакан воды", price: 0 },
+        { id:"2", mealName: "Стандарт (сэндвич)", price: 25 },
+        { id:"3", mealName: "Премиум (лобстеры)", price: 257.77 },
+        { id:"4", mealName: "Богема (филе жирафа)", price: 3720.88 }
       ];
 
       // Редактируемые данные
@@ -91,7 +113,7 @@
         // var name = prompt('name?');
         // var number = prompt('number?');
 
-        self.seats.push(new SeatReservation(name, self.availableMeals[0]));
+        self.seats.push(new SeatReservation("", self.availableMeals));
 
       };
       

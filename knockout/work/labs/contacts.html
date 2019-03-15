@@ -8,17 +8,24 @@
   <script src='../knockout.js'></script>
 </head>
 
+<script  type="text/html" id="contacts">
+  <h3 data-bind="text: name">Имя</h3>
+  <p>
+    Телефон: <span data-bind="text: phone">123-45-67</span>
+  </p>
+  <p>
+    Email: <span data-bind="text: email">name@email.ru</span>
+  </p>
+
+  <button data-bind="click: $root.removeContact">Удалить</button>
+
+</script>
+
 <body>
 
   <h2>Список контактов</h2>
-  <div data-bind="foreach: contacts">
-    <h3 data-bind="text: name">Имя</h3>
-    <p>
-      Телефон: <span data-bind="text: phone">123-45-67</span>
-    </p>
-    <p>
-      Email: <span data-bind="text: email">name@email.ru</span>
-    </p>
+  <div data-bind="template: { name: 'contacts', foreach: contacts, afterRender: afterAdd, beforeRemove: beforeRe}">
+
   </div>
   
   <script>
@@ -41,6 +48,26 @@
           email: 'zina@korzinkina.ru'
         }
       ])
+
+      this.afterAdd = function (elements, data) {
+
+        // console.log(elements);
+        // console.log(data);
+
+        for (var i = 0; i < elements.length; ++i) {
+          if (elements[i].nodeType == 1 && elements[i].tagName != "BUTTON")
+            elements[i].style.color = "red";
+        }
+      }
+
+      this.removeContact = function () {
+        self.contacts.remove(this);
+      }
+
+      this.beforeRe = function () {
+        console.log(5);
+      }
+
     }
     ko.applyBindings(new СontactsViewModel());
   </script>

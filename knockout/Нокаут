@@ -17,7 +17,7 @@
 
 	var customer = { name: 'Guest', location: 'Lutsk' }; 
 
-	ko.applyBindings(customer);
+	ko.applyBindings(customer); - можна приціпити якиїсь отдільний участок а не весь темплейт. Кароче погратись треба з аргументами
 
 	- Тобто це я вказав нокауту що для цього вю (цей хтмл файл, ну або до якого ти привязаний), буде назначена тукуща модель вю ko.applyBindings(customer);
 
@@ -65,7 +65,7 @@
 
 	destroy() - це теж видалить елемент, але це більш схоже на те що це буде скритий елемент. Суть у тому що у кнокаут елементів є свойство __destкoy. І якщо воно = тру, то елемент буде ніби виделений. Наприклад елемент у якого свойство дестрой було тру, не виводився вже у таблиці у якій я форічом виводив всі елементи масива у якому були елементи нокаута.
 
-		- можна щоб дестроєні елементи виводились в форічі. Для цього треба переробити з цього <tbody data-bind='foreach: coursesList'> на <tbody data-bind='foreach:coursesList'> 
+		- можна щоб дестроєні елементи виводились в форічі. Для цього треба переробити з цього <tbody data-bind='foreach: coursesList'> на <tbody data-bind='foreach:coursesList, , includeDestroyed:true'> 
 
 	destroyAll(), sort(), reversed(), slice(), indexOf()
 
@@ -84,7 +84,7 @@
 		<ul data-bind='foreach:regs'>
                 	<li data-bind='text:$data'></li> - виведе текуще значення масива regs
 
- 8) $index - хранить у собі порядковий номер ітерації цикла. Але якщо його змінити data-bind='text: $index +1' - буде помилка, а так вже норм - data-bind='text: $index()+1'. Це із за того що $index - обсервабл. Приклад візьму з іншої змінної - this.discount = ko.observable(discount); - console.log(this.discount()) - this.discount - це метод, а this.discount() виклик цього метода
+ 8) $index - хранить у собі порядковий номер ітерації цикла. Але якщо його змінити data-bind='text: $index +1' - буде помилка, а так вже норм - data-bind='text: $index()+1'. Це із за того що $index - обсервабл. Приклад візьму з іншої змінної - this.discount = ko.observable(discount); - console.log(this.discount()) -
 
  9) Умови - <td data-bind="if:discount() > 0"> - discount це обсервабл свойство контекста з якого тянуться дані в хтмл, тому discount()
 
@@ -100,6 +100,8 @@
 
 	text: <value>
 		<strong data-bind = 'text: methodName'></strong> - аналог скріптового innerText 
+
+	textInput: Це для інпутів
 
 	html: <value>
 		<strong data-bind='html: methodName'></strong> - аналог скріптовог innerHtml
@@ -131,7 +133,11 @@
 		<button data-bind='click: someMethod'>Нажать</button>
 
 	value: <property>
-		<input type="text" data-bind='value: someValue' /> - фція someValue() буде віддавати велью. Це підходить для інпутів, textaria, ... Я думаю це те саме що attr{value: someValue()}  
+		<input type="text" data-bind='value: someValue' /> - фція someValue() буде віддавати велью. Це підходить для інпутів, textaria, ... Я думаю це те саме що attr{value: someValue()}
+
+		-  valueUpdate - може бути у інпутів і у текстарії. Суть у тому що коли в мене є такий запис - <input id="one" type="text" data-bind="value:firstName"> - (this.firstName = ko.observable('one');) то this.firstName буде змінюватись коли інпут втратить фокус. valueUpdate - відповідає за то, коли апдейтити this.firstName (keyup, keypress, ...)
+
+		- <input id="one" type="text" data-bind="value:firstName, valueUpdate: 'keyup' ">
 
 	event: <object>
 		<div data-bind='event:{mouseover: methodOne, mouseout: methodTwo}'>...</div>
@@ -148,11 +154,19 @@
 
 	enable: <property>
 		<input type="text" data-bind='value: val1' />
-		<input type="text" data-bind='value: val2, enable: val1' />
+		<input type="text" data-bind='value: val2, enable: val1' /> - Якшо у першому інпуті тру, то це поле буде доступне. Як бачу по коді, це добавляється атрибут disable до елемента - http://joxi.ru/p27a7yxIoMaVDr
 	​
-	disable: <property>
+	disable: <property> - те саме що і enable, тільки навпаки. Це теж актуально тільки для елементів де можна шось вводити (інпути, текстарії)
+
 	checked: <property>
-		<input type="checkbox" data-bind='checked: val' />
+		<input type="checkbox" data-bind='checked: val' /> - Суть у тому, що якщо я маю <input form="f" type="checkbox" data-bind="value:agree"/> - неактивний чекбокс
+																	    this.agree = ko.observable(false); - agree == фолс
+			- <button data-bind="click:showData, enable:agree">Флаг</button> - і я маю кнопку, яка доступна тільки тоді, коли чекбокс активний. Я клацаю на чекбокс і кнопка всерівно не доступна, хоча agree обсервабл. Чекбокс оприділяється чи він чекнутий по свойству checked - <input form="f" type="checkbox" data-bind="checked:agree"/> - тепер все ок
+
+			- value для чекбокса - це скоріш за все як значення за замовчуванням, а не текуще значення
+
+			- this.goods = ko.observableArray(['one', 'two']); - <input form="f" type="checkbox" data-bind="checked:goods, value: 'one' "/>
+   									   - <input form="f" type="checkbox" data-bind="checked:goods, value: 'two' "/>
 
 	options: <array>
 		<select data-bind='options: value, value: currentValue'></select>
@@ -160,6 +174,18 @@
 
 	selectedOptions: <array>
 		<select data-bind = "options: coursesList, selectedOptions: currentCourse"></select>
+				
+---------------------------------------------
+				(<!-- options:coursesList - вказую що опціями цього селекта будуть обєкти з обсервебл масива this.coursesList - на даний момент виведуться обэкти, так як в масиві обэкти-->
+                                            <!-- optionsText:'title' - В якості текста у опшнів, буде братись свойство  title з обєктів у масиві this.coursesList - http://joxi.ru/J2bglQGfX3VJWA -->
+                                            <!-- optionsValue: 'value' - В якості value у опшнів, буде братись свойство  value з обєктів у масиві this.coursesList - http://joxi.ru/Q2Kz7o6i4Nv1gm -->
+                                            <!-- selectedOptions: selectedCourse -Велью за замовчуванням-->
+
+    <select form="f" name="newSelect" id="" data-bind="options:coursesList
+                                            ,optionsText:'title'
+                                            ,optionsValue: 'value'
+                                            ,selectedOptions: selectedCourse"></select>)
+---------------------------------------------
 
 	hasfocus: <property>
 		<input data-bind = 'value: val, hasfocus: true' />
@@ -170,5 +196,40 @@
 	Обратите внимание на то, что свойство self.meal является массивом объектов, а доступ к свойству объекта можно получить как: array().property
 
  ---------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------
+
+ - afterRender: someMethod(elem (dom відмальованих елемента), data (текущий елемент в циклі)) - Викликати якиїсь метод після того як відрендерився темплейт - <li data-bind="text:title, afterRender:someMethod"></li>
+
+ - beforeRemove - перед тим як видалився елемент з масива я з якого беруться дані для для рендеринга, 
+
+
+ - В консолі браузера оюєкт нокаута теж видно і з консолі можна з ним працювати (міняти на ходу і тд)
+
+
+
+ - 
+	var list = [
+	document.getElementById("x"),
+	document.getElementById("y"),
+	]
+	template: list - Так теж можна підключити шаблони. Єдине що підключиться весь вузел а не тільки його діти - http://joxi.ru/82QB5lacjle6oA
+
+
+
+  - На уроці я створював компонент і створював компонент на його основі і передавав його параметри. Типу як є конструктор і обєкт на основі цього конструктора.
+
+	<div data-bind="component: {name: 'text-field'}"></div>
+	<div data-bind="component: {name: 'text-field', params: {initialText: '!!!'}}"></div>
+
+		ko.components.register('text-field', { viewModel: function (params) {
+
+	- Але це не єдиний спосіб, створити компонент і передати потрібні параметри компоненту. Можна прям назвати хтмл тег іменем компонента і передати йому параметри - <text-field params="initialText:'Custom'"></text-field>
+
+		- Це створиться новий компонент text-field - http://joxi.ru/823dpX3TJZN6XA . Тобто це привязка до компонента, тільки без data-bind 
+
+
+
+
 
 

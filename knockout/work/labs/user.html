@@ -16,7 +16,7 @@
       Фамилия: <span data-bind="text:lastName">...</span>
     </p>
 
-    <input id="one" type="text" data-bind="value:firstName">
+    <input id="one" type="text" data-bind="value:firstName, valueUpdate: 'keyup' ">
     <input id="two" type="text" data-bind="value:lastName">
 
     <p data-bind="visible: isFullName() == true">Полное имя: <strong data-bind="text:fullName"></strong></p>

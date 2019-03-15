@@ -6,22 +6,55 @@
   <meta charset='utf-8' />
   <link rel='stylesheet' href='../style.css' />
   <script src='../knockout.js'></script>
+
+  <script type="text/html" id="tpl_courses">
+
+    <h3 data-bind="text:title"></h3>
+    <p data-bind="text:desc"></p>
+
+  </script>
+
 </head>
 
 <body>
   <h1>Наши курсы</h1>
-  <div>
+
+  <!--div data-bind="template:{name:'tpl_courses', data:js}"></div-->
+
+  <!--div>
     <h3>JavaScript</h3>
     <p>Описание курса JavaScript</p>
     <h3>PHP</h3>
     <p>Описание курса PHP</p>
     <h3>XML и XSLT</h3>
     <p>Описание курса XML и XSLT</p>
-  </div>
-  
+  </div-->
+
+  <div data-bind="template:{name:'tpl_courses', foreach:courses, afterRender:someMethod}"></div>
+
   <script>
-    //
+    function Courses() {
+
+      this.courses = [
+        {title: "Javascript", desc: "Описание курса JavaScript"},
+        {title: "PHP", desc: "Описание курса PHP"},
+        {title: "XML и XSLT", desc: "Описание курса XML и XSLT"}
+      ];
+
+      this.someMethod = function(e, l) {
+        console.log(e);
+        console.log(l);
+      }
+
+      // this.js = {title: "Javascript", desc: "Описание курса JavaScript"};
+      // this.php = {title: "PHP", desc: "Описание курса PHP"};
+      // this.xml = {title: "XML и XSLT", desc: "Описание курса XML и XSLT"};
+    }
+
+    ko.applyBindings( new Courses() );
+
   </script>
+
 </body>
 
 </html>

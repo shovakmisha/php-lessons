@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Демонстрация: component.html</title>
+  <meta charset='utf-8' />
+  <link rel='stylesheet' href='../style.css' />
+  <script src='../knockout.js'></script>
+
+  <script type="text/html" id="tpl">
+
+    Введите текст: <input data-bind='value:text' />
+                   <span data-bind='text:calculate()'></span>
+
+</script>
+
+</head>
+
+<body>
+
+  <div data-bind="component: 'text-field'"></div>
+
+
+  <!-- тобто я просто скопіював собы робочий комонент -->
+  <!--div data-bind="component: {name: 'text-field'}"></div-->
+
+  <!-- тобто я просто скопіював собі робочий комонент + йому можна передати параметри -->
+  <div data-bind="component: {name: 'text-field', params: {initialText: '!!!'}}"></div>
+
+  <text-field params="initialText:'Custom'"></text-field>
+
+  
+  <script>
+
+    function userViewModel() {
+      console.log('here');
+    }
+
+
+    ko.components.register('text-field', {
+      viewModel: function (params) {
+        var self = this;
+
+        console.log(params);
+
+        this.text = ko.observable(params && params.initialText || "");
+
+        this.calculate = function () {
+          if(this.text().length) {
+            return "Вы ввели " + this.text() +
+                    " длиной " + this.text().length +
+                    " символов";
+          } else {
+
+          }
+        };
+      },
+
+      // {
+      //   createViewModel: function () {
+      //     console.log('here');
+      //     return new userViewModel();
+      //   }
+      // },
+
+      template: {element: 'tpl'}
+
+
+    });
+
+    // ko.components.register('user-list', {
+    //   viewModel: userViewModel,
+    //   template: {element: 'user-list-tpl'}
+    // });
+
+    ko.applyBindings();
+
+  </script>
+</body>
+
+</html>
