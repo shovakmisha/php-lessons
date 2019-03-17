@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Демонстрация</title>
+  <meta charset='utf-8' />
+  <link rel='stylesheet' href='../style.css' />
+  <script src='knockout.js'></script>
+
+</head>
+
+<body>
+
+  <input type="text" data-bind="textInput: inputText">
+
+  <p data-bind="text: inputText"></p>
+
+  <button data-bind="click: function() {console.log(this)}">клік</button>
+
+  <script>
+
+    var viewModel = {
+      inputText: ko.observable('333')
+    };
+
+
+
+    // console.log( ko.utils.unwrapObservable(viewModel.inputText) );
+
+
+    viewModel.inputText.subscribe(function (newValue) {
+      console.log(newValue);
+    });
+
+    ko.applyBindings(viewModel);
+
+  </script>
+</body>
+
+</html>

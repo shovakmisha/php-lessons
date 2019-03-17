@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dcb50940-62c9-4c25-9a1b-a7eefe61bf23" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/work/demo/component2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/demo/tpl2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/work/demo/tpl3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/knowcity/app.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/knowcity/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/knowcity/knockout.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/knowcity/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/demo/component.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/demo/component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/demo/demo4.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/demo/demo4.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/demo/tpl.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/demo/tpl.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/work/demo/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/demo/user.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/labs/contacts.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/labs/contacts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/labs/meal.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/labs/meal.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/labs/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/work/labs/user.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Нокаут" beforeDir="false" afterPath="$PROJECT_DIR$/Нокаут" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,10 +19,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/work/demo/demo4.html">
+        <entry file="file://$PROJECT_DIR$/work/demo/tpl2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="935">
-              <caret line="55" column="42" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="42" />
+            <state relative-caret-position="221">
+              <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/work/demo/tpl3.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/work/demo/demo.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="884">
+              <caret line="52" column="29" selection-start-line="52" selection-start-column="21" selection-end-line="52" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/work/demo/demo3.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1343">
+              <caret line="79" column="17" selection-start-line="79" selection-start-column="13" selection-end-line="79" selection-end-column="17" />
               <folding>
                 <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -37,35 +59,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/work/labs/meal.html">
+        <entry file="file://$PROJECT_DIR$/knowcity/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="38" column="34" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
-              <folding>
-                <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#3;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="357">
+              <caret line="21" column="17" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/work/demo/component.html">
+        <entry file="file://$PROJECT_DIR$/knowcity/app.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="9" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="9" />
+            <state relative-caret-position="434">
+              <caret line="65" column="57" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
+              <folding>
+                <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/work/demo/component2.html">
+        <entry file="file://$PROJECT_DIR$/knowcity/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
+            <state relative-caret-position="323">
+              <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -74,10 +92,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>enable</find>
-      <find>coursesList</find>
-      <find>selectedCurse</find>
-      <find>seats</find>
       <find>setInfo</find>
       <find>firstName</find>
       <find>phone1</find>
@@ -103,7 +117,11 @@
       <find>data</find>
       <find>formattedPrice</find>
       <find>newSelect</find>
+      <find>enable</find>
+      <find>mouseover</find>
+      <find>info</find>
       <find>click</find>
+      <find>checklist</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -117,7 +135,6 @@
         <option value="$PROJECT_DIR$/work/demo/demo3.html" />
         <option value="$PROJECT_DIR$/work/demo/demo4.html" />
         <option value="$PROJECT_DIR$/work/labs/user.html" />
-        <option value="$PROJECT_DIR$/work/demo/user.html" />
         <option value="$PROJECT_DIR$/work/demo/tpl2.html" />
         <option value="$PROJECT_DIR$/work/labs/meal.html" />
         <option value="$PROJECT_DIR$/work/demo/demo2.html" />
@@ -126,12 +143,16 @@
         <option value="$PROJECT_DIR$/work/demo/tpl3.html" />
         <option value="$PROJECT_DIR$/work/demo/component.html" />
         <option value="$PROJECT_DIR$/work/demo/component2.html" />
+        <option value="$PROJECT_DIR$/work/demo/user.html" />
+        <option value="$PROJECT_DIR$/knowcity/index.html" />
+        <option value="$PROJECT_DIR$/knowcity/app.html" />
+        <option value="$PROJECT_DIR$/knowcity/main.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2526" />
-    <option name="y" value="62" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="992" />
+    <option name="y" value="24" />
     <option name="width" value="928" />
     <option name="height" value="1056" />
   </component>
@@ -141,6 +162,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -151,7 +173,7 @@
             <path>
               <item name="knockout" type="b2602c69:ProjectViewProjectNode" />
               <item name="knockout" type="462c0819:PsiDirectoryNode" />
-              <item name="knockout-docs" type="462c0819:PsiDirectoryNode" />
+              <item name="knowcity" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="knockout" type="b2602c69:ProjectViewProjectNode" />
@@ -174,7 +196,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -187,6 +208,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/knowcity" />
       <recent name="$PROJECT_DIR$/work/demo" />
     </key>
   </component>
@@ -224,18 +246,19 @@
       <workItem from="1552549615322" duration="16000" />
       <workItem from="1552590612618" duration="7377000" />
       <workItem from="1552635298233" duration="51000" />
-      <workItem from="1552639612932" duration="2634000" />
+      <workItem from="1552639612932" duration="22092000" />
+      <workItem from="1552809637936" duration="1796000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156065000" />
+    <option name="totallyTimeSpent" value="177319000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="34" width="1855" height="1084" extended-state="6" />
+    <frame x="992" y="24" width="928" height="1056" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12327252" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25510204" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -248,7 +271,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.36813778" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.2831001" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -291,54 +314,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/demo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="66" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Нокаут">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/demo2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/demo3.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="42" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="42" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/labs/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3791">
-          <caret line="223" column="7" selection-start-line="223" selection-start-column="7" selection-end-line="223" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="43" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/work/style.css">
       <provider selected="true" editor-type-id="text-editor">
@@ -354,42 +331,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/knowcity/knockout.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/component2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/work/labs/contacts.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="51" column="19" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="19" />
+        <state relative-caret-position="217">
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/tpl2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/tpl3.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="20" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/demo4.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="55" column="42" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="42" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/work/labs/counter.html">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/work/labs/meal.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="34" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
+        <state relative-caret-position="217">
+          <caret line="40" column="63" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="63" />
           <folding>
             <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -400,17 +372,98 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/component.html">
+    <entry file="file://$PROJECT_DIR$/work/labs/user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="9" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="9" />
+        <state relative-caret-position="217">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/work/demo/component2.html">
+    <entry file="file://$PROJECT_DIR$/work/demo/demo4.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="51" column="32" lean-forward="true" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="32" />
+        <state relative-caret-position="136">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/tpl.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/tpl2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1513">
+          <caret line="89" column="28" selection-start-line="89" selection-start-column="23" selection-end-line="89" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="884">
+          <caret line="52" column="29" selection-start-line="52" selection-start-column="21" selection-end-line="52" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/demo3.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" column="17" selection-start-line="79" selection-start-column="13" selection-end-line="79" selection-end-column="17" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/knowcity/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/demo2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="59" column="17" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/work/demo/tpl3.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/knowcity/app.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="65" column="57" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/knowcity/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
         </state>
       </provider>
     </entry>

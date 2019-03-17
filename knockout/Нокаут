@@ -17,7 +17,7 @@
 
 	var customer = { name: 'Guest', location: 'Lutsk' }; 
 
-	ko.applyBindings(customer); - можна приціпити якиїсь отдільний участок а не весь темплейт. Кароче погратись треба з аргументами
+	ko.applyBindings(customer); - можна приціпити якиїсь отдільний участок а не весь темплейт. ko.applyBindings(customer, document.getElementById(""));
 
 	- Тобто це я вказав нокауту що для цього вю (цей хтмл файл, ну або до якого ти привязаний), буде назначена тукуща модель вю ko.applyBindings(customer);
 
@@ -46,6 +46,10 @@
 	- Тобто коли я дьогаю один якийсь метод, запускається ф-ція computed.
 
 	- Другим аргументом у ф-ції computed йде обєкт у контексті якого буде виконуватись ф-ція, яка передана першим аргументом. Допомагає з заморочками this і тд...
+
+	- computed - буде викликатись кожен раз, коли обсервабл елементи у ній змінюються.
+
+		- Хоча навіть якщо написати <span data-bind="text:someFunction"> // someFunction = function(){ return 'something' ;} - то це теж работає
 					    
  
 
@@ -84,6 +88,8 @@
 		<ul data-bind='foreach:regs'>
                 	<li data-bind='text:$data'></li> - виведе текуще значення масива regs
 
+	- Тобто цикл змынюэ контекст для його елементів
+
  8) $index - хранить у собі порядковий номер ітерації цикла. Але якщо його змінити data-bind='text: $index +1' - буде помилка, а так вже норм - data-bind='text: $index()+1'. Це із за того що $index - обсервабл. Приклад візьму з іншої змінної - this.discount = ko.observable(discount); - console.log(this.discount()) -
 
  9) Умови - <td data-bind="if:discount() > 0"> - discount це обсервабл свойство контекста з якого тянуться дані в хтмл, тому discount()
@@ -101,7 +107,7 @@
 	text: <value>
 		<strong data-bind = 'text: methodName'></strong> - аналог скріптового innerText 
 
-	textInput: Це для інпутів
+	textInput: Це для інпутів - <input type="text" data-bind="textInput: varible">
 
 	html: <value>
 		<strong data-bind='html: methodName'></strong> - аналог скріптовог innerHtml
@@ -207,7 +213,6 @@
  - В консолі браузера оюєкт нокаута теж видно і з консолі можна з ним працювати (міняти на ходу і тд)
 
 
-
  - 
 	var list = [
 	document.getElementById("x"),
@@ -227,6 +232,20 @@
 	- Але це не єдиний спосіб, створити компонент і передати потрібні параметри компоненту. Можна прям назвати хтмл тег іменем компонента і передати йому параметри - <text-field params="initialText:'Custom'"></text-field>
 
 		- Це створиться новий компонент text-field - http://joxi.ru/823dpX3TJZN6XA . Тобто це привязка до компонента, тільки без data-bind 
+
+		- Можна параметрами передати обєкт - <text-field params="obj:{a:1, b:2}"></text-field>
+
+			- <text-field params="obj: new someFunction()"></text-field>
+
+		- Можна параметрами передати все що хочу - <text-field params="obj: true"></text-field> 
+
+								<text-field params="obj: 'sometext'"></text-field>
+
+								<text-field params="obj: 777"></text-field>
+
+								<text-field params="obj: 2 + 2 "></text-field> (<text-field params="obj: 4"></text-field>)
+
+								- Тобто у лапках виконується джава скріпт і туди можна писати джаваскріптовський код
 
 
 
