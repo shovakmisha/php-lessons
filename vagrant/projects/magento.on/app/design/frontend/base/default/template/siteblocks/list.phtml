@@ -1,4 +1,8 @@
+<?php
 
+/* @var $this IGN_Siteblocks_Block_List */
+
+?>
 <?php
 //foreach($this->getBlocks() as $block):
 ?>
@@ -16,16 +20,25 @@
 
 <?php
     // endforeach;
+
+    echo $this->test();
 ?>
 
 <?php foreach($this->getBlocks() as $block):?>
-    <div class="siteblock">
+    <div class="siteblock" style="border: 1px solid red">
         <div class="block-title"><?php echo $block->getTitle()?></div>
         <div class="block-image">
             <?php if($block->getImage()):?>
                 <img src="<?php echo $block->getImageSrc()?>" height="150" width="auto" alt="<?php $block->getTitle()?>" title="<?php $block->getTitle()?>">
             <?php endif;?>
         </div>
-        <div class="block-content"><?php echo $block->getContent() ?></div>
+        <!--div class="block-content"><?php echo $block->getContent() ?></div-->
+
+        <div class="block-content"><?php echo $this->getBlockContent($block) ?></div>
+
     </div>
+
+    <br><br>
+    <hr>
+    <br><br>
 <?php endforeach;?>

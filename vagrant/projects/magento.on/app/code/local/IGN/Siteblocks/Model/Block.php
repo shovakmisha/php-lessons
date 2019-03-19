@@ -3,9 +3,15 @@
 /**
  * Class IGN_Siteblocks_Model_Block
  *
+ *  Це моя головна моделька. Модель для кондішнів расширяется от класса Mage_Rule_Model_Rule. Тобто спочатку я екстендився від класа від якого екстендяться всі модельки,
+ *  А потім поміняв клас від якого екстенджусь на Mage_Rule_Model_Rule що кондінши працювали
+*      Обовязково в ній має бути методы: getConditionsInstance, getActionsInstance
+ *
  * @method getBlockStatus()
  * @method getContent()
  */
+
+
 class IGN_Siteblocks_Model_Block extends Mage_Rule_Model_Abstract {
 
     protected $_eventPrefix = 'siteblocks_block';
@@ -27,7 +33,7 @@ class IGN_Siteblocks_Model_Block extends Mage_Rule_Model_Abstract {
      *
      * @return Mage_CatalogRule_Model_Rule_Condition_Combine
      *
-     * этот метод, на самом деле нам не нужен, но интерфейс его требует
+     * Він якимось чином повязаний кондішнами. Та і по назві понятно getConditionsInstance
      */
     public function getConditionsInstance()
     {
@@ -36,6 +42,8 @@ class IGN_Siteblocks_Model_Block extends Mage_Rule_Model_Abstract {
 
     /**
      * Getter for rule actions collection
+     *
+     * этот метод, на самом деле нам не нужен, но интерфейс его требует
      *
      * @return Mage_CatalogRule_Model_Rule_Action_Collection
      */

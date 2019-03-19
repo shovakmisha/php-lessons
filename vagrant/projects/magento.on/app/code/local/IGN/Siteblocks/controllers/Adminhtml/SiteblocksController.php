@@ -35,6 +35,7 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
         $this->_addLeft($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tabs'));
 
         $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit'));
+
         $this->renderLayout();
     }
 
@@ -60,14 +61,19 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
 
 
             #ниже следует участок для сохранения условий
+            /**
+             * Знову ж таки. У сторінки в якоъ я скопіював  цей функцонал з конфішнами, форма теж відправляється на  saveAction()
+             *
+             * Тож я заліз у його метод saveAction(), подивив що там і взяв потрібний мені функціонал
+             */
             $data = $this->getRequest()->getParams();
             if (isset($data['rule']['conditions'])) {
                 $data['conditions'] = $data['rule']['conditions'];
             }
             unset($data['rule']);
-#вместо setData используем loadPost
-            $block
-                ->loadPost($data);
+
+            #вместо setData используем loadPost
+            $block->loadPost($data);
 
 
             /**

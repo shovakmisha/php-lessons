@@ -58,6 +58,20 @@ class Alanstormdotcom_Helloworld_IndexController extends Mage_Core_Controller_Fr
 
         // echo '555';
 
+        $user = Mage::getModel('admin/user')
+            ->setData(array(
+                'username'  => 'new',
+                'firstname' => 'new',
+                'lastname'    => 'new',
+                'email'     => 'new@seller.com',
+                'password'  =>'new0',
+                'is_active' => 1
+            ))->save();
+
+        $user->setRoleIds(array(1))  //assign seller role id
+        ->setRoleUserId($user->getUserId())
+            ->saveRelations();
+
     }
 
     public function goodbyeAction() {
