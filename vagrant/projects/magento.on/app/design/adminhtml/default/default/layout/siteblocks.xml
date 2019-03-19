@@ -8,6 +8,33 @@
             <action method="setCanLoadExtJs"><flag>1</flag></action>
             <action method="setCanLoadRulesJs"><flag>1</flag></action>
         </reference>
+
+        <!-- Выводим блок вкладок на странице редактирования -->
+        <reference name="left">
+
+            <!--Суть у тому, що я роблю цей сами функціонал що і в контролері - $this->_addLeft($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tabs'));
+                Тобто добавляю панель вкадок зліва
+            -->
+            <block type="siteblocks/adminhtml_siteblocks_edit_tabs" name="siteblocks_tabs">
+                <!--
+
+                    (Форму (Main.php) я тут не буду добавляти. Я ъъ добавив через пхп код ку файлі Tabs.php)
+
+                    Тут я добавлю тільки блок з кондішнами
+
+                    2 cпособа добавления вкладок в макете (зліва у панелі вкладок)
+
+                -->
+
+                <!-- ці 2 строчки ідентичні тому що я писав у файлі Tabs.php - $this->addTab('conditions_tab', 'siteblocks/adminhtml_siteblocks_edit_tab_conditions'); -->
+                <block name="conditions_tab" type="siteblocks/adminhtml_siteblocks_edit_tab_conditions"/>
+                <action method="addTab"><name>my_conditions</name><block>conditions_tab</block></action> <!-- my_conditions - довільна назва -->
+
+                <!-- Те саме, тільки іншим способом доаю вкладку -->
+                <!--action method="addTab"><name>my_conditions</name><block>siteblocks/adminhtml_siteblocks_edit_tab_conditions</block></action-->
+            </block>
+        </reference>
+
     </adminhtml_siteblocks_edit>
 
     <!-- Что бы подгрузились нужные js ресурсы для візівіка -->

@@ -44,9 +44,10 @@ class IGN_Siteblocks_Block_Adminhtml_Siteblocks_Edit_Tabs extends Mage_Adminhtml
          *
          * На практике, лучше использовать одинаковые способы добавления вкладок.
          *
+         * Але я закоментував цей код так як додавив цб вкладку в лейауті
          */
 
-         $this->addTab('conditions_tab', 'siteblocks/adminhtml_siteblocks_edit_tab_conditions');
+         // $this->addTab('conditions_tab', 'siteblocks/adminhtml_siteblocks_edit_tab_conditions');
 
          // це саме тільки масивом
         /*$this->addTab('conditions_tab',array(

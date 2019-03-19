@@ -31,8 +31,12 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
 
         $this->loadLayout();
 
-        #вывод блока вкладок на странице
-        $this->_addLeft($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tabs'));
+        /**
+         * вывод блока вкладок на странице
+         *
+         * Але я закоментував цей код, Я виводив вкладки через лейаут app/design/adminhtml/default/default/layout/siteblocks.xml
+         */
+        // $this->_addLeft($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tabs'));
 
         $this->_addContent($this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit'));
 
