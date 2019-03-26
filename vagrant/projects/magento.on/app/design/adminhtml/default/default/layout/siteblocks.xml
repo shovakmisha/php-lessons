@@ -32,10 +32,77 @@
 
                 <!-- Те саме, тільки іншим способом доаю вкладку -->
                 <!--action method="addTab"><name>my_conditions</name><block>siteblocks/adminhtml_siteblocks_edit_tab_conditions</block></action-->
+
+
+
+                <!--block name="products_tab" type="siteblocks/adminhtml_siteblocks_edit_tab_products"/>
+                <action method="addTab"><name>my_products</name><block>products_tab</block></action-->
+
             </block>
         </reference>
 
     </adminhtml_siteblocks_edit>
+
+   <!-- По суті додавання апселів вашще вивід кастомний. Тобто я взяв структуру тільки. А класи, блоки, екшни, мої.
+
+        Але це копія вкладки Upsell яка знаходиться в товарі. А в мене ця вкладка називається products -->
+
+    <!-- Тут выводим таблицу товаров, а всякие дополнительные параметры нужны, что бы можно было сохранять отмеченные товары -->
+
+    <!-- Следите внимательно за правильным именованием блоков. Для своего проекта вы будете это переименовывать. Переименовывайте синхронно во всех местах. -->
+
+    <adminhtml_siteblocks_products>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="siteblocks/adminhtml_siteblocks_edit_tab_products_grid" name="siteblocks_products"/><!-- Це відноситься до <grid_block_name> -->
+            <block type="adminhtml/widget_grid_serializer" name="siteblocks_products_serializer">
+
+                <reference name="siteblocks_products_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>siteblocks_products</grid_block_name>
+                        <data_callback>getSelectedBlockProducts</data_callback> <!-- local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Tab/Products/Grid.php - вона тут-->
+                        <hidden_input_name>links[products]</hidden_input_name>
+                        <reload_param_name>siteblocks_products</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_siteblocks_products>
+
+    <!-- Тут просто выводим хтмл таблицы товаров. Це для гріда товарів -->
+    <adminhtml_siteblocks_productsgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="siteblocks/adminhtml_siteblocks_edit_tab_products_grid" name="block_products"/>
+        </block>
+    </adminhtml_siteblocks_productsgrid>
+
+    <!--adminhtml_catalog_product_crosssell>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/catalog_product_edit_tab_crosssell" name="catalog.product.edit.tab.crosssell"/>
+            <block type="adminhtml/widget_grid_serializer" name="crosssell_grid_serializer">
+                <reference name="crosssell_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.crosssell</grid_block_name>
+                        <data_callback>getSelectedCrossSellProducts</data_callback>
+                        <hidden_input_name>links[crosssell]</hidden_input_name>
+                        <reload_param_name>products_crosssell</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_catalog_product_crosssell>
+
+    <adminhtml_catalog_product_crosssellgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/catalog_product_edit_tab_crosssell" name="catalog.product.edit.tab.crosssell"/>
+        </block>
+    </adminhtml_catalog_product_crosssellgrid-->
+
 
     <!-- Что бы подгрузились нужные js ресурсы для візівіка -->
     <adminhtml_system_config_edit>

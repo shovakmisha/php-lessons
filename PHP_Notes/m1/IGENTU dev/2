@@ -128,9 +128,89 @@
 
 
 
+ ----------------------------------- Вывод таблицы (grid) товаров на странице редактирования и на frontend. -----------------------------------------
+
+ - Тобто тут я реалізую вивід кроселів, апселів які будуть виробитись разом з моїм блоком. Це стандартний функціонал який є у продукта http://joxi.ru/E2pEgxwu9dyNyA , його я і скопіюю. І у на моїй сторінці редагування рядка гріда будуть вкладки з кроселами і апселами. Тобто я можу скопіювати собі будь що. Типу створити вкладку і скопіювати в неї функціонал вже якоїсь готової вкладки з мадженти
+
+ 1) Іду у файл лейаута сторінки каталога і шукаю там кросели і апсели app/design/adminhtml/default/default/layout/catalog.xml . Копіюю їх собі у лейаут app/design/adminhtml/default/default/layout/siteblocks.xml
+
+ 2) Весь функціонал легше зрозуміти якщо подивити код, я його прокоментував, але і тут щось напишу
+
+	-  У базі я буду хранити релейтед продукти до мого блока. Для них я створив отдільну колонку в базі products і в ній буде строка серіалізованих продуктів (ну або json). Це я буду робити в моїй головній модельці, переписавши метод  protected function _beforeSave() {
+						parent::_beforeSave();
+						if(is_array($this->getData('products'))) {
+						    $this->setData('products',json_encode($this->getData('products'))); - так просто додаються дані в базу в колонку 'products'
+						}
+					    }
+
+						- Тобто json може серіалізувати обєкти
+
+	- А після того, як я дістаю ці дані з бази, мені треба їх розсеріалізувати. Переписую метод     protected function _afterLoad() {
+														parent::_beforeSave();
+														if(!empty($this->getData('products'))) {
+														    $this->setData('products',(array)json_decode($this->getData('products')));
+														}
+													    }
+
+ - Розпишу по спепах, а то легко запутатись
+
+ 1) Добавляю нову табу Products у файлі Tabs - $this->addTab('products_tab','siteblocks/adminhtml_siteblocks_edit_tab_products');
+
+ 2) Стврюю цю табу app/code/local/IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Tab/Products.php у якій будуть її імя, заголовок, і екшн, який буде аяксом загружатись у цю табу
+
+	    /**
+	     * На цей екшн я попаду як клацну на вкладку Products
+	     */
+	    public function productsAction()
+	    {
+		$this->loadLayout()
+		    ->renderLayout();
+	    }
+
+ 3) Далі переношусь в лейаут для цього екшна - <adminhtml_siteblocks_products>
+
+	- <block type="siteblocks/adminhtml_siteblocks_edit_tab_products_grid" name="siteblocks_products"/> створюю свою табу 
+
+		<reference name="siteblocks_products_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>siteblocks_products</grid_block_name> - і ініціалізую її. ТОбто передаю її маджентіському обработчику.
+			<data_callback>getSelectedBlockProducts</data_callback> викликаю цей метод у файлі гріда який показується у вкладці
+			- Тут це буде код, але його я описав в коді
+
+4) public function getSelectedBlockProducts()
+
+	- $selected = $this->getRequest()->getParam('siteblocks_products'); - $selected поки null
+
+	- $this->_getBlock()->getProducts() - getProducts() - цей метод в моїй модельці. Беру всі дані з бази з колонки 'products' і складую їх в масив $products. 
+
+		- метод getSelectedBlockProducts() поверне масив $products
+
+	- воркфлоу такий, що мені треба передати маджентівському обработчику мої продукти, які він покаже в гріді. Для цього я пересписую метод getSelectedBlockProducts() в якому я всказую які продукти передавати 
+
+	- А вже в самому гріді метод getSelectedBlockProducts() викликає метод _getSelectedProducts()
 
 
+ -----------------------------------------
 
+ $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addAttributeToSelect('*');
+
+
+ Все ж таки є код де використовується метод getResourceModel
+------------------------------------------
+
+
+ Давай ще раз
+
+ 1) Порішати з кнопкою вішліст і добавлення в корзину на ie? (а слайдер впорядку) - 1
+
+ 3) http://joxi.ru/J2bkX0JT0X6gPA
+
+ 4) http://joxi.ru/MAjgevRHj4QZxr - Зробити щоб і ціна поміщалась
+
+ 5) 81762  -  http://joxi.ru/LmGbpY7twe0M1r
+
+ Це ці 4 поправити, так? Зроблю їх в рамках тікета 81762
 
 
 

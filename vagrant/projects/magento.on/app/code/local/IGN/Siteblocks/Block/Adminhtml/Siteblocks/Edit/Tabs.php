@@ -56,6 +56,22 @@ class IGN_Siteblocks_Block_Adminhtml_Siteblocks_Edit_Tabs extends Mage_Adminhtml
             'content' => $this->getLayout()->createBlock('siteblocks/adminhtml_siteblocks_edit_tab_conditions')->toHtml()
         ));*/
 
+
+        /**
+         * Добавляю вкладку для апселів
+         *
+         * вкладку с товарами будет использовать AJAX, поэтому не используем массив параметров как примере выше
+         */
+        $this->addTab('products_tab','siteblocks/adminhtml_siteblocks_edit_tab_products');
+
+        // Хоча у нативній мадженті ця таба додається так. І не треба в цьому випадку створювати файл IGN/Siteblocks/Block/Adminhtml/Siteblocks/Edit/Tab/Products.php
+        // У нативній мадженті, у файлі Edit/Tab/Upsells.php вже виводяться сам грід товарів
+        // $this->addTab('upsell', array(
+        //     'label'     => Mage::helper('catalog')->__('Up-sells'),
+        //     'url'       => $this->getUrl('*/*/upsell', array('_current' => true)),
+        //     'class'     => 'ajax',
+        // ));
+
         return parent::_prepareLayout();
     }
 }

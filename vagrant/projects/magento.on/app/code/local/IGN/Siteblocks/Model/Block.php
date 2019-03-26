@@ -52,4 +52,30 @@ class IGN_Siteblocks_Model_Block extends Mage_Rule_Model_Abstract {
         return Mage::getModel('catalogrule/rule_action_collection');
     }
 
+    #перед сохранением преобразуем массив в строку
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+        if(is_array($this->getData('products'))) {
+            $this->setData('products',json_encode($this->getData('products')));
+        }
+    }
+#после загрузки преобразуем строку в массив
+    protected function _afterLoad()
+    {
+        parent::_beforeSave();
+        if(!empty($this->getData('products'))) {
+            $this->setData('products',(array)json_decode($this->getData('products')));
+        }
+    }
+
+#дополнительный метод, который вернет нам массив всегда
+    public function getProducts()
+    {
+        if(!is_array($this->getData('products'))) {
+            $this->setData('products',(array)json_decode($this->getData('products')));
+        }
+        return $this->getData('products');
+    }
+
 }

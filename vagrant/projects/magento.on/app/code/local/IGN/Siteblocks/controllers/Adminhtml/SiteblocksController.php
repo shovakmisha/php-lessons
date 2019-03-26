@@ -64,13 +64,43 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
 
 
 
+
+            $data = $this->getRequest()->getParams();
+
+
+            /**
+             * Це для гріда вкладки Products
+             *
+             * Шоб зберігались значення філдів і чекбоксів які я відмітив в гріді
+             */
+            #вот такой участок отвечает за сохранение отмеченных чекбоками товаров
+            $links = $this->getRequest()->getPost('links', array());
+
+             // var_dump($links); die(); // 'products' => string '2=cG9zaXRpb249'
+
+            if (array_key_exists('products', $links)) {
+                $selectedProducts = Mage::helper('adminhtml/js')->decodeGridSerializedInput($links['products']);
+
+                // var_dump($selectedProducts); die(); // http://joxi.ru/KAggGLzfEnBE4A // http://joxi.ru/E2pEgxwu7OQ7jA
+
+                $products = array();
+                foreach($selectedProducts as $product => $position) {
+                    $products[$product] = isset($position['position']) ? $position['position'] : $product;
+                }
+                $data['products'] = $products;
+            }
+
+            // І перед збереженням цих даних я переписав метод beforeSave() який переробить з масива у якому дані про товар у строку - http://joxi.ru/1A5KpknTD03DYm
+
+
+
+
             #ниже следует участок для сохранения условий
             /**
              * Знову ж таки. У сторінки в якоъ я скопіював  цей функцонал з конфішнами, форма теж відправляється на  saveAction()
              *
              * Тож я заліз у його метод saveAction(), подивив що там і взяв потрібний мені функціонал
              */
-            $data = $this->getRequest()->getParams();
             if (isset($data['rule']['conditions'])) {
                 $data['conditions'] = $data['rule']['conditions'];
             }
@@ -220,6 +250,27 @@ class IGN_Siteblocks_Adminhtml_SiteblocksController extends Mage_Adminhtml_Contr
                 return false;
             }
         }
+    }
+
+
+    #2 наших новых экшена для AJAX запросов
+
+    /**
+     * На цей екшн я попаду як клацну на вкладку Products
+     */
+    public function productsAction()
+    {
+        $this->loadLayout()
+            ->renderLayout();
+    }
+
+    /**
+     * На цей екшн я попаду як клацну на вкладку Products
+     */
+    public function productsgridAction()
+    {
+        $this->loadLayout()
+            ->renderLayout();
     }
 
 }
