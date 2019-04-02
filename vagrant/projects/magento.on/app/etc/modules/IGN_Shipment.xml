@@ -1,0 +1,11 @@
+<config>
+<modules>
+    <IGN_Shipment>
+        <active>true</active>
+        <codePool>community</codePool>
+        <depends>
+            <Mage_Shipping />
+        </depends>
+    </IGN_Shipment>
+</modules>
+</config>

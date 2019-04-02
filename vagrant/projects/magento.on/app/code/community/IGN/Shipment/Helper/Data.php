@@ -4,6 +4,7 @@ class IGN_Shipment_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function getPacketCost($weight)
     {
+        // Як бачу, можна використовувати і зендовський клас, не тільки маджентівський для роботи з апішкою
         $request = new Zend_Http_Client();
         $request->setUri('http://tarifikator.belpost.by/forms/international/packet.php');
         $request->setParameterPost(array(
@@ -19,7 +20,13 @@ class IGN_Shipment_Helper_Data extends Mage_Core_Helper_Abstract {
 
         $tag_regex = "/<blockquote>(.*)<\/blockquote>/im";
         $sum_reqex = "/(\d+)/is";
-        preg_match_all($tag_regex,
+
+        /**
+         *
+         * Возможно у вас есть вопросы к моим регуляркам. У меня тоже есть к ним вопросы, но оставим это по принципу «работает — не трогай».
+         *
+         */
+        preg_match_all($tag_regex, // Кароче ця регулярка поверне ціну зі хтмл сторінки яка храниться строкою
             $html,
             $matches,
             PREG_PATTERN_ORDER);

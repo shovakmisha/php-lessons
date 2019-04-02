@@ -1,0 +1,107 @@
+
+ ------------ https://habr.com/ru/post/312322/ - Создание модуля способа оплаты (Payment Method) Admin -> System -> Configuration -> Sales -> Payment Methods ---------------------
+
+ - Створюю ще 1 пеймент метод - вын буде і в адмінці і на фронті - http://joxi.ru/ZrJzyo5iw3KJPr
+
+ 1) Я взяв стандартний модуль мадженти Mage_Payment і урізав його дуже сильно. Залишивши тільки самі потрібніфайли і код у цих файлах.
+
+	- etc/config.xml i etc/system.xml - ці 2 файла. У файлі system.xml я описав цей блок - http://joxi.ru/YmEzDojiwbPR72. Нічого свого, окрім Secret Code
+
+	- etc/system.xml - у цей файл я не прописував якісь звязування з моїм модулем. Навпаки у модулі я буду звязуватись з цим файлом. Про це пізніше. Головне що я хочу сказати, що у цьому файлі поки скопійований код з мадженти + моє кастомне поле 
+
+		<secret_code translate="label">
+		    <label>Secret Code</label>
+		    <frontend_type>text</frontend_type>
+		    <sort_order>99</sort_order>
+		    <show_in_default>1</show_in_default>
+		    <show_in_website>1</show_in_website>
+		    <show_in_store>0</show_in_store>
+		</secret_code>
+
+ 2) class IGN_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract - це моя головна моделька, яку я теж скопіював з маджентівського модуля Mage_Payment_Model_Method_Abstract і від нього екстенджусь
+
+	- Взагалі Mage_Payment_Model_Method_Abstract має багато функціоналу і можна буде глянути в нього щоб краще його зрозуміти. І зрозуміти як іде оплата. В принципі всі змінні і методи там говоряші, типу $_canUseForMultishipping - чи можнацей пеймент метод використовувати в мультишипінгу і т д.
+
+	- Також тут є методи які відповідають за відміну платежа, за валідацію і т д
+
+	- Наприклад у своєму модулі я створив інпут secret_code у адмінці пеймент метода і вивів його на фронт. А у модельцы переписав метод validate() у якому перевіряв - якщо на фронті я ввів цей  secret_code, валідація пройшла
+ 
+ 3) В конфігах дефолтного модуля Пеймент прописані пеймент методи - http://joxi.ru/DmB8DjGUJdVZkA 
+
+	<default>
+        	<payment>
+			<payment1>
+			<payment2>
+			...
+
+	- Вони є і в адмінці і на фронті теж виводяться.
+
+	- У своєму переписаному модулі, я додав ще один пеймент метод, свій 
+
+	    <default>
+		<payment>
+		    <ignpayment>
+			<active>1</active>
+			<model>ignpayment/method</model> <!-- Самый важный момент в настройках. class IGN_Payment_Model_Method - це моя головна моделька -->
+			<order_status>pending</order_status>
+			<title>Secret Code</title>
+			<allowspecific>0</allowspecific>
+			<sort_order>1</sort_order>
+			<group>offline</group>
+		    </ignpayment>
+		</payment>
+
+ 4) Поки воркфлоу такий, що в config.xml інінціалізовую новий пеймент метод в якому назначаю йому кастомну модельку. system.xml поки ні при чому
+
+	- Йду у екшн чекаута - http://magento.on/index.php/checkout/onepage/index/ - app/code/core/Mage/Checkout/controllers/OnepageController.php
+
+		- Саме за вкладку Пеймент методів відповідає екшн - protected function _getPaymentMethodsHtml()
+
+			- І в ньому є така строчка - $update->load('checkout_onepage_paymentmethod'); - checkout_onepage_paymentmethod - цей хендл загрузиться.
+
+			- Знаходжу цей хендл у лейаутах checkout_onepage_paymentmethod. Це його блок - type="checkout/onepage_payment_methods" Це темплейт - checkout/onepage/payment/methods.phtml
+
+			- У темплейті викликається метод блока - public function getPaymentMethodFormHtml(Mage_Payment_Model_Method_Abstract $method) (Так, його назва така сама як і у екшна, я нічого не напутав)
+
+				- $method - це Mage_Payment_Model_Method_Abstract. Цей метод я переоверайдив у своїй модельці у своєму модулі
+
+				- У методі є строчка return $this->getChildHtml('payment.method.' . $method->getCode()); 
+
+					- $method->getCode() повертає $this->code . А code Я ЗМІНИВ У СВОЇЙ МОДЕЛЬЦІ. НА СВІЙ - protected $_code = 'ignpayment'; Тобто назва мого блоку з пеймент методом буде -payment.method.ignpayment
+
+ 
+
+
+ --------------------- Модуль способа доставки (Shipping Method) -----------------------------
+
+ 1) Також я створив кастомний Шипінг метод. Це була урізана версія Mage_Shipping. У мого шипінг метода у депенденсі був Mage_Shipping. І я покопіював від нього файли і урізав код який був лишній
+
+ 2) Всі шипінг методи модуля Mage_Shipping знаходяться в конфігах     <default>
+									<carriers>
+									    <flatrate> - Цей я залишив і переписав під своє. Інші видалив
+									    ........
+									    ........
+
+ 3) В адмінці в шипінг методах він теж буде. Тобто system.xml я теж створював
+ 
+ 4) Я не працював з базою у цьому уроці, тож не створював ресурсну модельку
+
+ 4) З апішкою білорусбкої пошти я працював через зендовський клас - $request = new Zend_Http_Client();
+
+ 5) !!КРУТА ШТУКА. Як я вчив, то до будь-якого файлу чи на сервері чи локально, можна звертатись як хочу. Тож по ідеї якщо я бачу форму, то в консолі гугла можна подивити які дані приймає ця форма і їйапішкою можна кинути їй ці дані (дані передати методом пост).
+
+	Маджентою це можна реалізувати так -    $request = new Zend_Http_Client();
+						$request->setUri('http://tarifikator.belpost.by/forms/international/packet.php');
+						$request->setParameterPost(array( - передаю параметри формі
+						    'who'=>'ur',
+						    'type'=>'registered',
+
+
+
+
+
+
+
+
+
+
