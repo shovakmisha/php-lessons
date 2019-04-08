@@ -62,6 +62,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/ringphp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/streams" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ircmaxell/password-compat" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jms/metadata" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jms/parser-lib" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jms/serializer" />
@@ -359,6 +360,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/resource-operations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/seld/cli-prompt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/seld/jsonlint" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/seld/phar-utils" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spomky-labs/otphp" />
@@ -368,6 +370,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/css-selector" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dependency-injection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dom-crawler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher" />
@@ -378,6 +381,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php54" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php55" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php56" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php70" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
