@@ -77,6 +77,9 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
      */
     public function execute()
     {
+
+        die('777');
+
         // Get initial data from request
         $categoryId = (int) $this->getRequest()->getParam('category', false);
         $productId = (int) $this->getRequest()->getParam('id');
