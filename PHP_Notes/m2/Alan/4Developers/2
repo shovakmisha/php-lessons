@@ -1,0 +1,182 @@
+
+ --------------------------- Magento 2: Adding Frontend Assets via Layout XML - https://alanstorm.com/magento_2_javascript_css_layout_woes/ ---------------------------
+
+ 1) Хендл catalog_category_view.xml знаходиться не тільки в модулі Каталога. Для прикладу - ./vendor/magento/module-checkout/view/frontend/layout/catalog_category_view.xml
+
+ 2) Alan каже що блоки і контейнери в хml схожі по структурі. Якщо в мене є <referenceContainer name="root">, то якщо я напишу <referenceBlock name="root">, то цей запис подіє на контейнер і по суті я зміню контейнер цим записом. Тож щоб маджента не путалась, краще не називати блоки і контейнери одинаково
+
+	- Наприклад у першому уроці я писав <referenceBlock name="content"> і в ньому прописував блоки і все работало. Хоча name="content" це контейнер а не блок. Мало б пути <referenceContainer name="content">
+
+ 3) Соответцтвенно хендл default.xml те саме що в першій мадженті <default>.  Тобто цей хендл зявиться на всіх сторінках
+
+ 4) В m2 в лейаутах зявились теги <head> і <body>. Щоб роздфляти код було зручніше.
+
+	- У тезі <head> урізані можливості. Там можна писати <attribute/>, <css/>, <link/>, <meta/>, <remove/>, <script/>, <title/>
+
+<!-- File: vendor/magento/module-backend/view/adminhtml/layout/default.xml -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Magento Admin</title>
+        <meta name="viewport" content="width=1024, initial-scale=1"/>
+        <link src="requirejs/require.js"/>
+        <css src="extjs/resources/css/ext-all.css"/>
+        <css src="extjs/resources/css/ytheme-magento.css"/>
+    </head>
+    <body>
+        <attribute name="id" value="html-body"/>
+        <block name="require.js" class="Magento\Backend\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml"/>
+        <referenceContainer name="global.notices">
+            <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
+        </referenceContainer>
+        <!-- ... -->
+    </body>
+</page>
+
+ 5) Не розімію контекст, але - M2 - це сторіннка phtml яка наповнюється змінними. 
+
+	- Типу є файл vendor/magento/module-theme/view/base/templates/root.phtml. У ньому є змінні, які і виведуться на сторінку. Заповнюються ці змінні у  файлі vendor/magento/framework/View/Result/Page.php
+
+		$output = $this->getLayout()->getOutput();
+		$this->assign('layoutContent', $output);
+		//...
+		<?php /* @escapeNotVerified */ echo $layoutContent ?>
+		.......
+
+ 6) Кароче Алан і сам не поняв що він хотів. Єдине що він хотів донести, що <head> рендериться не так як <body>
+
+ 7) "Pulsestorm_JavascriptCssExample::test.js" - так я вказую шляхи до статики. якщо б я написав просто - test.js, то цей файл буде шукатись в темі а не в модулі
+
+ 8) <referenceBlock name="head.additional"> - "head.additional" - буде виводитись на всіх сторінках. Це тег <head>
+        <block  template="head.phtml" - Тут я написав <!-- Hello There --> і він вивівся - http://joxi.ru/YmEzDojiww1OJ2 у <head>
+                class="Pulsestorm\JavascriptCssExample\Block\Head" 
+                name="pulsestorm_javascriptcssexample_block_head" />
+    </referenceBlock>
+
+	- Поки в цьому не має сенсу, але виводити так лінки в хеді теж не очень <head>
+											<css src="Pulsestorm_JavascriptCssExample::test.css"/>
+											<link src="Pulsestorm_JavascriptCssExample::test.js"/>
+										    </head>
+
+	- Для цього це й придумано. Для гнучкості. В М2 є спеціальний обєкт для генерування лінків до файлів - \Magento\Framework\View\Asset\Repository
+
+		$asset_repository = $this->assetRepository;
+		$asset  = $asset_repository->createAsset('Pulsestorm_JavascriptCssExample::test.js'); 
+		$url    = $asset->getUrl(); - http://magento.two/pub/static/version1554986803/frontend/Magento/luma/en_US/Pulsestorm_JavascriptCssExample/test.js
+
+			- Тобто тут Pulsestorm\JavascriptCssExample\Block\Head я ініціалізував цей обєкт і в темплейті вивів цю лінку. І в результаті в мене у хеді зявилась нова лінка на цей файл
+
+			- І вроді, обєкт \Magento\Framework\View\Asset\Repository вже встроений у темплейти нових версій мадженто. Можна перевірити це - $this->getAssetRepository() або $this->_assetRepo(); може й сканає
+
+ 9) я вже десь писав, але коли роблю зміни в конструкторі, то треба очищувати кеш з папки generate. Це із за депенденсі інжекшн. Якщо проблема з застарілим кодом в папці generate, треба запустити setup:di:compile
+
+
+
+
+
+ ---------------------- Magento 2 and RequireJS - https://alanstorm.com/magento_2_and_requirejs/ --------------------------------
+
+ 1) Каждый модуль Magento имеет возможность добавлять директивы конфигурации RequireJS через специальный файл представления с именем requirejs-config.js.
+
+	app/code/Package/Module/view/base/requirejs-config.js    
+	app/code/Package/Module/view/frontend/requirejs-config.js    
+	app/code/Package/Module/view/adminhtml/requirejs-config.js    
+
+	requirejs-config.js - специальный файл javascript, который Magento будет автоматически загружать при каждой загрузке страницы, используя иерархию областей.
+		
+		- http://joxi.ru/J2bglQGf00p5eA
+
+		- Тобто якщо в ньомк написати alert("Hello"); - воно спрацює
+
+		- Як бачу по коду всі файли requirejs-config.js  скомпоновуються в 1 і грузяться на всіх сорінках м2.  Тобто в своєму я написав alert("Hello"); і у цьому скомпонованому файлі воно виводиться так (function() { - Тобто у анонімній ф-ції
+			alert("Hello");
+			require.config(config); - ця строчка якраз і запускає - require.config({   paths: { "hello": "helper/world" - аліас (requirejs(['hello'], function(hello) {) }, });
+		    })();
+
+		- Але і анонімна ф-ці виводиться у головній анонімній ф-ції - (function(require){ тобто обєкт require буде доступний у всіх анонімних ф-ціях
+										(function() {
+											alert("Hello");
+
+		- requirejs-config.js в продакшн моді генерується після setup:di:compile  (в девелоп моді має згенеруватись на льоту). Але думаю це не правда. скоріш за все він зявиться після static-content-deploy
+
+ 2) paths - це аліас шляху
+
+ 3) Тобто requirejs-config.js це буде й файл на всіх. І якщо я в ньому зміню щось. Ці зміни будуть по всьому проекту (path, map, baseUrl)
+
+	- requirejs-config.js - це файлик конфігів для глобального - require.js
+
+ 4) Поки модуль не викликаэться через рекваєр, цей модуль не загрузиться у систему requirejs. ТОбто я можу у файлі requirejs-config.js прописати шлях до нього, і шлях цей буде у мене. Але самого модуля не буде
+
+	requirejs(['my_module'], function(my_module){});
+
+	requirejs(['Package_Module/my_module'], function(my_module){});    
+
+	define(['Package_Module/my_module'], function(my_module){});   
+
+ 5) В Magento 2 jQuery загружается как модуль RequireJS. - http://joxi.ru/Dr8RE7kCoowgO2
+
+ 	 - Тобто якщо я пропишу так в темплейті <script type="text/javascript">jQuery(function(){ </script> - Ваш браузер може жаловаться, что jQuery не определен.
+
+	- але коли загрузяться всі скріпти, з jQuery всерівно можна буде працювати глобально. Тобто у кастомному файлі, який підключений через рекваєр я написав window.xxx = '4'; і window бачив змінну xxx
+
+
+	
+
+ 6) requirejs(['jquery'], function(jQuery){ - Якщо я хочу підключити скріпт в темплейті правильно. З RequireJS
+	    jQuery(function(){
+		//your code here
+	    });
+	});
+
+		// Цей код у файлі jquery.js тобто він тут дефайниться. Ось чому requirejs(['jquery'] 
+		if ( typeof define === "function" && define.amd ) { - Современные версии jQuery обнаружат, включены ли они в среду RequireJS / AMD, и определят модуль, который возвращает глобальный объект jQuery.
+			define( "jquery", [], function() {
+				return jQuery;
+			});
+		}
+
+
+ 7) http://joxi.ru/zANzVoLivvYbpA - Маджента сама виводить baseUrl
+
+ 8) На перший погляд може здатись що шляхи у мадженті запутані. Але якщо судити по вже згенерованим файлам то все ок - http://joxi.ru/BA05vlZSMM5jxr
+
+ 9) jQuery плагіни і конфілікти. Умовно у мене є плагін cookie - var config = $.cookie = function (key, value, options) {
+
+	- Щоб його використати, треба  var config = { paths:{
+								"jquery.cookie":"Package_Module/path/to/jquery.cookie.min"
+							    }
+
+	- Але коли я хочу його використати у якомусь файлі, я пишу requirejs(['jquery','jquery.cookie'] - тобто отдільно треба загружати jquery (у якого поки не має мого плагіна) і підключити до jquery мій  плагін 'jquery.cookie'
+
+		- Проблема в тому, що то що я написав ['jquery','jquery.cookie'] не означає що модулі загрузяться в цьому порядку. Порядок загрузки модулів асинхронний і він більше залежить від скріптів які загружаються на цій сторінці. К счастью, есть решение. Директива конфигурации RequireJS shim позволяет вам настроить так называемые зависимости «порядка загрузки». то есть вы можете сказать - Привет RequireJS - когда вы загружаете модуль jquery.cookie? Сначала убедитесь, что вы полностью загрузили модуль jquery. Опция конфигурации dep только дает представление о том, на что способна shim - документацию shim стоит прочитать, если вы заинтересованы в более подробной информации.
+
+			var config = {
+			    paths:{
+				"jquery.cookie":"Package_Module/path/to/jquery.cookie.min"
+			    },
+			    shim:{ - Мы определили новое свойство конфигурации верхнего уровня с именем shim. Это свойство является объектом javascript пар ключ-значение. Ключом должно быть имя вашего модуля (jquery.cookie выше). Значение - это другой объект javascript, который определяет конфигурацию shim для этого конкретного модуля. Существует несколько различных параметров конфигурации shim
+
+				'jquery.cookie':{
+				    'deps':['jquery']
+				}
+			    }
+			};
+
+ 10) Require vs. RequireJS - require() requirejs(); - В чем разница между этими двумя? Их нет, они одинаковы. 
+
+	- Стандарт AMD вызывает функцию с именем require. Однако RequireJS понял, что уже может быть использован код, который определяет функцию require. Чтобы обеспечить возможность использования их библиотеки вместе с этим кодом, они предоставляют псевдоним requirejs для своей основной стандартной функции AMD.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

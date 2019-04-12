@@ -1,0 +1,225 @@
+
+ ------------------------------ Introduction to Magento 2 — No More MVC - https://alanstorm.com/magento_2_mvvm_mvc/ -------------------------------------
+
+ 1) в отличие от традиционной системы MVC, этот объект контроллера отвечает только за
+
+	Решая, какой макет страницы использовать
+
+	Обработка сохранения данных из запросов POST Или Cообщаем системе визуализировать HTTP-ответ
+
+	Или перенаправить пользователей на следующую / предыдущую страницу
+
+ 2) можна очистити кеші просто очистивши папку кеша. але ще є папка дженерейт із з якої може грузитись старий контент
+	rm -rf /path/to/magento/var/generation/*
+	rm -rf /path/to/magento/var/cache/* 
+ 
+ 3) головний файл модуля це - app/code/тема/модуль/etc/module.xml
+	- є ще файл конфіг, але це просто шаблон
+
+ 4) не пояснювали нічого про xsd, сказали просто копіпастити верхню частину 
+
+	<!-- File: app/code/Pulsestorm/HelloWorldMVVM/etc/module.xml --> - файл module.xml является основным файлом конфигурации модуля. Этот файл - то, что ищет основной код Magento при сканировании системы на наличие модулей.
+
+	<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd"> Хоча в 2-й мадженті мабуть не треба це все, досить взяти з якогось модуля цей кусок і вставити, а то у цьому багато інфи
+		- Під ним знаходиться  код - <module name="Pulsestorm_HelloWorldMVVM" setup_version="0.0.1" />
+			- Тег module означає що я обявлявляю, що хочу додати новий модуль
+			- початкову версію треба ставити setup_version="0.0.1, коли створюю вперше. Вона важлива для setup-resource/migration . Але я поки не знаю що це
+
+	 - CLI - приложуха для управління модулями. Тут можна дивити їх статус(module:status) і тд.. Мабуть це буде виглядати якось так php bin/magento module:status - покеже які модулі доступні, а які ні
+		
+		- Статус модулів можна подивити з адмінки - Stores -> Configuration -> Advanced -> Advanced -> Disable Modules Output
+
+	 - php bin/magento setup:upgrade - ця помилка може вискочити після створення нового модуля. Це із за недоработки розробників системи.
+
+	----------------------------------------------
+		'full_page' => 0, в файлі env.php - це var/page_cache - у мене він 0, тож ця папка пуста
+	----------------------------------------------
+
+	 - The index.php portion is optional — if you have mod_rewrite (or your web server’s equivalent) enabled, this URL is the same as - це що стосується index.php в адресній строці
+
+		- http://magento.example.com/index.php/hello_mvvm/hello/world - Часть index.php является необязательной - если у вас включен mod_rewrite (или эквивалент вашего веб-сервера), этот URL совпадает с http://magento.example.com/hello_mvvm/hello/world
+
+	 - Модуль може требувати від мадженти певну поведінку. Наприклад у є адреса http://site-domain.com/module_name/blabla/blabla.html. І якщо у мене у коді є цей модуль, то якщо прописати у файлі app/code/тема/модуль/etc/frontend/routes.xml код що привяже мій модуль, то при запросі цієї адреси, він скаже мадженто - єй диви, тут у тебе у адресній строці, після домена - вказаний мій модуль, я маю контролер для нього, який його обробить
+
+	<!-- File: app/code/тема/модуль/etc/frontend/routes.xml -->
+	<?xml version="1.0"?>
+	<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd"> - думаю у нас ця строка буде не така
+	    <router id="standard"> це якщо модуль для фронта. Якщо для адмінки, замість standart буде admin. 
+		<route id="тема_модуль" frontName="тема_модуль"> - frontName якраз указує, що якщо в адресній строці буде "тема_модуль", то мій контролер почне його обробляти. 
+									id - це імя маршрутизатора. Вказуючи айді, я обявляю його усій системі. він має бути такий як frontName
+		    <module name="Тема_Модуль" />
+		</route>
+	    </router>
+	</config>     
+
+ 5) Контролер
+	- Контролер - це по великому рахунку шлях у адресній строці.
+	- Сторінка прийшла сюди на обробку, так як юрл совпадав з frontName (/etc/frontend/routes.xml) Тепер він візьме в нього імя, але замісь андерскора поставить обратний слеш // Тема\Модуль\Controler(обовязково) Далі у контролері має бути папка з файлом у який буде виводити сторінку. Папка буде називатись Hello. Файлик буде називатись World.php // Тема\Модуль\Controler\Hello\World - повне імя контролера
+
+ 6) World.php
+ 	- У файлику World.php треба створити клас. По ходу якщо це новий клас, то він має екстендитись від існуючого ф-ціоналу для фронтенд контролерів // class World extends \Magento\Framework\App\Action\Action
+	- У файлик World.php треба додати namespace - це по ходу папка у якій знаходиться цей файлик 
+	- In Magento 2, each controller has one, and only one, entry point. That’s the execute method. This is a step Magento 2’s architects took to help avoid conflicts with a large development teams all editing the same controller file for different features.
+
+ - use Magento\Framework\View\Result\PageFactory; - це для залежностей. Після цього буде доступна $pageFactory; 
+ - use Magento\Framework\App\Action\Context; - Це щоб контролер повертав ретурном сторінку ($this - це сторінка) Після цього буде доступна $context; (тут я бачу реквест, респонз, ...)
+
+ 7) Арії управляют такими вещами, как загрузка сеансов, проверка правил контроля доступа и загрузка файлов конфигурации. Область внешнего интерфейса - это приложение мадженто
+
+------------------------
+
+ 8) View
+	- app/code/тема/модуль/view/frontend/layout/імя-модуля_лалала.xml - Імя xml буде складатьсь з frontName (/etc/frontend/routes.xml), папки в якій знаходиться файл і імя файла // hello_mvvm_hello_world.xml
+
+		<?xml version="1.0"?>
+		<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">        
+		    <referenceBlock name="content">
+			<block 
+			    template="content.phtml" 
+			    class="Pulsestorm\HelloWorldMVVM\Block\Main" 
+			    name="тема_модуль_бла_бла"/>
+		    </referenceBlock>
+		</page>    
+	- app/code/тема/модуль/Block/файл.php - Додати файл з класом. Цей код звязуэться з xml-кою і прописати namespace і use
+		- namespace Pulsestorm\HelloWorldMVVM\Block;
+		- use Magento\Framework\View\Element\Template; - базовий шаблон мадженто
+			class Main extends Template
+			{    
+			    protected function _prepareLayout()
+			    {
+				
+			    }
+			}
+	- app/code/Pulsestorm/HelloWorldMVVM/view/frontend/templates/content.phtml // <h1>Hello World</h1>
+
+ 
+
+ - Можливо так стане зрозумуліше про шаблони (це не робочий код, просто приклад)
+
+	$our_view_block = $layout->createNewBlockWithClass('Pulsestorm\HelloWorldMVVM\Block\Main')
+	$our_view_block->setName('pulsestorm_helloworld_mvvm');
+	$out_view_block->setTemplate('content.phtml');
+
+$layout->addBlockToContentContainer($our_view_block); 
+
+
+#File: app/code/Pulsestorm/HelloWorldMVVM/Block/Main.php
+	<?php
+	namespace Pulsestorm\HelloWorldMVVM\Block;
+	use Magento\Framework\View\Element\Template;
+
+	class Main extends Template
+	{    
+	    protected function _prepareLayout() - як бачу по коду, цей метод взагалі нічого не робить, просто повертає this. Але я можу помилятись
+	    {
+
+	    }
+	}
+
+ - У лейауті має бути лінка на phtml
+	<!-- File: app/code/Pulsestorm/HelloWorldMVVM/view/frontend/layout/hello_mvvm_hello_world.xml -->    
+	<block <!-- ... -->
+	    template="content.phtml"         
+	<!-- ... -->  
+ - По ходу вищеописаний код, скаже щоб весь контент відображався у файлику content.phtml
+
+-------------------
+
+ 9) Магічні методи set() get(), ... в мадженті 2 теж працюють
+
+ 1) Блоки теж мають достут до контекста (в ньому дані реквеста, респонза, ...) - $this->getRequest()->getParam('name') - $this це блок
+
+
+
+ -------------------- Magento 2: Serving Frontend Files - https://alanstorm.com/magento-2-frontend-files-serving/ -----------------------
+
+ 1) То що index.php i .htaccess знаходятьсяу папці pub - Это современное соглашение о фреймворке PHP, которое представляет собой один из уровней многоуровневого подхода к защите PHP и файлов конфигурации от раскрытия миру
+
+	- Тем не менее, Magento все еще поставляется с корневым уровнем index.php, потому что многие хостинговые компании делают изменение этого веб-корня трудным и / или невозможным.
+
+ 	- По ідеї в апачі, можна було б вказати pub/index.php як точка входження, так як всі файли генеряться у папку pub. Можливо навіть якщо я буду в продакшн моді, то і треба буде це зробити
+
+		- Та і правильно це робити (ставити точку входження pub/index.php) 
+
+ 2) !можливо я не добре перевів. В продакшн моді Magento 2 также отключит большую часть (если не все) генерации магического кода. Можливо будуть проблеми з магічними методами. Хоча це не точно
+
+ 3) По бекенд файли не скажу (вони мне будуть передаватись клієнту на скільки знаю), Але фронтенд файли будуть брати відлік з папки pub - це їх корінь
+
+	<link rel="stylesheet" type="text/css"  media="all" href="http://magento.example.com/static/frontend/Magento/luma/en_US/mage/calendar.css" />
+	<script  type="text/javascript" src="http://magento.example.com/static/_requirejs/frontend/Magento/luma/en_US/requirejs-config.js"></script>
+
+	Такий шлях до файлів в мене був коли я перший раз заргузив сайт. Тотім я відкрив цей файл у браузері http://magento.example.com/static/frontend/Magento/luma/en_US/mage/calendar.css і папка pub зразу додалась в шлях. Маджента сообразила шо в мене точка входження index.php а не pub/index.php(так правильно) і добавила папкуpub у шлях
+
+		- Якщо я буду додавати скріпт з мадженти, то не буде проблем зішляхом до цих файлів, але якщо я буду підключати сторонні файли, то можуть бути проблеми з папкою pub 
+
+ 4) В девелоп режимі - если Magento не может найти статический (фронтовий файл по ходу) файл ресурсов, он автоматически скопирует этот файл или вставит в него символическую ссылку из исходного модуля этого файла. Если вы нам не верите, настройте свою систему для работы в производственном режиме
+
+	- За то, щоб у девелоп режимі, брались дефолтні файли для різних сторів (при умові що їх немає), відповідає код у файлі pub/.htaccess 
+
+		<IfModule mod_rewrite.c>
+		    RewriteEngine On
+
+		    # Remove signature of the static files that is used to overcome the browser cache
+		    RewriteRule ^version.+?/(.+)$ $1 [L]
+
+		    RewriteCond %{REQUEST_FILENAME} !-f
+		    RewriteCond %{REQUEST_FILENAME} !-l
+
+		    RewriteRule .* ../static.php?resource=$0 [L]
+		</IfModule>
+
+
+		Тобто з http://magento.example.com/static/frontend/Magento/luma/en_US/mage/calendar.css зробиться http://magento.example.com/static.php?resource=frontend/Magento/luma/en_US/mage/calendar.css
+
+			- У цьому також йому допомагає файл static.php який содержит мини-приложение, созданное с использованием кода платформы Magento.
+
+				- У ньому є строчка - $app = $bootstrap->createApplication('Magento\Framework\App\StaticResource');
+
+				- а у #File: vendor/magento/framework/App/StaticResource.php є метод public function launch() який це робить
+
+
+
+--------------- Magento 2: Adding Frontend Files to your Module - https://alanstorm.com/magento_2_adding_frontend_files_to_your_module/ ------------------
+
+ 1) чтобы пользователь apache и ваш собственный пользователь оболочки находятся в одной группе unix.
+
+	 find /path/to/magento2/pub/static -exec chmod 777 '{}' +
+	 find /path/to/magento2/var/ -exec chmod 777 '{}' + 
+
+ 2) Коли я добавив файл скріпта (думаю з лесом буде те саме) у модуль, я перегенерив статику (думаю можна без цього) і він зявився у папці pub/static/lalalla/Module/file.js - Тобто якщо файл э у мене у модулі, то він є і на сервері. І його можна буде знайти за шляхом - http://magento.two/pub/static/frontend/Magento/luma/en_US/Pulsestorm_FrontendTutorial1/hello.js
+
+ 3) То що я розділяю файли статики по папках (сss, js) не обовязково. Воно б і без цього работало. Головне щоб вони лежали у папці web(не факт). Тобто у цій папці файли які передаються клієнту через веб (http)
+
+ 4) Я створив js файл view/base/web/file.js - так як він у base, то він згенерився і в папку luma i в папку blank. luma i blank  находяться у в арії Magento - http://joxi.ru/krDzDoEiKKqKX2
+
+	- Він згенериться навіть у папку backend - pub//static/adminhtml/Magento/backend/en_US/Pulsestorm_FrontendTutorial1/hello.js
+
+		- Для цього треба вказуватиконкретні арії (frontend/backend) щоб не плодити лишній код
+
+		- Ну і звичайно працюють приорітети. Якщо є 2 файли у папці base i frontend (то приорітетнішим буде той у якого вказана конкретна арія frontend)
+
+ 5) Генерування js файлів для різних сторів - app/code/Pulsestorm/FrontendTutorial1/view/base/web/i18n/fr_FR/hello.js - http://magento.example.com/static/adminhtml/Magento/blank/fr_FR/Pulsestorm_FrontendTutorial1/hello.js
+
+ 6) ls -lh - Щоб подивити на який файл сімлінк (ls -lh hello.js)
+
+ 7) если символические ссылки из режима develop все еще присутствуют в подпапках pub / static при запуске setup: static-content: deploy, Magento не удалит их
+
+ 8) Дивно, але навіть за таким шляхом можна знайти мій файл http://magento.example.com/static/fake-area-that-is-not-there/bar/foo/baz/Pulsestorm_FrontendTutorial1/hello.js
+
+	- Це не то що проблема, просто я хотів донести що маджента знайде файл навіть якщо шлях до нього не правельний (не правильна арія або назва тема)
+
+	- Але ця аномалія з шляхами є тільки в DEVELOP MODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

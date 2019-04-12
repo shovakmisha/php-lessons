@@ -1,0 +1,47 @@
+
+ 1) В скріпті заранее обявлений файл - це вже модуль. Тобто є приложуха і я підключаю в неї можулі, які мені треба
+
+ 2) Дуже зручно. Наприклад можна щоб кожен модуль розробляв різний програміст
+
+ 3) тестувати цю быблыотеку можна тільки якщо є хост(локалхост теж ок). Якщо просто відкрию файли у браузері, то асинхронність не буде працювати
+
+ 4) Нагадаю, що коли браузер бачить цей запис <script src"path/file.js"></script> то браузер бере файл по цьому шляху і вставляє цого сюди
+
+    - Тепер цим буде займатись Require.js
+
+ 5) Сенс простий. Коли я хочу створити модуль, пишу define, а коли хочу його собі взяти, пишу require
+
+ 6)  <!-- data-main attribute tells require.js to load
+             scripts/main.js after require.js loads. -->
+        <script data-main="scripts/main" src="scripts/require.js"></script>
+ 
+ 7) require просить обєкт (хоча не факт. Вроді модуль може повертати будь що). Ось чому коли я створюю модуль через define, то він повертає обєкт - define(['modules/math.js'], function () { return {} }
+
+ 8) так теж ок 
+
+	define([], function(){
+	    var o = {};
+	    o.getMessage = function()
+	    {
+		return 'Hello Module World';
+	    }
+	    return o;
+	});
+
+ 9) По умолчанию RequireJS преобразует имя модуля, например helper/world, в путь HTTP (S) - http://example.com/scripts/helper/world.js
+
+ <!--This sets the baseUrl to the "scripts" directory, and
+    loads a script that will have a module ID of 'main'-->
+<script data-main="scripts/main.js" src="scripts/require.js"></script>
+
+ 10) Базовий шлях до файлів можна змінити
+
+	require.config({
+	    baseUrl: '/my-javascript-code', - тобто це я змінюю точку відліку для файлів
+	});
+
+ 11) require.config({   
+	    paths: {        
+		"hello": "helper/world" - аліас (requirejs(['hello'], function(hello) {)
+	    },
+	});
