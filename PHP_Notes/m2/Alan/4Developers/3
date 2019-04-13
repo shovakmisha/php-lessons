@@ -1,0 +1,137 @@
+
+Magento 2 так само як і м1, використовує ActiveRecord
+
+ ------------------ Magento 2 and the Less CSS Preprocessor - https://alanstorm.com/magento_2_less_css/ -------------------------------
+
+ 1) System -> Stores -> Configuration -> Advanced -> Developer -> Front-end Developer Workflow  - Тут указується чи компілювати less на сервері
+
+ 2) <css src="Pulsestorm_StartingWithLess::red-alert.css"/> - якщо замість red-alert.css буде red-alert.less, маджента його перекомпілює на сервері і покладе в статику css файл. і в статиці буде вже файл а не сімлінк
+
+ 3) Якщо я зміню лес файл, то маджента не буде перегенеровувати css. Щоб перегенерувати css з новими змінами, треба
+
+	- видалити css - rm pub/static/frontend/Magento/luma/en_US/Pulsestorm_StartingWithLess/red-alert.css
+
+	- Вам также необходимо очистить папку view_preprocessed от Magento. Это папка кеша для исходных файлов less
+
+ ----------------------- Magento 2: CRUD Models for Database Access - https://alanstorm.com/magento_2_crud_models_for_database_access/ -------------------------
+
+ - https://inchoo.net/magento-2/setup-scripts-magento-2/ - Тут є потрібна інфа 
+
+ 1) Setup/InstallSchema.php - тут я буду створювати таблиці в базі. 
+
+	- Файл InstallSchema.php предназначен для хранения кода для создания структуры таблиц вашей базы данных.
+
+	- Если модуль устанавливается, выполняется Setup \ InstallSchema :: install ().
+
+	- Файл InstallData.php використовується щоб оновити схему ( InstallSchema.php). Зазвичай дадавання якихось атрибутів продукту або щось типу того. В доці мадженти https://devdocs.magento.com/videos/fundamentals/add-a-new-table-to-database/ - це так пояснюється - Setup/InstallSchema.php - тут створюю таблицю - InstallData.php - тут її заповнюю.
+
+ 2) три столбца в любой таблице (creation_time, update_time и is_active) - это поля, которые Magento ожидает найти в модели. Хотя эти поля в ваших моделях не обязательны, это всегда хорошая идея.
+
+	- Кароче краще подивити дефолтны таблиці мадженти
+
+ 3) vendor/magento/framework/DB/Ddl/Table.php - тут всі типи даних полів БД. По правильному їх так і треба вказувати - \Magento\Framework\DB\Ddl\Table::TYPE_TEXT
+
+ 4) setup: upgrade добавити ці поля в базу
+
+	- В Magento 1 системный код ядра автоматически выполнял любые необходимые миграции всякий раз, когда был сделан некэшированный запрос HTTP (S). 
+
+ 5) У першій мадженті я всі конфіги для роботи з базоб писав у файлі конфігів. І по них понятно було куди я підключаюсь і які папки створювати. У м2 схожа структура але в конфігах нічого не треба прописувати. Тому якщо мені шось не понятно, можна глянути на опис модельки в м1
+
+ 6) setup_module - У цій таблиці є всі модулі і їхні версії (shrema_version data_version). Тут так само як в першій 
+
+-----------------------
+
+- ці пункти я скопіював з м1
+
+	- Якщо при setup:upgrade, маджента побачить що у мене є установлений модуль і його не має у цій таблиці, маджента запустить інстал скріпти і добавить модуль у цю таблицю. Типу схоже на просте добавлення нового модуля але при цьому іще і інстал скріпти спрацьовують
+
+			- Если вы хотите перезапустить сценарий инсталлятора (полезно в процессе разработки), просто удалите строку для нужного модуля из этой таблицы. DELETE from setup_module where module = 'weblog_setup';
+
+			- Коли я робив цей урок, то у мене був модуль з великою версією. Я видалив його з бази DELETE from setup_module where module = 'weblog_setup'; поставив 0 1 0 і не було помилки
+	
+---------------------------------
+
+ 7) Как и Magento 1, все модели Magento CRUD расширяют базовый класс абстрактных моделей -Magento\Framework\Model\AbstractModel
+
+	- В отличие от Magento 1, все модели CRUD также реализуют интерфейс IdentityInterface. Этот интерфейс вынуждает разработчиков моделей определять метод getIdentities
+
+	- Також я створив інтерфейс для своєї моделі - app/code/Pulsestorm/ToDoCrud/Model/TodoItemInterface.php
+
+		- TodoItemInterface играет важную роль, когда приходит время экспортировать модели CRUD в новый API на основе контрактов на обслуживание Magento. По ходу тут будуть описані методи Апішки
+
+	- #File: app/code/Pulsestorm/ToDoCrud/Model/TodoItem.php - ось основна моделька. В принципі тут все як м1
+
+		- її метод _construct будет вызываться всякий раз, когда создается экземпляр модели. 
+
+		- Каждая модель CRUD в Magento должна использовать метод _construct для вызова метода _init. Метод _init принимает один строковый параметр - имя модели ресурсов этой модели.
+
+ 
+ 8) Модель ресурсов Magento 2 - те саме шо в м1
+
+	- В Magento 2 класс модели определяет методы, которые программист конечного пользователя будет использовать для взаимодействия с данными модели.
+
+	- Класс модели ресурсов содержит методы, которые фактически извлекают информацию из базы данных. Каждая модель CRUD в Magento 2 имеет соответствующий класс модели ресурсов.
+
+	- Каждый класс модели ресурсов CRUD расширяет класс - Magento\Framework\Model\ResourceModel\Db\AbstractDb - Этот базовый класс содержит базовую логику для извлечения информации из одной таблицы базы данных.
+
+	- protected function _construct() { $this->_init('pulsestorm_todocrud_todoitem','pulsestorm_todocrud_todoitem_id'); } - те саме що в м1 
+
+ 9) Модель из коллекции Magento 2 - когда вам нужно выбрать несколько моделей (ресурсов) определенного типа
+
+	- Он считается моделью ресурсов, поскольку он создает код SQL, необходимый для извлечения информации из таблицы базы данных.
+
+	- Все коллекции в Magento 2 расширяют базовый класс коллекций - \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+
+	- Метод _init модели ресурсов коллекции принимает два аргумента. Первая - это модель, которую собирает эта коллекция. Второе - это модель ресурсов, собранная этой моделью.
+
+ 10)  В Magento 2 каждая модель CRUD имеет соответствующий factory класс.
+	
+	- Все имена классов фабрики - это название класса модели, к которому добавлено слово - Factory
+
+	- Всякий раз, когда менеджер объектов Magento встречает имя класса, оканчивающееся на слово Factory, он автоматически генерирует класс в папке generated, если класс еще не существует - http://joxi.ru/zANzVoLivvbqDA
+
+	- Итак, поскольку наш модельный класс назван Pulsestorm/ToDoCrud/Model/TodoItem - это означает, что наш фабричный класс будет назван Pulsestorm/ToDoCrud/Model/TodoItemFactory
+
+		- \Pulsestorm\ToDoCrud\Model\TodoItemFactory $toDoFactory - це я писав в конструкторі блока \Pulsestorm\ToDoCrud\Model\TodoItemFactory $toDoFactory, де я працював з базою через цю модельку
+
+	- Тобто це і досі клас Pulsestorm/ToDoCrud/Model/TodoItemFactory - це ще не обєкт. get_class($this->toDoFactory) - string 'Pulsestorm\ToDoCrud\Model\TodoItemFactory' 
+
+		protected $toDoFactory;
+		public function __construct( \Magento\Framework\View\Element\Template\Context $context, \Pulsestorm\ToDoCrud\Model\TodoItemFactory $toDoFactory )
+		{
+		$this->toDoFactory = $toDoFactory; parent::__construct($context);}
+
+			- $toDoFactory->create(); - це вже обєкт
+
+				$todo = $this->toDoFactory->create();
+				$todo->setData('item_text','Finish my Magento article') - Затем мы устанавливаем свойство item_text нашей модели (вже обєкту Factory)
+				->save(); -  и вызываем его метод сохранения. В таблицю добавилось. Тобто схоже на м1
+
+					$todo = $todo->load(1);
+        				var_dump($todo->getData());
+
+						// магічні методи
+						 var_dump($todo->getItemText());
+    						var_dump($todo->getData('item_text'));
+
+ 11) CRUD model’s collection object. Те саме, що і для звичйної, тільки діставати їх буду так
+
+	$todo = $this->toDoFactory->create();
+
+	$collection = $todo->getCollection();
+
+	foreach($collection as $item)
+	{
+	var_dump('Item ID: ' . $item->getId());
+	var_dump($item->getData());
+	}
+	
+
+	
+
+
+
+
+
+
+
