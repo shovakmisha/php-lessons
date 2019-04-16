@@ -127,7 +127,70 @@ Magento 2 так само як і м1, використовує ActiveRecord
 	}
 	
 
-	
+ ------------------------------ Magento 2: Understanding Object Repositories - https://alanstorm.com/magento_2_understanding_object_repositories/ ------------------------------
+
+ - Кароче у цьому уроці я працював з командною строкою. В пхп файлах я писав логіку. В залежності від команд які буду вводити, командна строка буде виводити різне
+
+	- умовно я ввів php bin/magento ps:examples і виконався код 
+
+		$repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');
+		$page = $repo->getById(2);
+		echo get_class($page),"\n"; - це вивелось в командній строці
+ 
+ 1) API на основе RESTful с аутентификацией oAuth
+
+ 2) Треба перечитати про оюєкти в мадженті, а потім повернутись до цієї статті
+
+
+
+ --------------------- Magento 2: Understanding Access Control List Rules - https://alanstorm.com/magento_2_understanding_access_control_list_rules/ --------------------------------
+
+ 1) ACL - Владелец может иметь для себя внутреннюю учетную запись, но также предоставлять каждому члену своего персонала доступ к Бэкэнд Magento -  System -> Users and Systems -> Roles sections
+
+	- Некоторыми примерами ролей могут быть отдел продаж, персонал поддержки, ИТ-персонал, разработчики контрактов, исполнительная группа и т. Д. Типу кожному відділу можна дати права на якиїсь розділ в мадженті. Тобто у кожного відділа буде різний логін пароль і від цього буде залежати куди вони будуть мати доступи
+
+ 2) Коли я роблю новий модуль в адмінці - есть несколько мест, где вы, как разработчик модуля, должны добавить проверки правил ACL в свой модуль
+
+	- Каждая конечная endpoint/controller URL-адреса в приложении администратора должна реализовывать метод _isAllowed, который определяет, может ли пользователь получить доступ к конечной точке URL-адреса. $auth = $object_manger->get('Magento\Framework\AuthorizationInterface'); if($auth->isAllowed('Magento_GoogleAnalytics::google')
+
+		- Если вы используете контроллер, расширяющий контроллер - \Magento\Backend\App\Action - вы автоматически получаете доступ к объекту проверки авторизации через свойство _authorization.
+
+			- $this->_authorization->isAllowed('Pulsestorm_HelloAdmin::pulsestorm_helloadmin_index_index');
+
+			- Також треба буде добавити Magento\Backend\App\Action\Context в конструктор. В этом объекте контекста создается экземпляр объекта проверки подлинности, который сам внедряется.
+
+			- Якщо будуть проблеми з Magento\Framework\AuthorizationInterface, треба буде спробувати через Magento\Framework\Authorization
+
+ 3) etc/acl.xml - тут прописуються acl доступи
+
+ 4) Для прикладу візьму google аналітик - <resource id="Magento_GoogleAnalytics::google" title="Google API" /> - Magento_GoogleAnalytics::google - Это идентификатор, который вы будете использовать, чтобы проверить, имеет ли авторизованный пользователь доступ к этому ресурсу.
+
+	- цей ідентификатор - проізвольний. Але треба притримуватись стандартів. імя модуля - Magento_GoogleAnalytics, потім ::, потім строка(lower case), описывающая цель правила - google
+
+ 5) vendor/magento/framework/Acl/etc/acl.xsd - acl.xsd для acl файлів
+
+ 6) <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Pulsestorm_AclExample::top" title="Pulse Storm ACL Example Module"> - http://joxi.ru/MAjElawujxYeR2
+                    <resource id="Pulsestorm_AclExample::config" title="The First Rule"/>
+                    <resource id="Pulsestorm_AclExample::more_rules" title="The Second Rule"/>
+                </resource>
+
+ 7) Якщо брати аналогію з м1, то там я описував вкладку <helloworld_options> в system.xml і давав acl доступ в файлі config.xml
+
+ 8) У м1 для acl прописувалась повна іерархія до вкладки, якій треба доступ. У м2, вказується тільки ідентифікатор - Magento_GoogleAnalytics::google - по ньому можна здогадатись що це за модуль, але де ця іерархія вже треба шукати
+
+ 9) Кароче, до цієї айдішки Magento_GoogleAnalytics::google привязується функціонал. Який функціонал, треба вже шукати цю айдішку по проекту.
+
+ 10) protected function _isAllowed(){ - цей метод теж треба у адмінському екшні. 
+        return $this->_authorization->isAllowed('Pulsestorm_HelloAdminBackend::menu_1'); } - Если _isAllowed возвращает true, то пользователь разрешен. Если нет, они получат экран отказа в доступе.
+
+		- Але якщо це суперкористувач, то цей метод проігнорується
+
+
+
+
 
 
 

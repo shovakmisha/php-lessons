@@ -1,0 +1,127 @@
+
+ ------------------------------- Magento 2: Admin Menu Items - https://alanstorm.com/magento_2_admin_menu_items/ ----------------------------------
+
+ 1) Наша конечная цель цього урока - добавить ссылку на левое меню адмінки Magento
+
+ 2) Адмінка использует ту же систему MVC / MVVM / View, что и фронт. но есть 2 дополнительные функции, основанные на безопасности бэкэнда и соглашениях с пользовательским интерфейсом.
+
+	ЮРЛ адмінки ділиться на 4 частини. Наприклад admin/cms/page/index
+
+		1) admin - це арія. Всі юрлки в адмінці починаються з адмін арії
+
+		2) Front Name:      cms
+
+		3) Controller Name: page
+
+		4) Action Name:     index
+
+ 3) Magento 2 - это система «Один URL, один контроллер». 
+
+ 4) key - має бути у всіх юрл-ках адмінки. key - предназначен для предотвращения атак с использованием межсайтовых сценариев
+
+	- Если вы не включите этот ключ в свой URL, Magento отклонит запрос как недействительный.
+
+ 5) Я створював новий модуль щоб додати і зберігати новий ппункт меню
+
+ 6) <!-- File: app/code/Pulsestorm/MenuTutorial/etc/adminhtml/menu.xml -->
+	<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	    <menu>
+		<add id="Pulsestorm_MenuTutorial::top_level_example" - http://joxi.ru/82QB5lacwyd3jA - це все що треба щоб пункт меню зявився в адмінці. Але він поки не надарований функціоналом
+
+									- Тобто кожен вузел <add буде добавляти пункт меню
+
+									- Атрибут id определяет уникальный идентификатор для этого узла. Правила його назви я вже описував але нагадаю, По соглашению (но не обязательно) это должно быть имя модуля (Pulsestorm_MenuTutorial), за которым следуют две двоеточия (::), за которыми следует строчный текст, который описывает действия модуля (top_level_example).					
+											
+		     title="Top Level Example"
+		     module="Pulsestorm_MenuTutorial" - должен соответствовать текущему модулю
+		     sortOrder="9999"
+		     resource="Magento_Backend::content" - определяет правило ACL, которое должен иметь пользователь для доступа к этому пункту меню. Обычно вы определяете свое собственное правило ACL в том же модуле и используете его здесь. Але тут я взяв стандартний маджентівський. ТОбто якщо користувач адмінки має доступ до Magento_Backend::content, то і до мого пункту меню буде мати доступ
+
+		    />
+	    </menu>
+	</config>
+
+		- В принципі можна і тут прописувати функціонал для цієї лінки, але зазвичай тут пишеться тільки розмітка
+
+ 7) Додати підпункт меню
+
+	<add id="Pulsestorm_MenuTutorial::second_level_example" - http://joxi.ru/nAyv8gwUgjQRdr
+		     title="Second Level Example"
+		     module="Pulsestorm_MenuTutorial"
+		     sortOrder="9999"
+		     resource="Magento_Backend::content" - В принципі давати йому ресурс такий самий як у парента погана практика. Треба давати інший для гнучкішого контролю доступа
+
+		     parent="Pulsestorm_MenuTutorial::top_level_example" - парен.
+		     action="cms/page/index" - екшн - http://magento.two/admin_zfjo40/cms/page/index/key/8082e760519a79eb34c1bbb0781ae6a81ee4eb5f700948cfde1c3734ace8c3a3/ - відкриється сторінка з цмс пейджами
+		/>
+
+	- Тобто у м1 парент - чайлд оприділявся через вложеності хмл-ок. А у м2 оприділяється атрибутами.
+
+ 8) додати підпункт третього рівня. Щоб підпункт 2-го рівня не був лінкою, я забрав в нього екшн
+
+	<add id="Pulsestorm_MenuTutorial::third_level_example" - http://joxi.ru/VrwElJwu78kbd2
+		     title="Third Level Example"
+		     module="Pulsestorm_MenuTutorial"
+		     sortOrder="9999"
+		     resource="Magento_Backend::content"
+
+		     parent="Pulsestorm_MenuTutorial::second_level_example"
+
+			// parent="Magento_Backend::system" - можна втыснути мый пункт меню вже в існуюючу менюшку 
+
+		     action="cms/page/index"
+		/>
+
+	- Є тільки 3 рівні вложеностей в меню.
+
+ -------------------- Magento 2: Advanced Routing - https://alanstorm.com/magento_2_advanced_routing/ ---------------------------
+
+ 1) Mage::getUrl('foo/baz/bar'); $urlModel->getUrl('foo/baz/bar'); $this->getUrl('foo/baz/bar'); // routeId/controllerName/actionName.
+
+
+
+
+
+
+
+
+
+
+ --------------------- Magento 2: Admin MVC/MVVM Endpoints - https://alanstorm.com/magento_2_admin_mvcmvvm_endpoints/ --------------------------
+
+ 1) <route id="pulsestorm_hello_admin_backend" frontName="pulsestorm_hello_admin_backend"> - Модуль Pulsestorm_HelloAdminBackend запрашивает frontName pulsestorm_hello_admin_backend.
+            <module name="Pulsestorm_HelloAdminBackend"/>
+        </route>
+
+ 2) все бэкэнд-контроллеры Magento должны наследоваться от класса \Magento\Backend\App\Action
+
+ 2) Якщо в екшні є __construct, то в нього має бути обєкт \Magento\Backend\App\Action\Context $context.
+
+	- и убедитесь, что вы передаете этот объект в качестве первого аргумента при вызове родительского конструктора. - parent::__construct($context, ......);
+
+ 3) public function execute(){ - http://joxi.ru/L216bOacRgZ9eA
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Pulsestorm_HelloAdminBackend::a_menu_item'); - 
+        return $resultPage; }
+
+	- Когда вы добавите этот код, Magento сделает две вещи.
+
+		- Родитель верхнего уровня элемента меню (Система http://joxi.ru/KAggGLzfEX3LJA) будет выделен
+
+		- заголовок страницы по умолчанию будет установлен на заголовок пункта меню второго уровня - http://joxi.ru/KAggGLzfEX3MJA - http://joxi.ru/V2VbKoXUdKL7P2
+
+	-  $resultPage->getConfig()->getTitle()->prepend(__('Our Custom Title')); - установити кастомний тайтл
+
+
+
+
+
+
+
+
+
+
+
+
+
+	http://magento.two/admin_zfjo40/cms/page/index/key/0d65280e9cd77bb3cfc5450688ee087f15774b485a7fffa7666c51713aea2bdd/

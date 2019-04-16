@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="253443ba-0529-4b67-8a49-2bf498049ec9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../PHP_Notes/m2/Alan/4Developers/3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../PHP_Notes/m2/Alan/4Developers/3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,7 +47,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
+            <state relative-caret-position="816">
               <caret line="48" column="23" selection-start-line="48" selection-start-column="20" selection-end-line="48" selection-end-column="23" />
             </state>
           </provider>
@@ -68,21 +69,10 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-459" />
-          </provider>
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Blogpost.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Mysql4/Blogpost.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
@@ -91,12 +81,28 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/config.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="293">
+              <caret line="28" column="13" lean-forward="true" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/system.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>templa</find>
-      <find>_code</find>
       <find>Secret</find>
       <find>secret_code</find>
       <find>payme</find>
@@ -125,6 +131,8 @@
       <find>createNewPostAction</find>
       <find>blogpost</find>
       <find>set</find>
+      <find>helloworld_options</find>
+      <find>&lt;messages translate=&quot;label&quot;&gt;</find>
     </findStrings>
     <replaceStrings>
       <replace>IGN_Payment</replace>
@@ -292,7 +300,7 @@
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
               <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
@@ -301,17 +309,7 @@
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
               <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
               <item name="etc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -321,46 +319,8 @@
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="local" type="462c0819:PsiDirectoryNode" />
               <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
-              <item name="sql" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="Alanstormdotcom" type="462c0819:PsiDirectoryNode" />
-              <item name="Weblog" type="462c0819:PsiDirectoryNode" />
-              <item name="sql" type="462c0819:PsiDirectoryNode" />
-              <item name="weblog_setup" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="IGN" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento.on" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="local" type="462c0819:PsiDirectoryNode" />
-              <item name="IGN" type="462c0819:PsiDirectoryNode" />
-              <item name="Payment" type="462c0819:PsiDirectoryNode" />
+              <item name="Helloworld" type="462c0819:PsiDirectoryNode" />
+              <item name="Helper" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="magento.on" type="b2602c69:ProjectViewProjectNode" />
@@ -386,7 +346,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/mustela" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -508,11 +468,13 @@
       <workItem from="1554819305376" duration="444000" />
       <workItem from="1555140475723" duration="3736000" />
       <workItem from="1555150626366" duration="4939000" />
+      <workItem from="1555306383372" duration="17000" />
+      <workItem from="1555329757771" duration="1436000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="679045000" />
+    <option name="totallyTimeSpent" value="680498000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -526,7 +488,7 @@
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25317854" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25870648" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -546,7 +508,7 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.15533444" />
+      <window_info anchor="right" id="Database" order="3" weight="0.15533444" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18131565" />
@@ -635,20 +597,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/code/core/Mage/Payment/Block/Form.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="61" lean-forward="true" selection-start-line="7" selection-start-column="61" selection-end-line="7" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/IGN/Payment/etc/system.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1615">
-          <caret line="95" column="55" selection-start-line="95" selection-start-column="55" selection-end-line="95" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/design/frontend/base/default/template/checkout/onepage/shipping_method.phtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -930,14 +878,9 @@
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/sql/weblog_setup/mysql4-install-1.0.0.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-459" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/etc/config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
+        <state relative-caret-position="816">
           <caret line="48" column="23" selection-start-line="48" selection-start-column="20" selection-end-line="48" selection-end-column="23" />
         </state>
       </provider>
@@ -952,10 +895,13 @@
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Resource/Mysql4/Setup.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/controllers/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Weblog/Model/Blogpost.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -963,6 +909,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="28" column="13" lean-forward="true" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/code/local/Alanstormdotcom/Helloworld/etc/system.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
         </state>
       </provider>
     </entry>
