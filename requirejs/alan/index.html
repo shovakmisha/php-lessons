@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+
+ <title>Alan</title>
+
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+ <script type="text/javascript" src="ko-init.js"></script>
+
+</head>
+
+<body>
+
+ <!--div id="main">
+  <h1 data-bind="text:title"></h1>
+  <p data-bind="text:content"></p>
+ </div-->
+
+ <div id="main">
+
+  <h1 data-bind="text:getTitle()"></h1>
+  <p data-bind="text:content"></p>
+
+  <p data-bind="text:theValue"></p>
+
+  <select data-bind="value:theValue"> <!-- в скріпті theValue == 2, тому Second буде активний -->
+  <option value="">-- Choose --</option>
+  <option value="1">First</option>
+  <option value="2">Second</option>
+  <option value="3">Third</option>
+  </select>
+
+  <input type="text" data-bind="value:theValue"/>
+
+  <div>
+  <br/><br/>
+
+  <button data-bind="click:pickRandomValue">Do It</button>
+
+  </div>
+
+
+
+
+
+  <div id="one" data-bind="template:{'name':'hello-world','data':first}"></div>
+
+  <div id="two" data-bind="template:{'name':'hello-world','data':second}">
+  </div>
+
+  <script type="text/html" id="hello-world">
+   <h1 data-bind="text:theTitle"></h1>
+   <p data-bind="text:theContent"></p>
+  </script>
+
+
+ </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,246 @@
+
+ ------------------------------- Magento 2: Javascript Init Scripts - https://alanstorm.com/magento_2_javascript_init_scripts/
+
+ 1) В принципі можна написати код і так. Підключити його в phtml і викликати його скріпті без спецатрибута type="text/x-magento-init", вказавши залежність. 
+	- <script type="text/javascript">    
+		requirejs(['Pulsestorm_JavascriptInitTutorial/example'],function(example){.. - Тобто requirejs працює і в phtml. Тут я йому вказав залежність
+
+	- Але це по суті те саме що з консольки це написати - це я так думаю
+
+ 2) <script type="text/x-magento-init">
+    {
+        "*": { // замість хірочки може бути любий селект з jQuery
+            "Pulsestorm_JavascriptInitTutorial/example":{} 
+        }
+    }
+
+	- // Маджента розуміє це як requirejs(['Pulsestorm_JavascriptInitTutorial/example']
+  </script>
+
+ 3) Компоненты Magento Javascript - это модули RequireJS, которые возвращают функцию. Якщо добре памятяю зазвичай модулі повертають обєкт. А тут ф-ція
+
+	 define([], function () {
+
+		  var mageJsComponent = function()
+		  {
+		   alert("A simple magento component.");
+		  };
+
+		  return mageJsComponent;
+	 });
+
+	- Системный код Magento будет вызывать эту функцию особым образом, который предоставляет дополнительные функциональные возможности. Наприклад можна передавати параметри
+
+		- Маженто має 2 параметри у ф-ції var mageJsComponent = function(config, node) 
+
+			- config - це config ("#one": { "Pocketbook_Checkout/js/test":{"config":"value"}}) 
+
+			- а node це дом елемент (у даному випадку елемент з айді #one)
+
+ 4) X-magento-init означает, что существует системный путь направляющий для создания модулей Javascript, которые основаны на серверном рендеринге JSON и работают на любом произвольном узле DOM. Цей маджентовський ініт вирішує декілька проблем
+
+	1) они предоставляют стандартный механизм, препятствующий непосредственному встраиванию JavaScript в страницу. Тобто Не буде куска кода скріпта в DOM 
+
+	2) они предоставляют способ вызова отдельного модуля RequireJS (определенного с define) в качестве программы
+
+		- Я тільки тепер догнав що це - '{"Pulsestorm_JavascriptInitTutorial/example": {"another":"example"}}'. Тобто я на сервері я кажу Рекваєру який скріпт запустити у клієнта і які параметри йому передати. В цьому й фішка цього ініціалізування. Якщо я напишу так -  <script type="text/javascript">    
+										requirejs(['Pulsestorm_JavascriptInitTutorial/example'],function(example){ - То я нічого не зможу передати з сервера. Просто запуститься скріпт на фронті
+
+	3) они предоставляют способ передать этой программе сгенерированный JSON-объект на стороне сервера.
+
+	4) они предоставляют способ сообщить той программе, на каких (если они есть) узлах DOM она должна работать.
+
+ 5) Так теж работає - <div data-mage-init='{"Pulsestorm_JavascriptInitTutorial/example": {"another":"example"}}'>A single div</div>
+
+ 6) Кавички теж можуть грати роль - <div data-mage-init='{"Pulsestorm_JavascriptInitTutorial/example": {"another":"example"}}'>A single div</div>
+
+
+ ------------------------- KnockoutJS Primer for Magento Developers - https://alanstorm.com/knockoutjs_primer_for_magento_developers/ --------------------------
+
+ 1)  1) кнокаут працює тыльки коли загружена сторінка
+
+ 2) data-bind="template" - можна звязати декілька параметрів. <div id="one" data-bind="template:{'name':'hello-world','data':first}"></div> 
+	- Алан написав внизу скріпт і айдішкою звязав name - 'name':'hello-world' - <script type="text/html" id="hello-world">
+	- 'data':first він звязав у скріпті var viewModelConstructor = function(){ this.first = { theTitle:ko.observable("Hello World"),  ...
+
+ -------------------------- Magento 2: KnockoutJS Integration - https://alanstorm.com/magento_2_knockoutjs_integration/ ------------------------------
+
+ 1) RequireJS кэширует ваши модули при первой загрузке. Алан каже що це рішає проблему з загрузкою одинакових файлів. Тобто вони не дублюються
+
+ 2) vendor/magento/module-theme/view/base/requirejs-config.js - У цьому файлі можна знайти де береться "ko" - var config = {
+													    'waitSeconds': 0,
+													    'map': {
+														'*': {
+														    'ko': 'knockoutjs/knockout', - knockout - це файл нокаута.
+
+ 3) Кароче - це головний файл скріпта - js/core/app.js 
+
+	- Модуль RequireJS Magento_Ui/js/core /app - 
+
+		- на высоком уровне Magento создаст новый объект javascript для каждого отдельного модуля RequireJS, настроенного как компонент, и этот новый объект станет view model.
+
+	- '../lib/knockout/bootstrap' -  Це Виклик Нокаута. - Тобто нокаут - це модуль рекваєра. А як памятаю, якщо я викликаю вмодуль через рекваєр, то він загружається на сторінку
+
+		- Щоб було понятніше, раніше він називався Magento_Ui/js/lib/ko/initialize. В теорії його можна і викликати на якіїсь сторінці requirejs(['Magento_Ui/js/lib/ko/initialize'], function(){
+																			    //your program here
+																			});
+		- Цей модуль '../lib/knockout/bootstrap' нічого не повертає, але це і не його задача. Головне щоб він викликався (якщо я викликаю вмодуль через рекваєр, то він загружається на сторінку)
+
+			- У ньому є ця строчка - ko.setTemplateEngine(templateEngine); Розробники м2 трохи переробили роботу з шаблонами нокаута
+		
+------------------------------------
+#пункт4
+------------------------------------
+
+ 4) /js/lib/knockout/bootstrap.js - Це файл нокаута по великому рахунку.
+
+	- / knockout-repeat, knockoutjs / knockout-fast-foreach и Модули knockoutjs / knockout-es5 являются дополнениями сообщества KnockoutJS. Тобто це якісь додаткові ліби нокаута. Типу як у jQuery є ліби, так і в нокаута є ліби.
+
+		- До речі це не рекваєрівські модулі, просто анонімні ф-ції в цих файлах
+
+	- ./template/engine - це маджентівські кастомні темплейти. Взагалі, темплейти в мадженті підключаються як компоненти, але я і сам не дуже вкурив це. Суть у тому що підключення темплейтів не таке як у стандартного нокаута
+
+		- Це робиться у цих строчках RemoteTemplateEngine.prototype = new NativeTemplateEngine; RemoteTemplateEngine.prototype.makeTemplateSource = function (template) ,... тобто через прототипи переписується логіка рендерінга темплейтів
+
+			- результатом является механизм, который может загружать шаблоны через URL-адреса из модулей Magento.
+
+----------------------------------------
+
+			 ! Невірно - Удалити -> Темплейти - 'ui/template': 'Magento_Ui/templates' - (requirejs-config.js). 
+
+				- Маджента переробила логіку темплейтів нокаута. Якщо в стандартному нокауті я загружав темплейти по айдішці (описувати не буду, краще подивити в прикладах які я робив як загружати темплейти), то у мадженті можна загружати темплейти по юрлу - <div data-bind="template:'Pulsestorm_KnockoutTutorial/hello'"></div>  
+
+					- Тобто Pulsestorm_KnockoutTutorial/hello - переробиться в повний шлях до цього файла
+
+					- Наприклад я добавив цей кусок в phtml - <div data-bind="template:'Pulsestorm_KnockoutTutorial/hello'"></div> 
+
+						- і в мене буде помилка - > GET http://magento-2-0-4.dev/static/frontend/Magento/luma/en\_US/Pulsestorm\_KnockoutTutorial/template/hello.html 404 (Not Found) - Не знайдений цей файл hello.html - це по ходу мій темплейт який я прошу. Якщо додам, має пропасти помилка.
+
+							- Але в нових версіях вже не буде работати вроді (в мене не работало). Як я поняв з форумів файлу html треба вю модельку (js файл), а й умене його не було 
+
+---------------------------------------
+
+	- У ньому привязуються темплейти ko.setTemplateEngine(templateEngine); ko.applyBindings();
+
+		- Флоу такий, що після того як маджента підшаманить темплейти (./template/engine) і зробить що до них можна буде достукатись по юрлу з вюшки, потім вона починає рендерити вюшки. Це якраз тут і робиться 
+
+		- за це відповідає модуль ./bind/scope' ('./bindings/bootstrap') - Тобто це маджентівська кастомна привязка вюшок до вю модельок
+
+		- Тобто тут і вирішується ця логіка, що мені не треба в моїх html файлах підключати js(view model) - Тут все підключиться
+
+
+--------------------------------------------
+
+ Поки це виглядає так. Рекваєр грузиться на всіх сторінках (RequireJS Magento_Ui/js/core /app - це його головний файл) і сотвецтвенно у цьому файлі ініціалізується нокаут. 
+
+	- Задача мадженто розробників у тому щоб у кожних файлах яких хочу, можна було підключати вю модельку(кастомну або існуючу) для будь якого темплейта
+
+	- А вю модельки будуть грузитись через рекваєр (модулями (define)), як і все у мадженті
+
+ З цими знаннями іду далі 
+
+--------------------------------------------
+
+
+ 
+
+
+
+-------------------------
+
+ 6) Продовжую #пункт4 (('./bindings/bootstrap') -  маджентівська кастомна привязка вюшок до вю модельок)
+
+	- Працює це так - <li class="greet welcome" data-bind="scope: 'customer'" -- вю моделька customer привяжеться до  <li class="greet welcome" і його дітей
+
+		- А внизу файла phtml у якому data-bind="scope: 'customer'" є такий код <script type="text/x-magento-init"> щоб скоупу знати що за вю модель "customer" 
+
+			- А якщо є цей атрибут type="text/x-magento-init", то це означає що будуть активні всі плюшки, про які я писав вверху (передавання даних і т д)
+
+						- Викликаю або створюю новий компонент з іменем "customer" і вю моделькою Magento_Customer/js/view/customer
+						{
+						    "*": {
+							"Magento_Ui/js/core/app": { - 
+							    "components": {
+								"customer": {
+								    "component": "Magento_Customer/js/view/customer",
+								    "extra_data":"something" - Якщо треба передати додаткові параметри модулю - Magento_Customer/js/view/customer
+								}
+							    }
+							}
+						    }
+						}
+
+							- По великому рахунку все так як я описував раніше у простих прикладах. Все через JSON щоб можна було звязувати фронт і бек
+
+								<script type="text/x-magento-init">
+								    {
+									".foo": {
+									    "Pulsestorm_JavascriptInitTutorial/example":{"config":"value"}
+									}
+								    }
+								</script>
+
+								- Єдина різниця що тут я просто загружаю скріпт на сторінку, а  "*": {
+																	"Magento_Ui/js/core/app": {
+																	    "components": {
+																		"customer": { - а так я підключаю(звязую) вю модельку з файлом
+
+						- Тобто заходжу в цей файл Magento_Customer/js/view/customer, роблю там всяку штуки і їх можна відобразити тут <li class="greet welcome" або у його дітей
+
+						- Виходить що тут взагалі не має звичайний нокаутівських темплейтів, все через компоненти
+
+						- Magento_Ui/js/core/app - Алан його не описував, тільки сказав що він создаст новый объект javascript для каждого отдельного модуля RequireJS, настроенного как компонент, и этот новый объект станет вю моделькою.
+
+						- А синтаксис такий скоріш за все із за того, що іншим способом до масива маджентівських компонентів достукатись не можна. Magento_Ui/js/core/app - це переписаний маджентою рекваєр (з цими всіма маджентівськими плюшками). Тобто щоб не використовувати стандартний рекваєр і нокаут, я роблю все через цей файл Magento_Ui/js/core/app. 
+
+		- Тобто привяжеться він компонентом
+
+		 	Це буде приблизно так
+
+				var ViewModelConstructor = requirejs('Magento_Customer/js/view/customer');
+				var viewModel = new ViewModelConstructor;
+				viewModelRegistry.save('customer', viewModel); зареєстувалась нова вю моделька для файла у якому цей код.  
+
+		----------------------------------------------------
+		 - Це все що я описував - Це я зареєстрував нову вю модельку "customer". Після цього її можна буде привязати до вюшки через скоуп - data-bind="scope: 'customer'"
+		----------------------------------------------------
+
+	- Скоріш за все можна витягнути всі зареєстворані вю модельки. Це було б логічно
+
+	- У цьому файлі(модулі) './bindings/bootstrap і викликається цей скоуп - scope: require('./scope') - Magento_Ui/js/lib/knockout/bindings/scope.js
+
+
+ 7) Далі буду описувати файл Magento_Ui/js/lib/knockout/bindings/scope.js в якою вюмодельки реєструються і привязуються до вюшок
+
+	- registry.get(component, apply); - тут робляться вю модельки які потрібні для вюшок.
+
+		- http://joxi.ru/RmzEkMwuYRBp4r - Тобто як я вверху писав про компонент "customer" і його вюшку + data-bind="scope: 'customer'" то тут воно звязується
+			console.log(component);
+		        console.log(apply);
+		        console.log('\n');
+
+		- registry - тут зареєстровані вю моделі.
+
+			- registry == 'uiRegistry' == "'Magento_Ui/js/lib/registry/registry" (requirejs-config.js -> uiRegistry:     'Magento_Ui/js/lib/registry/registry' )
+
+		- apply = applyComponents.bind(this, el, bindingContext, promise)
+
+			- applyComponents - Тут робиться шось типу нокаутівського  ko.applyBindings(); тобто привязується модель вю до вюшки
+
+ 8) Відладка 
+
+	<li class="greet welcome" data-bind="scope: 'customer'"> - привязуюсь до приславутоъ вю-модельки 'customer'
+		<pre data-bind="text: ko.toJSON($data, null, 2)"></pre> - вивожу її дані на сторінку - http://joxi.ru/823dpX3T9DWaOA
+		<!-- ... -->
+	</li>
+
+ 9) !!! Напишу це тут. Якщо напишу вверху то не понятно буде за що я пишу.
+
+	- /web/js/core/app.js - У цьму файлі запрашується (а отже і ініціалізується) модуль './renderer/layout' - Magento_Ui/js/core/renderer/layout. Саме тут Magento инициализирует вю модели и добавляет их в реестр вю моделей.
+
+
+
+
+
+
+

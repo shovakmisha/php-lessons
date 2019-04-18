@@ -1,4 +1,8 @@
 
+приблизно так
+
+value = viewModel['title']; - це значення береться з вюшки
+textNode = document.createTextNode(value); - створюється з нього вузел. І цей вузел додається в дерево
 
 
  ---------------- knockout - фреймворк -------------------
@@ -196,6 +200,24 @@
 	hasfocus: <property>
 		<input data-bind = 'value: val, hasfocus: true' />
 
+---------------------------------------------
+
+	<div data-bind="pulseStormHelloWorld:message"></div> - Можна створювати кастомні привязки
+
+		jQuery(function(){    
+		    var viewModelConstructor = function()
+		    {   
+			this.message = "Hello World";
+		    }  
+
+		    ko.bindingHandlers.pulseStormHelloWorld = {
+			update: function(element, valueAccessor){
+			    jQuery(element).html('<h1>' + valueAccessor() + '</h1>');
+			}
+		    };    
+		    ko.applyBindings(new viewModelConstructor);        
+		});
+
 
  ----------------------------------
 
@@ -211,6 +233,8 @@
 
 
  - В консолі браузера оюєкт нокаута теж видно і з консолі можна з ним працювати (міняти на ходу і тд)
+
+ - Шаблон - это просто стандартный набор узлов HTML с привязками KnockoutJS.
 
 
  - 

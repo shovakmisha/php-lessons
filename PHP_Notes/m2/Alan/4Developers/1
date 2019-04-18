@@ -194,7 +194,7 @@ $layout->addBlockToContentContainer($our_view_block);
 
 	- Він згенериться навіть у папку backend - pub//static/adminhtml/Magento/backend/en_US/Pulsestorm_FrontendTutorial1/hello.js
 
-		- Для цього треба вказуватиконкретні арії (frontend/backend) щоб не плодити лишній код
+		- Для цього треба вказувати конкретні арії (frontend/backend) щоб не плодити лишній код
 
 		- Ну і звичайно працюють приорітети. Якщо є 2 файли у папці base i frontend (то приорітетнішим буде той у якого вказана конкретна арія frontend)
 

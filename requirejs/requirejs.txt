@@ -45,3 +45,5 @@
 		"hello": "helper/world" - аліас (requirejs(['hello'], function(hello) {)
 	    },
 	});
+
+ 12) Хотя jQuery не требуется, KnockoutJS не может начать рендеринг представления, пока не будет загружен весь документ / DOM . Тому jquery document ready можна буде використати. Це хороша практика

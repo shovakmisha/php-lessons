@@ -1,0 +1,184 @@
+
+
+ --------------------------- The Curious Case of Magento 2 Mixins - https://alanstorm.com/the-curious-case-of-magento-2-mixins/ ----------------------------------------------
+
+ - Mixins - не является частью стандартного RequireJS - це маджентівська приблуда
+
+class A
+{
+    public function foo()
+    {
+    }
+}
+
+class B
+{
+    public function bar()
+    {
+    }
+}
+
+class C
+{
+    mixin A;
+    mixin B;
+
+    public function baz()
+    {
+    }
+}
+$object = new C;
+
+ Обратите внимание, что классы не наследуются друг от друга. Вместо этого программист указывает, что класс C должен получать методы из класса A и класса B.
+
+
+requirejs-config.js
+
+	var config = {
+	    'config':{
+		'mixins': {
+		    'Magento_Customer/js/view/customer': {
+		        'Pulsestorm_RequireJsRewrite/hook':true
+		    }
+		}
+	    }
+	};
+
+app/code/Pulsestorm/RequireJsRewrite/view/base/web/hook.js
+
+	define([], function(){
+	    'use strict';
+	    console.log("Called this Hook.");
+	    return function(targetModule){
+		targetModule.crazyPropertyAddedHere = 'yes'; - це я добавив нове свойство у мagento_Customer/js/view/customer (module = requirejs('Magento_Customer/js/view/customer');
+																> console.log(module.crazyPropertyAddedHere) - "yes" )
+
+		return targetModule;
+	    };
+	});
+
+ 2) При роботі з міксінами можна використати mage/utils/wrapper модуль. Це схоже на aroundPlugin в пхп
+
+	Смысл модуля-обертки заключается в том, чтобы обернуть существующий вызов функции новым кодом без необходимости редактировать исходную функцию.
+
+	var example = {};
+	example.foo = function (){
+	    console.log("Called foo");
+	}
+
+	var wrapper = requirejs('mage/utils/wrapper');
+
+	var wrappedFunction = wrapper.wrap(example.foo, function(originalFunction){
+
+		- Метод wrap принимает два аргумента. Первая - это оригинальная функция, которую вы хотите обернуть. Вторая - это функция, которую вы хотите обернуть.
+     
+	    console.log("Before");
+	    originalFunction();
+	    console.log("After");
+	});
+
+	//call wrapped function
+	wrappedFunction();
+
+		Before
+		Called foo
+		After
+
+	//change method definition to use wrapped function
+	example.foo = wrappedFunction;
+
+ 3) Кароче Алан ще трохи розказував про це і наводив приклади як з цим працювати. Я розписувати не буду, краще заглянути в статтю
+
+ ------------------------- Knockout Observables for Javascript Programmers - https://alanstorm.com/knockout-observables-for-javascript-programmers/ ----------------------------------
+
+ 1) ko = requirejs('ko'); - Це можна і в консольці написати і працюавти з нокаутом. Те саме якби в require/define я б в залежностях написав ['ko']
+
+ 2) subscribe - можна підписатись на зміни елемента. Типу івент change на інпуті. 
+
+	- ko = requirejs('ko');
+	- var objectToHoldMyValue = ko.observable('default value');
+
+	objectToHoldMyValue.subscribe(function(newValue){ - Підписуюсь на objectToHoldMyValue. Якщо там буде щось мінятись - console.log("The subscriber sees: " + newValue);
+	    console.log("The subscriber sees: " + newValue);
+	}); 
+
+	- Тобто - objectToHoldMyValue('a second new value') - console.log("The subscriber sees: " + newValue);
+
+		- Важливо - якщо я знов напишу objectToHoldMyValue('a second new value') то нічого не буде, так як значення не змінилось (тобто як івент change) - значення не змінилось тому і метод не викликався (console.log("The subscriber sees: " + newValue); )
+
+		- Кароче можна сказати що це ідентична тема як у обсервабл інпутів. 
+
+	- observable елемент могут иметь несколько subscribers.
+
+		пыдписатись на обсервабл елемент можна через template’s через data-bind атрибут. 
+
+ 3) subscribe БУДЕ ПРАЦЮВАТИ НАВІТЬ ЯКЩО Я СТВОРЮ свою привязку (https://knockoutjs.com/documentation/custom-bindings.html)
+		
+ 4) objectToHoldMyValue._subscriptions - подивити хто підписаний на мій елемент. 
+
+	- objectToHoldMyValue._subscriptions.change[0].callback - подивити що робить підписаний елемент
+
+ ---------------------------- Modifying a jQuery Widget in Magento 2 - https://alanstorm.com/modifying-a-jquery-widget-in-magento-2/ ----------------------------
+
+ 1) Це стаття про віджети jQuery https://learn.jquery.com/jquery-ui/widget-factory/how-to-use-the-widget-factory/ в мадженті
+
+	- Віджети в jQuery це частина jQuery UI.
+
+ 2) jQuery.widget('ournamespace.ourPluginMethod', { // - Це віджет jQuery 
+
+	- Когда мы вызываем jQuery.widget - мы создаем определение виджета. Это похоже на создание файла определения класса в традиционной объектной системе
+
+    _create:function(cr){
+        //widget initilization code here, widget has
+        //access to things like this.options, this.element
+        //to access configuration and the matched dom node
+
+	Кароче сюди автоматом попадають дані які я передаю при ініціалізації віджета (jQuery('#the-node').ourPluginMethod({ці дані});)
+
+
+    },
+    hello:function(){
+        console.log("Say Hello");
+    }
+});
+
+	- Приведенный выше код сделает метод с именем ourPluginMethod доступным для клиентских программистов jQuery.
+
+	- jQuery('.some-node').ourPluginMethod({/* ... initial config ...*/}); - ініціалізую цей віджет
+
+		- Когда разработчик говорит jQuery ('. Some-node'). OurPluginMethod, это похоже на то, как разработчик создает объект с помощью файла определения класса. 
+
+
+	- Але так викликати методи віджетів краще - var widgetInstasnce = jQuery('#the-node').ourPluginMethod({/* ... initial config ...*/});
+
+							//call the `hello` method - У мого віджета є метод hello()
+							widgetInstasnce.ourPluginMethod('hello')
+
+ 2) Пространство імен у віджетах
+
+	- Коли я ствоював віджет, я писав - jQuery.widget('ournamespace.ourPluginMethod', {
+
+		- ournamespace - Це пространство імен
+
+		- ourPluginMethod - мій віджетовський плагін
+
+	- console.log(jQuery.ournamespace.ourPluginMethod)
+
+ 2) У цьому файлі перший раз загружаються віджети jQuery- lib/web/mage/list.js
+
+									define([
+									    "jquery",
+									    'mage/template',
+									    "jquery/ui" - це вони
+
+									], function($, mageTemplate){
+									    "use strict";
+
+									    $.widget('mage.list', {        /*...*/});
+									    /*...*/
+									    return $.mage.list;
+									})
+
+
+
+
