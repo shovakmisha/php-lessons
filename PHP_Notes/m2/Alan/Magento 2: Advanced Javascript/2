@@ -126,6 +126,7 @@ app/code/Pulsestorm/RequireJsRewrite/view/base/web/hook.js
 
  2) jQuery.widget('ournamespace.ourPluginMethod', { // - Це віджет jQuery 
 
+
 	- Когда мы вызываем jQuery.widget - мы создаем определение виджета. Это похоже на создание файла определения класса в традиционной объектной системе
 
     _create:function(cr){
@@ -164,12 +165,12 @@ app/code/Pulsestorm/RequireJsRewrite/view/base/web/hook.js
 
 	- console.log(jQuery.ournamespace.ourPluginMethod)
 
- 2) У цьому файлі перший раз загружаються віджети jQuery- lib/web/mage/list.js
+ 3) Для  своїх плагінів м2 має своє пространство імен - mage. Для прикладу розгляну як створюється плагін list (він також і модуль) - lib/web/mage/list.js
 
 									define([
 									    "jquery",
 									    'mage/template',
-									    "jquery/ui" - це вони
+									    "jquery/ui" - це вони. Тобто це маджентівські плігіни jQuery, які загружаються як модулі (через рекваєр)
 
 									], function($, mageTemplate){
 									    "use strict";
@@ -177,7 +178,177 @@ app/code/Pulsestorm/RequireJsRewrite/view/base/web/hook.js
 									    $.widget('mage.list', {        /*...*/});
 									    /*...*/
 									    return $.mage.list;
+
+										// jQuery['mage']['list'] == $.mage.list;
 									})
+
+ 
+ 4) Якщо захочу його використати у своєму модулі, треба написати 
+
+	requirejs([
+	    'jquery', - теж треба
+	    'mage/list' - Тобто і пространство імен теж треба вказати
+	], function($, listWidget){
+	    $('#some-node').list({/* ... */}); - тобто просто list, а не listWidget. Те саме як і то що я описував вверху про ініціалізацію стандартних плагінів jQuery - jQuery('#the-node').ourPluginMethod({/* ... initial config ...*/}); 
+
+		- То що я добавив у рекваєрі 'mage/list' це я вже добавив до jQuery мій плагін. і в jQuery буде до нього доступ вже
+
+	})
+
+ 5) Але не завжди 1 модуль == 1 віджет. Наприклад віджети Menu and Navigation знаходяться у файлі vendor/magento/magento2-base/lib/web/mage/menu.js
+
+	$.widget('mage.navigation', $.mage.menu, { - зразу 2 віджети оприділяються за 1 раз
+
+	 - Їх аліас теж можна переоприділити vendor/magento/module-theme/view/frontend/requirejs-config.js
+	    										"menu":                   "mage/menu",
+
+ 6) Ще трохи про шляхи. Наприклад мені треба плагін календаря - 'mage/calendar'(і це робочий варіант). Логічно предположити що це модуль і його треба шукати тут lib/web/mage/calendar.js
+
+	- Але це не так. Файл календаря дійсно можна знайти по цьому шляху, але це не модуль а анонімна ф-ція.
+
+	- в ній оприділяються віджети і ця анонімна ф-ція повертає dateRange:  $.mage.dateRange, calendar:   $.mage.calendar . Нічого важкого, просто не маж стандартів
+
+	- typeof define === 'function' && define.amd - Этот код проверяет наличие require.js библиотеки. 
+
+ 7) Як я писав вверху, створення це як створення класу. А використовування віджета - jQuery('#the-node').ourPluginMethod({/* ... initial config ...*/}); це як робити обєкт з цього класу
+
+	- Але це не єдиний спосіб ініціалізувати обєкт. Маджента предлагає ще 2 способи data-mage-init, x-magento-init script
+
+		- Це атрибути які я вже розглядував у попередніх статтях. Вони ідентичні по суті. Виявляється що вони підходять і для віджетів
+
+			1) $('#some-node').list({/* ... config ... */});  ==  <div id="some-node" data-mage-init='{"mage/list":{/* То що я тут передав. */}}'></div>
+
+
+														//File: lib/web/mage/list.js
+														define([
+														    "jquery",
+														    'mage/template',
+														    "jquery/ui"
+														], function($, mageTemplate){
+														    "use strict";
+
+														    $.widget('mage.list', {        /* Передасться сюди */});
+														    /*...*/
+														    return $.mage.list;
+														})
+
+ 8) Вопше йся уся система з data-mage-init і x-magento-init script ізначально була придумана для віджету -  <div id="some-node" data-mage-init='{"mage/list":{/* То що я тут передав. */}}'></div>
+
+	- Якщо подивити, то віджети теж повертають шось типу return $.mage.list;
+
+	- А потім вже переробили щоб ця система працювала і для скріптів і для вю модельок і для компонентів.
+
+ 9) Стандартні віджети jQuery це ооп. І звичайно їх можна розширяти, переоприділяти і тд. Також можна викликати батьківський віджет - _super()
+
+	- батьківський метод можна викликати навіть якщо я його переоприділив у своєму віджеті - open: function() {
+														console.log( "open" );
+													 
+														// Invoke the parent widget's open().
+														return this._super();
+													    }
+
+		- _super() and _superApply() це аналоги call() apply() - в скріпті
+
+	- $.widget( "custom.superDialog", $.ui.dialog, {} ); - При указании родительского виджета передайте его в качестве второго аргумента - после имени виджета и перед объектом-прототипом виджета.
+
+		- Цей код зробить віджет custom.superDialog ідентичним $.ui.dialog, {}
+
+ 10) $.widget( "custom.superDialog", $.ui.dialog, {
+	    red: function() { - Добавлю метод до мого віджета
+		this.element.css( "color", "red" );
+	    }
+	});
+
+	- Викликаю цей новий метод - $( "<div>I am red</div>" ).superDialog().superDialog( "red" );
+
+		- Переоприділяти(викликати) батьківські методи теж можна
+
+ 11) ПОчинаючи з jQuery UI 1.9 переоприділяти віджети можна так $.widget( "ui.dialog", $.ui.dialog, {
+								    open: function() {
+									console.log( "open" );
+									return this._super();
+								    }
+								});
+								 
+								$( "<div>" ).dialog();
+
+	
+ 12) <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{ - Как это работает?
+
+	1) Magento получает модуль dropdownDialog через RequireJS - require['dropdownDialog'(це аліас - "dropdownDialog":         "mage/dropdown",)]
+
+	2) Модуль dropdownDialog использует jQuery.widget для определения виджета. Тобто у файлі модуля оприділяється цей віджет
+
+	3) Модуль dropdownDialog возвращает объект определения виджета. І після цього у jQuery є цей плагін на моїй сторінці
+
+	4) Код ядра Magento, который реализует data-mage-init, использует возвращенный объект виджета для создания экземпляра виджета
+
+		- НЕ ПОНЯВ ЦЕ АЛЕ АЛАН КАЖЕ ЩО ЯКЩО ОЮЄКТ ВЖЕ ІНІЦІАЛІЗУВАВСЯ З ВІДЖЕТА ТО ЦІ ВСІ ФІШКИ З ПЕРЕОПРИДІЛЕННЯМ ВІДЖЕТА ВЖЕ НЕ ДІЮТЬ
+
+
+ 13) ------ Створення міксіна на віджет --------------------
+
+	- app/code/Pulsestorm/Logdropdown/view/base/requirejs-config.js
+
+	var config = {
+	    "config": {
+		"mixins": {
+		    "mage/dropdown": { - Тобто я тут пишу не аліас модуля яко мені треба міксанути а модуль (хоча у нього є аліас - 'dropdownDialog': 'mage/dropdown')
+		        'Pulsestorm_Logdropdown/js/dropdown-mixin':true
+		    }
+		}
+	    }
+	};
+
+	//File: app/code/Pulsestorm/Logdropdown/view/base/web/js/dropdown-mixin.js
+
+	define(['jquery'], function(jQuery){
+	    return function(originalWidget){ - originalWidget == mage/dropdown
+		alert("Our mixin is hooked up.");
+		console.log("Our mixin is hooked up");
+
+		originalWidget.prototype.widgetName; - імя віджета
+
+		originalWidget.prototype.namespace - неймспейс віджета
+
+		return originalWidget;
+	    };
+	});
+
+		- Або варіант з екстендом
+
+			define(['jquery'], function(jQuery){
+			    return function(originalWidget){
+
+				jQuery.widget(
+				    'mage.dropdownDialog', jQuery['mage']['dropdownDialog'],  
+
+				    { - ПЕРЕОПРИДІЛЯЮ МЕТОД - Це цей дробдаун http://joxi.ru/EA4LvxOiopvMWA. Не тільки цей, він на багато елементів діє, але і на цей теж
+					open:function(){
+					    //our new code here
+					    console.log("I opened a dropdown!"); - http://joxi.ru/L216bOacR0zWnA
+
+					    //call parent open for original functionality
+					    return this._super();
+
+					}
+				    });
+
+				return jQuery['mage']['dropdownDialog']; І ПОВЕРТАЮ ЙОГО
+			    };
+			});
+
+	- php bin/magento setup:upgrade - також чистить кеші
+
+	- Как только вы это сделаете, загрузите любую страницу, которая использует виджет dropdownWidget (домашняя страница, страница каталога и т. Д.), И вы должны увидеть предупреждение и сообщение console.log о том, что наш миксин подключен.
+
+ 14) Я впевнений що можна не екстендити існуючий модуль, а створити новий на основі існуючого і приміняти його там де мені треба. Але скоріш за все це теж не ок коли у різних сторінках одинакові плагіни будуть мати різну поведінку
+
+
+
+
+
+
 
 
 
