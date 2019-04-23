@@ -1,0 +1,303 @@
+
+ <uiComponent /> (файл компонентов пользовательского интерфейса) - это язык, специфичный для домена (DSL), который управляет созданием вложенных объектных файлов PHP. 
+
+	- Каждый узел в файле ui_component связан с узлом конфигурации в файле - vendor/magento/module-ui/view/base/ui_component/etc/definition.xml
+
+		- Тобто якщо в мене є файл юі компонента (ui_component/[...].xml) , то він звязаний з файлом ui_component/etc/definition.xml
+
+ -------------------------------------------- Magento 2: Introducing UI Components - https://alanstorm.com/magento_2_introducing_ui_components/
+
+ 1) тег <uiComponent /> - упрощена система лейаутів для адмінки. 
+
+	- <uiComponent name="product_form"/> - цей тег додасть форму редагування продукту
+
+ 2) <uiComponent />, Magento 2 облегчает разработчикам повторное использование различных компонентов в разных местах.
+
+ 3) До прикладу список цмс блоків в адмінці (Content -> Block) побудовані за допомогою <uiComponent />
+
+	File: vendor/magento/module-cms/view/adminhtml/layout/cms_block_index.xml -->
+
+		- По назві файлу вже можна здогадатись фронтнейм контролер екшн - http://magento.two/admin_zfjo40/cms/block/index/key/121d0485c741cfe7a8840a393af7b7801fb260340ea234c78f4ecf5d3238ecdf/
+
+		<referenceContainer name="content">
+		    <uiComponent name="cms_block_listing"/> - це список цмс блоків. ЦЕ КОМПОНЕНТ
+		</referenceContainer>
+		
+
+ 4) Трохи запутано. Алан каже що рендерінг скріптів і темплейта теж робиться в XHTML. Як я поняв те саме що і в phtml. Те що я написав поки не має сенсу, єдине що я хотів сказати що xhtml i скріпти звязані. 
+
+	- Це робиться у цьому методі - appendLayoutConfiguration() - #File: vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php
+
+		public function appendLayoutConfiguration() - візьме цей json з скріптами і додасть його в темплейт
+		{
+		    $layoutConfiguration = $this->wrapContent(
+			json_encode(
+			    $this->structure->generate($this->component)
+			)
+		    );
+		    $this->template->append($layoutConfiguration);
+		}
+
+		- Навіть з шляху до файлу можна зрозуміти що цей пхп файл обробляє xhtml темплейти.
+
+		- виходить що методи класа vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php теж можна викликати в темплейті
+
+
+ ---------------------- Magento 2: Simplest UI Component - https://alanstorm.com/magento_simplest_ui_component/ ------------------------------
+
+ Тут я створив вже базову сторынку в адмінці (типу хеллоуворлд) і тепер додаю конфігурацію uiComponent
+
+ 1) <!-- File: app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/layout/pulsestorm_simpleuicomponent_index_index.xml -->
+
+	<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	    <referenceBlock name="content">
+		<block template="content.phtml" class="Pulsestorm\SimpleUiComponent\Block\Adminhtml\Main" name="pulsestorm_simpleuicomponent_block_main" />
+
+		<!-- START: our new ui component -->
+		<uiComponent name="pulsestorm_simple"/> - додаю у мій темплейт uiComponent - pulsestorm_simple
+		<!-- END:   our new ui component -->
+
+	    </referenceBlock>
+	</page> 
+
+		- Получаю помилку DOMDocument should be created. Це із за того що я сконфігурував юі компонент pulsestorm_simple, але маджента не може знайти цей файл. Це пхп-шна помилка. маджента через пхп хоче прочитати конфіги pulsestorm_simple але не може їх знайти
+
+		- Щоб не було цього ексепша і маджента могла прочитати ці конфіги, треба ствроити цей файл конфігів тут - ui_component/[...].xml
+
+			<!-- File: app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/ui_component/pulsestorm_simple.xml -->
+
+				- Фай має називатись як імя компонента - pulsestorm_simple.xml
+
+				- Це сторінка адмінки, тому арія adminhtml
+
+			<pulsestorm_simple xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+			</pulsestorm_simple> - З цим тегом проблеми. Це верхня нода у моєму компоненті. Кожна нода ui_component має бути звязана з файлом definition.xml
+
+				- цей тег не обовязково має співпадати з іменем компонента - <uiComponent name="pulsestorm_simple"/>. Я поставиви вже існуючий замість нього і все работало
+
+ 2) Після цього получаю ще одну помилку - No matching global declaration available for the validation root. Це із за того що мій вузел юі компонента </pulsestorm_simple> не існує у файлі - definition.xml + а DSL-компонент(uiComponent) Magento не будет знать, какой класс PHP создать, когда он встретил этот узел.
+
+	- definition.xml - це файл конфігів юі компонентів. Він мержиться в 1 файл і вкінці я получаю 1 великий файл конфігів. Тож треба бути осторожним з назвою компонентів і нодів для нього, щоб не переписати існуючі.
+
+	- Файл definition.xml має лежати у арії base
+
+	- definition.xml - також грає роль дефолтних конфігів для юі компонента. Наприклад я можу задати темплейт у файлі definition.xml <argument name="data" xsi:type="array">
+            															<item name="template" xsi:type="string">templates/our-template</item>
+
+
+		- а потім переоприділити його у файлі компонента pulsestorm_simple.xml ( можна заглянути у цей файл, там є закоментований код)
+
+		- це крута фішка для того щоб використовувати мій компонент у різних місцях і кожен зможе використовувати мій компонент. Тобто я задаю дефолтні конфіги, а кому не підходить хай встановлює свої
+
+	- Добавляю цей файл - <!-- File: app/code/Pulsestorm/SimpleUiComponent/view/base/ui_component/etc/definition.xml -->
+
+		<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
+		    <pulsestorm_simple class="Pulsestorm\SimpleUiComponent\Component\Simple"/> - це обєкт мого компонента pulsestorm_simple. Цей клас звичайно треба створити
+
+			- Файл класса Magento 2 UI Component (Simple) должен расширять базовый абстрактный класс Magento\Ui\Component\AbstractComponent и должен определять метод getComponentName().
+
+				- AbstractComponent за допомогою нього я буду рендерити XHTML темплейти
+
+
+				- Тобто Pulsestorm\SimpleUiComponent\Component\Simple це $this для темплейта XHTML
+
+---------------------------------------------
+			<argument name="data" xsi:type="array"> Вказую який XHTML темплейт рендерити
+			    <item name="template" xsi:type="string">templates/our-template</item> - Звичайно цей темплейт треба буде добавити - view/adminhtml/ui_component/templates/our-template.xhtml
+
+				- Система uiComponent будет искать эти шаблоны в папке view / [area] / ui_component модуля. Незважаючи на то що це xhtml, це хмл файли. І по їх заголовку це понятно <?xml version="1.0" encoding="UTF-8"?>
+
+			</argument>
+
+			- Якщо не вказати який щаблон рендерити, викинеться ексепшн - Exception #0 (Magento\Framework\Exception\LocalizedException): Object DOMDocument should be created.
+
+			- Я написав цей кусок коду, який вказує темплейт у файлі pulsestorm_simple.xml і всеодно работало
+
+------------------------------------------
+
+		</components>
+
+
+ -------------------------------------------------
+
+ з того що я поняв на даний момент. У лейауті я додаю юі компонент. Він знаходиться у ui_component/[...].xml а конфіги для нього знаходяться у файлі definition.xml
+
+ -------------------------------------------------
+
+ 3) Після цього я знов получаю помилку - Exception #0 (Magento\Framework\Exception\LocalizedException): Element 'pulsestorm_simple': This element is not expected. Expected is one of ( range, tab, dataSource, paging, massaction, listing, form, fieldset, field, filters ).
+
+	- Це із за того що створений мною definition.xml (змержений) не проходить валідацію файла - vendor/magento/module-ui/etc/ui_definition.xsd
+
+	- Magento\Framework\Config\Dom::validateDomDocument - Цей метод відповідає за валідацію
+
+		- (Алан каже що в статтях про обєкти він про це розказував)
+
+	- По ходу, створення нових нод для юі компонентів ваще погана ідея. великі заморочки з валідацією їх 'xml-ок'
+
+	- Щоб валідації не було я переписав клас який валідує 
+
+		<!-- File: app/code/Pulsestorm/SimpleUiComponent/etc/di.xml -->
+
+		<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+		    <preference for="Magento\Framework\App\Arguments\ValidationState" type="Pulsestorm\SimpleUiComponent\Model\ValidationState"/>
+		</config>
+
+		- і змінив клас валідації
+
+		 public function isValidationRequired(){        
+			return false; }
+
+	- XSD валидация позади, мы готовы продолжить наше исследование.
+
+ 4) Також в нових версіях мадженти треба створити файл app/code/Pulsestorm/SimpleUiComponent/view/base/ui_component/etc/definition.map.xml
+
+	- Не скажу точно нащо він
+
+	<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.map.xsd">
+	    <component name="pulsestorm_simple">
+		<schema name="current">
+		    <argument name="data" xsi:type="array">
+		        <item name="config" xsi:type="array">
+
+		            <item name="provider" type="string" xsi:type="xpath">@provider</item>
+		            <item name="component" type="string" xsi:type="xpath">@component</item>
+		            <item name="template" type="string" xsi:type="xpath">@template</item>
+		            <item name="sortOrder" type="number" xsi:type="xpath">@sortOrder</item>
+		            <item name="displayArea" type="string" xsi:type="xpath">@displayArea</item>
+		        </item>
+		    </argument>
+		</schema>
+	    </component>
+	</components>
+
+ 5) !!!!!!ОСТАННЄ. Після цього всього в мене знов буде помилка - ( ! ) Fatal error: Method Magento\Ui\TemplateEngine\Xhtml\Result::__toString() must not throw an  exception, caught Error: Call to a member function getConfigData() on null  in /path/to/magento/ - Не може відрендерити лейаут
+
+	- Суть у тому що помимо рендерига лейаута, система UI Component ганяє інфу між беком і фронтом (Я звязував вверху Xhtml темплейт і пхп клас). За передачу цих даних (по крайній мірі з бека на фронт) відповідає Дата провайдер. І його треба вказати. Я його вказав у файлі - pulsestorm_simple.xml
+
+	<dataSource name="pulsestorm_simple_data_source"> - pulsestorm_simple (назва UI Component) + _data_source
+		<argument name="dataProvider" xsi:type="configurableObject">
+		    <!-- the PHP class that implements a data provider -->
+		    <argument name="class" xsi:type="string">Pulsestorm\SimpleUiComponent\Model\DataProvider</argument> - Я заглянув у клас (Magento\Ui\DataProvider\AbstractDataProvider) від якого він екстендиться і там були методи які звязувались з базою (Типу - $this->getCollection()->addFieldToSelect($field, $alias); .....) 
+
+		    <!-- redundant with the `dataSource` name -->
+		    <argument name="name" xsi:type="string">pulsestorm_simple_data_source</argument> - pulsestorm_simple (назва UI Component) + _data_source
+
+		    <!-- required: means ui components are meant to work with models --> Це треба. Воно вказує, що ui component буде працювати з моделькою 
+		    <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+
+		    <!-- required: means ui components are meant to work with URL passing -->
+		    <argument name="requestFieldName" xsi:type="string">id</argument> - Це теж треба
+		</argument>
+
+	    </dataSource>
+
+ 6) ----------- Пояснення того що я написав вверху
+
+	- Коли маджента зустрічає шось таке <uiComponent name="pulsestorm_simple"/>, то запускається приблизно такий функціонал
+
+		$data = functionThatLoadsArgumentNodesFromXmlFiles();
+		$ui_component = new Pulsestorm\SimpleUiComponent\Component\Simple(
+		    //...
+		    $data,    
+		);    
+		echo $ui_component->render();
+	
+	- Взагалі весь процес що я робив, це звязував клас Pulsestorm\SimpleUiComponent\Component\Simple (в ньому є метод render() який рендерить дані компонента по ходу) з іншими даними які відносяться до мого компонента (Типу темплейт установити)
+
+		$data = functionThatLoadsArgumentNodesFromXmlFiles();
+		$ui_component = new Pulsestorm\SimpleUiComponent\Component\Simple(
+		    //...
+		    [
+			'template'=>'templates/our-template'
+		    ],    
+		);    
+		echo $ui_component->render();
+
+	- Всякий раз, когда вы застряли с небольшим количеством конфигурации юі компонентів, помните, что вы готовите значения для Magento для преобразования в код PHP
+
+	- Все що я написав, можна подивити в ісходному коді сторінки. Так мій лейаут відрендерився 
+
+		<div>
+		    <h1>
+			Hello World
+		    </h1>
+		    <script type="text/x-magento-init"> - Цікаво що скріпти саме у цьому тезі
+			{
+			    "*": {
+				"Magento_Ui/js/core/app": {
+				    "types": {
+				        "dataSource": [],
+				        "pulsestorm_simple": {
+				            "extends": "pulsestorm_simple"
+				        },
+				        "html_content": {
+				            "component": "Magento_Ui\/js\/form\/components\/html",
+				            "extends": "pulsestorm_simple"
+				        }
+				    },
+				    "components": {
+				        "pulsestorm_simple": {
+				            "children": {
+				                "pulsestorm_simple": {
+				                    "type": "pulsestorm_simple",
+				                    "name": "pulsestorm_simple"
+				                },
+				                "pulsestorm_simple_data_source": {
+				                    "type": "dataSource",
+				                    "name": "pulsestorm_simple_data_source",
+				                    "dataScope": "pulsestorm_simple",
+				                    "config": {
+				                        "params": {
+				                            "namespace": "pulsestorm_simple"
+				                        }
+				                    }
+				                }
+				            }
+				        }
+				    }
+				}
+			    }
+			}        
+		    </script>
+		</div>
+
+
+ 7) {{}} - Синтаксис щоб викликати метод з Компонента класа цього темплейта - {{ getComponentName() }}. Цей мето є у файлі - app/code/Pulsestorm/SimpleUiComponent/Component/Simple.php - це його $this
+
+ 8) Також у темплейті можна витягнути дані з файла - app/code/Pulsestorm/SimpleUiComponent/view/base/ui_component/etc/definition.xml
+
+	- <item name="message" xsi:type="string">Hello World</item> - <div> {{message}} </div>
+
+		- Раніше була помилка, що треба було так писати <div class="{{message}}"> {{message}} </div> але тепер вроді ок
+
+ 9) Я вроді поняв як передаються дані з бека на фронт. У цей json обєкт який я писав вверху <script type="text/x-magento-init">.... можна додавати дані з файла app/code/Pulsestorm/SimpleUiComponent/Component/Simple.php через метод getDataSourceData()
+
+	- Я написав у ньому return ['data' => ['foo'=>'bar']]; і в ісходному коді у цьому json обєкті зявилися ці дані - http://joxi.ru/82QB5lacw9zLJA
+
+	- Виникає питання, навіщо тоді клас Pulsestorm\SimpleUiComponent\Model\DataProvider, але Алан не дав відповіді на це. Якщо дивити на корівські мотоди, то хороший патерн для передачі даних буде виглядати так
+
+		#File: app/code/Pulsestorm/SimpleUiComponent/Component/Simple.php 
+
+		public function getDataSourceData()
+		{
+		    return ['data' => $this->getContext()->getDataProvider()->getData()];
+		}
+
+		#File: app/code/Pulsestorm/SimpleUiComponent/Model/DataProvider.php
+		<?php
+		namespace Pulsestorm\SimpleUiComponent\Model;
+		class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+		{
+		    public function getData()
+		    {
+			return [['foo'=>'baz']];
+		    }
+		}    
+		
+		- Вроді так правильніше передавати дані. Хоча работає якщо прердавати просто з метода - getDataSourceData()
+
+
+
+
+	 
