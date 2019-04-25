@@ -1,0 +1,84 @@
+ 
+ --------------------------- Magento 2: ES6 Template Literals - https://alanstorm.com/magento_2_ec6_template_literals/ -----------------------------
+
+ 1) Літерали  Кароче якшо строчка знаходиться в обратних кавичках - це шаблонний літерал. Він рендериться в звичайну строку. Це дуже схоже на скобки ${} в строці в пхп
+
+	var results = `Hello World`
+
+	> var type    = typeof results;
+
+	> console.log(type) - Hello World
+
+	string
+
+ 3) mage/utils/template - модуль RequireJs для того щоб шаблонний літерал підтримували старі браузери. Але работає це дуже повільно. Логка така, що маджента перевряє, якщо браузер падтримує шаблонні літерали, дані не будуть оброблятись цим модулем (і все буде швидко), якщо не підтримує, тоді будуть
+
+	requirejs(['mage/utils/template'], function(templateRenderer){
+	    window.salutation      = 'Brave New'; - треба щоб це була глобальна змінна. литералы шаблона могут читать только из глобальной области видимости інакше помилка - salutation is not defined
+	    var templateLiteral = '${salutation} World';    
+	    var results         = templateRenderer.template(templateLiteral);
+	    console.log(results);
+	}); 
+
+ 4) Щоб звязувати їх з свойствами обєкта, є другий синтаксис - ${$.placeholder}
+
+	requirejs(['mage/utils/template'], function(templateRenderer){
+		var viewVars        = {
+		    'salutation':'What a Crazy'
+		};   
+
+		var templateLiteral = '${$.salutation} World';
+		var results         = templateRenderer.template(templateLiteral, viewVars);
+		console.log(results);
+	    });  
+
+ 4) І як це мені допоможе у системі скріптів мадженти. Я вже писав що конструктор вю модельок - це uiElement(uiElement/Magento_Ui/js/lib/core/element/element.js)
+
+	- це приклад використання конструктора вю модельок
+
+		requirejs(['uiElement'], function(Element){
+		    viewModelConstructor = Element.extend({});
+		    viewModel = new viewModelConstructor;
+		    console.log(viewModel);
+		});
+
+		UiClass {_super: undefined, ignoreTmpls: Object, ...}
+
+ 	- Конструктор вю модельок імплементує - uiClass/Magento_Ui/js/lib/core/class
+
+	- Конструктору вю моделі можна задати дефолтні значення
+
+		viewModelConstructor = Element.extend({
+		    'defaults':{
+			'ourDefaultValue':'Look at our value!' - це значення буде у всіх, хто наслідується від цього конструктора вю моделі
+		    }
+		});
+
+		viewModel = new viewModelConstructor;
+    		console.log(viewModel.ourDefaultValue); - Look at our value!
+
+ 5) requirejs(['uiElement'], function(Element){
+	    viewModelConstructor = Element.extend({
+		'defaults':{
+		    'message':'${$.salutation} World. ',
+		    'salutation':'Goodbye'
+		}
+	    });
+	    viewModel = new viewModelConstructor({
+		'salutation':'This is still a crazy'
+	    });
+	    console.log(viewModel.message);
+	});
+
+	This is still a crazy World. - Тобто суть у тому, що є дефолтні значення і значення вже в новому обєкті. І значення з нового обєкту перебивають дефолтні. Якби не перебивали, було б - Goodbye World
+
+
+
+
+
+
+
+
+
+
+

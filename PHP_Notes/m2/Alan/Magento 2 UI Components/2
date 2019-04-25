@@ -1,0 +1,325 @@
+
+ ----------------------- Magento 2: Simplest UI Knockout Component - https://alanstorm.com/magento_2_simplest_ui_knockout_component/
+
+ 1) Я вже писав про реєстрацію вю модельок (типу маджента проходиться по вюмодельках і реєструє їх) трохи. Щоб їх подивити, можна глянути у файл  requirejs-config.js
+
+	var config = {
+	    map: {
+		'*': {
+		    uiRegistry:     'Magento_Ui/js/lib/registry/registry', - це воно. Цей модуль знаходиться за цим шляхом - vendor/magento/module-ui/view/base/web/js/lib/registry/registry.js
+
+ 2) Щоб витягнути дані з модуля uiRegistry, можна зайти в цей модуль реєстрації, і там над методом get() є підсказки як витягувати дані з модуля реєстрації - http://joxi.ru/Y2Lz0oWi7ENnRr
+
+	- Для прикладу там є список варіантів як витягнути дані з модуля. Це один із них * @example Providing custom search handler.
+
+               registry.get(function (item) { return item.sample === true; }); це навіть в консолі можна перевірити - reg = requirejs('uiRegistry'); 
+							
+															 reg.get(function(item){
+															    console.log(item.name);
+															    console.log(item); - http://joxi.ru/zANzVoLivjqgOA
+															}); - item це всі зареєстровані модулі які в ньому є
+
+		- Ці заморочки з витягуванням зареєстрованих модулів не просто так. Просто витягнути - reg.get('product_listing.product_listing'); - не можна
+
+ 3) Добавляю у файл definition.xml цей код 
+
+	<item name="config" xsi:type="array">
+		<item name="component" xsi:type="string">Pulsestorm_SimpleUiComponent/js/pulsestorm_simple_component</item>
+	</item>
+
+	І бачу що він передався json - ном на фронт "components": {
+							    "pulsestorm_simple": {
+								"children": {
+								    "pulsestorm_simple": {
+									"type": "pulsestorm_simple",
+									"name": "pulsestorm_simple",
+									"config": {
+									    "component": "Pulsestorm_SimpleUiComponent\/js\/pulsestorm_simple_component" - цей файл треба створити інакше помилка
+									}
+								    },
+
+	- Скріпт який у цьому файлі відпрацює, але всеодно буде помилка - TypeError: Constr is not a constructor
+
+		- Це із за того (Алан каже), що треба щоб мій модуль ( файлик pulsestorm_simple_component.js ), повертав view model constructor. В ньому треба написати шось таке
+
+			define(['uiElement'], function(Element){
+			    viewModelConstructor = Element.extend({
+				defaults: {
+				    template: 'Pulsestorm_SimpleUiComponent/pulsestorm_simple_template' - це темплейт html(вю моделька) - app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/web/template/pulsestorm_simple_template.html
+				}
+			    });
+
+			    return viewModelConstructor;
+			});
+
+		- Дані вю модельки(pulsestorm_simple_template) можна буде викликати у моєму шаблоні юі компонента (xhtml файл) -  http://joxi.ru/KAxB9qwcZKgGvm
+
+			<div data-bind="scope: 'pulsestorm_simple.pulsestorm_simple'" class="entry-edit form-inline"> - привязую до цього дом елемента компонент(його вю модельку) - pulsestorm_simple_component.js
+
+				<!-- ko template: getTemplate() --><!-- /ko --> - виведе дані вюшки, яку я задав в pulsestorm_simple_component.js . Воно запрацює, тому що якщо темплейт юі компонента, який звязуєтьєся з нокаутівським компонентом(вю модель) через scope, а у вю моделька повертає viewModelConstructor('uiElement') то тоді цей функціонал має працювати
+
+			    </div>
+
+
+
+
+ 4) reg = requirejs('uiRegistry'); 
+
+	- Якщо написати в консолі reg.get('pulsestorm_simple.pulsestorm_simple') , то буде те саме, що я писав вверху console.log(item);  єдине що в консольці буде 1 модуль а item це всі зареєстровані модулі які в ньому є
+
+ 5) Аліаси теж работають, тобто <item name="component" xsi:type="string">uiComponent</item> підключить цей модуль(requirejs-config.js - uiComponent:    'Magento_Ui/js/lib/core/collection' )
+
+ 5) дебажити цю всю діч можна з консолі. Тобто коли вже сторінка загрузилась
+
+	- <strong data-bind="text: message"></strong>
+
+	- viewModelConstructor = Element.extend({
+		defaults: {
+		    template: 'Pulsestorm_SimpleUiComponent/pulsestorm_simple_template'
+		},
+		message: ko.observable("Hello Knockout.js!")
+	    });
+
+	reg = requirejs('uiRegistry');
+	reg.get('pulsestorm_simple.pulsestorm_simple').message("Change Me"); - змінить свойство message.
+
+ 6) В хромі модулі RequireJS можна знайти так - https://alanstorm.com/2016/images/simple-ui-knockout/sources.png
+
+ 7) Щоб знайти вюшку, яку я підключив через вю модель - https://alanstorm.com/2016/images/simple-ui-knockout/xhr.png 
+
+
+-------------------------------------------
+
+ 8) Виведення вю модельок і вюшок колекцією. (можна провести легку аналогію з лейаутом типу core/text_list який виводить всі дочірні елементи)
+
+	- То шо я писав вверху, дозволяє вивести у шаблоні юі компонента одну вю модель і привязаний до неї шаблон. Маджента дозволяє виводити колекцію вю модельок і вюшок в одному місці.
+
+	- app/code/Pulsestorm/SimpleUiComponent/view/base/ui_component/etc/definition.xml
+
+		<item name="config" xsi:type="array">
+		        <!-- <item name="component" xsi:type="string">Pulsestorm_SimpleUiComponent/js/pulsestorm_simple_component</item> -->  так я підключав вю модельку (і вюшку у вю модельці)  
+		    </item>  
+
+			-------------------------
+
+		<item name="config" xsi:type="array"> а так я підключаю колекцію, у якій можна буде виводити декілька вю модельок і вюшок
+			<item name="component" xsi:type="string">uiComponent</item> - це буде цей комонент, vendor/magento/module-ui/view/base/web/js/lib/core/collection.js
+		</item>  - і цей темплейт - vendor/magento//module-ui/view/base/web/templates/collection.html
+
+			<each args="data: elems, as: 'element'">
+			    <render if="hasTemplate()"/>
+			</each>
+
+			- Це маджентівська фішка з цими темплейтами. По факту це можна розлядати так
+
+				<!-- ko foreach: {data: elems, as: 'element'} -->
+				    <!-- ko if: hasTemplate() --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->
+				<!-- /ko -->
+
+				https://alanstorm.com/magentos-knockoutjs-templates-arent-knockoutjs/
+
+				Цей цикл буде проходитись по по всіх вю модельках що в ньому і також буде рердерити вюшки цих вю модельок.
+
+				- Типу додаю новий компонент - (http://joxi.ru/4AkgeRYfokz3PA) - <item name="component" xsi:type="string">uiComponent</item>  
+
+					- Якщо не буде жодного компоненту http://joxi.ru/DmB8DjGUJ479QA - reg = requirejs('uiRegistry'); - reg.get('pulsestorm_simple.pulsestorm_simple') - андефайнд. Тобто його не буде у зареєстованийх компонентах
+
+				- Ну кароче, додав я цей компонент - <item name="component" xsi:type="string">uiComponent</item> - колекція яка буде виводити вю модельки мого юі компоненту. На даний момент він пустий - 	reg = requirejs('uiRegistry');
+			> viewModelConstructor = reg.get('pulsestorm_simple.pulsestorm_simple')
+			> viewModelConstructor.elems() 
+		
+				- Щоб додати мої вю модельки і вюшки на цю сторінку (привязати до колекції), треба додати їх у мій юі компонент - app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/ui_component/pulsestorm_simple.xml
+
+					<htmlContent name="first_ever_child"> - htmlContent це вроді довільний тег
+						<argument name="block" xsi:type="object">Magento\Framework\View\Element\Text</argument>
+						<argument name="data" xsi:type="array">
+						    <item name="config" xsi:type="array">
+							<item name="component" xsi:type="string">Pulsestorm_SimpleUiComponent/js/pulsestorm_simple_component</item>
+						    </item>            
+						</argument>         
+					    </htmlContent>
+
+		- І ВСЕ РАБОТАЄ КОЛЕКЦІЯ, ДАНІ ВИВОДЯТЬСЯ - reg = requirejs('uiRegistry'); 
+							    > viewModelConstructor = reg.get('pulsestorm_simple.pulsestorm_simple') 
+							    > viewModelConstructor.elems() - http://joxi.ru/brRz6oRi7Oe6Jr
+
+		- Так можна подивити в зареєстрованих модулях
+
+			> reg = requirejs('uiRegistry');
+			> reg.get(function(item){
+			    console.log(item.name);
+			})
+
+
+ -------------------------
+
+		Можна ще 1 добавити і буде работати. Тобто це той самий компонент і він виведеться двічі. Можна звичайно вказати інший компонент
+
+			<htmlContent name="second_ever_child"> - ІМЯ ВЖЕ ІНШЕ
+				<argument name="block" xsi:type="object">Magento\Framework\View\Element\Text</argument>
+				<argument name="data" xsi:type="array">
+				    <item name="config" xsi:type="array">
+					<item name="component" xsi:type="string">Pulsestorm_SimpleUiComponent/js/pulsestorm_simple_component</item>
+				    </item>            
+				</argument>         
+			    </htmlContent>
+
+				> reg = requirejs('uiRegistry');
+				> reg.get(function(item){
+				    console.log(item.name);
+				})
+				pulsestorm_simple.pulsestorm_simple
+				pulsestorm_simple.pulsestorm_simple.first_ever_child
+				pulsestorm_simple.pulsestorm_simple.second_ever_child
+
+				- viewModelConstructor = reg.get('pulsestorm_simple.pulsestorm_simple.first_ever_child')
+
+
+	- Подвійне імя 'pulsestorm_simple.pulsestorm_simple' із за того, що 
+
+ 
+	
+
+
+
+------------------------------ Magento 2: Simplest XSD Valid UI Component - https://alanstorm.com/magento_2_simplest_xsd_valid_ui_component/ ---------------------------------------------
+
+ 1) Це як я створював на попередньому уроці простий юі компонент, але ігнорував валідацію. То на цьому уроці я зроблю з валідацією. А той модуль без валідації я виключив. Тому що він вліяв на валідацію всіх модулів (так як файл definition.xml маржиться з усіх модулів)
+
+ 2) Як я писав на попередньому уроці, XSD schema валідацію я обходив із за того, що коли я створюю новий юі компонент, його треба добавити у файл definition.xml і при чому як верхню ноду. Але не можна додавати ноди з новими іменами. Всі імена там зарезервовані і тільки вони проходять валідацію
+
+	- Взагалі починаючи з мадженти версії 2.1 не можна розпостраняти код(модуль) у якому якимось чином змінена XSD schema валідація
+
+	- Тому замість вузла <pulsestorm_simple можна використати вузел </container>
+
+	- Цей код буде у ісходному коді адмінки (тобто ці дані прийдуть через json)
+
+		<div>
+		    <div data-bind="scope: 'pulsestorm_simple_valid.areas'" class="entry-edit form-inline">
+			<!-- ko template: getTemplate() --><!-- /ko -->
+		    </div>
+		    <script type="text/x-magento-init">
+		    {
+			"*": {
+			    "Magento_Ui/js/core/app": {
+				"types": {
+				    "dataSource": [],
+				    "container": {
+				        "extends": "pulsestorm_simple_valid"
+				    },
+				    "html_content": {
+				        "component": "Magento_Ui\/js\/form\/components\/html",
+				        "extends": "pulsestorm_simple_valid"
+				    }
+				},
+				"components": {
+				    "pulsestorm_simple_valid": {
+				        "children": {
+				            "pulsestorm_simple_valid": {
+				                "type": "pulsestorm_simple_valid",
+				                "name": "pulsestorm_simple_valid",
+				                "config": {
+				                    "component": "uiComponent" - Тобто колекція(collection.js) вже по дефолту. (collection.html теж - це вюшка)
+				                }
+				            },
+				            "pulsestorm_simple_valid_data_source": {
+				                "type": "dataSource",
+				                "name": "pulsestorm_simple_valid_data_source",
+				                "dataScope": "pulsestorm_simple_valid",
+				                "config": {
+				                    "params": {
+				                        "namespace": "pulsestorm_simple_valid"
+				                    }
+				                }
+				            }
+				        }
+				    }
+				}
+			    }
+			}
+		    }    
+		    </script>
+		</div>
+
+		- конфіги для тега </container> можна знайти у файлі - vendor/magento//module-ui/view/base/ui_component/etc/definition.xml
+
+			<container class="Magento\Ui\Component\Container">
+			    <argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+				    <item name="component" xsi:type="string">uiComponent</item> - вю моделька (колекція)
+				</item>
+				<item name="template" xsi:type="string">templates/container/default</item> - XHTML темплейт юі компонента
+			    </argument>
+			</container>
+
+ 3) <container/> це один з двох тегів верхнього рівня, який можна використати і не буде помилки. Алан ще казав що це по суті дочірня нода, тому і не має помилки при валідації. Але я не зовсім зрозумів як це
+
+ 4) У юі компоненті я вказав шаблон для юі компонента - app/code/Pulsestorm/SimpleValidUiComponent/view/adminhtml/ui_component/templates/pulsestorm_simple_valid/default.xhtml
+
+	<div - то що корневий файл має бути дів(або form), вказано у схемі - ui_template.xsd
+		data-bind="scope: '{{getName()}}.{{getName()}}'"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="../../../../../../Ui/etc/ui_template.xsd">
+
+	    <!-- ko template: getTemplate() --><!-- /ko -->
+	</div>
+
+	- Синтаксис такий дивний із за того, що файли xhtml можуть мати тільки одну верхню ноду, інакше він не пройде валідацію. Не треба боятись за ці атрибути. це ок. Рлюс після рендерігу їх не видно буде - вони видаляться у цьому методі - vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php
+
+    											public function __toString()
+
+	- Якщо я не напишу ці атрибути для тега дів, це нічого не дасть, так як всі xhtml файйли мержаться в 1 і валідація все одно буде для цього файла. Просто якщо не вкажу ці атрибути, получтися що валідація не пройде і я не буду знати із за чого. Тобто можна розглядати ці атрибути як підсказку по чочу валіуюється цей файл
+
+ 5) Тег <htmlContent> Як я писав вверху, за допомогою йього тега можна рендерити темплейти (вверху контент, який був у тезі <htmlContent> рендерила колекція )
+
+	- Звичайно він є у дефолтному definition.xml і можна глянути на його реалізацію
+
+	- Алан каже що його функціонал типу лейаута, брати дані з пхп і відправляти json-ом на фронт
+
+	<htmlContent name="our_first_content">
+		<argument name="block" xsi:type="object">Pulsestorm\SimpleValidUiComponent\Block\Example</argument>
+	    </htmlContent>
+
+		- Це ваще стандартна поведінка лейаутів. Вказую блок (він навіть розширяє абстрактний блок від якого фронтові блоки наслідуються - Pulsestorm\SimpleValidUiComponent\Block\Example)
+
+		- І вивожу дані в адмінку, тим самим методом що і на фронті - public function toHtml() {
+        									return '<h1>Hello PHP Block Rendered in JS</h1>'; }
+
+		- Думаю можна вказати не тільки блок(пхп клас) а і темплейт теж
+
+	- Але валідність скоріш за все буде прохотити тільки в тому випадку, якщо цей тег буде знаходитись в тезі <container/> . Треба глянути в definition.xml щоб удостовіритись
+
+	- клас блока можна задати і так - <htmlContent class="Pulsestorm\SimpleValidUiComponent\Component\Simple" name="our_first_content_red"> 
+
+	- Його ваще можна кастомізувати
+
+		<htmlContent class="Pulsestorm\SimpleValidUiComponent\Component\Simple"  name="our_first_content_redd">
+			<argument name="data" xsi:type="array">
+			    <item name="config" xsi:type="array">
+				<item name="component" xsi:type="string">Pulsestorm_SimpleValidUiComponent/js/pulsestorm_simple_component</item> - тобто це вю модель конструктор де можна вказати темплейт
+			    </item>
+			</argument>
+		    </htmlContent>
+
+	- АЛЕ НЕ ЗАБУВАТИ ЩО ВОНИ ВСІ ЗЛИВАЮТЬСЯ В ОДИН ФАЙЛ
+
+
+ 	------------------ все работає і код поністю валідний -------------
+
+ 6) 
+
+
+
+
+
+
+
+
+
+
+
+<div data-bind="scope: 'pulsestorm_simple.pulsestorm_simple'" class="entry-edit form-inline">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+
+
