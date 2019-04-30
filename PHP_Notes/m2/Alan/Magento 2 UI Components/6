@@ -1,0 +1,136 @@
+
+ ------------- Magento 2: uiElement Features and Checkout Application - https://alanstorm.com/magento-2-uielement-object-features-and-checkout-application/ --------------------
+
+ 1) Magento 2: Understanding the links default in uiElement Objects - https://alanstorm.com/magento-2-understanding-the-links-default-in/
+
+ 2) Understanding uiElement’s `listens` default - https://alanstorm.com/understanding-uielements-listens-default/
+
+	- прослушивания default
+
+	#File: vendor/magento/module-ui/view/base/web/js/grid/editing/record.js
+
+	defaults:{
+	    /* ... */
+	    listens: { - срабатывает при первоначальном назначении значений из импорта.
+		elems: 'updateFields',
+		data: 'updateState'
+	    },
+	    /* ... */
+	}
+
+	-- Як це работає (сторінка кастомерів в адмінці)
+
+	UiElement = requirejs('uiElement');
+
+	OurClass2 = UiElement.extend({
+	    defaults:{
+		imports:{ Якщо свойства imports не буде, метод testListen, не запуститься
+		   foo:'customer_listing.customer_listing:name', - імпортує в свойство foo - customer_listing.customer_listing:name яке знаходиться в регістрі
+		},
+		listens:{
+		   foo:'testListen' - Тобто коли дані свойства imports запрацюють і у змінну foo, прийде 'customer_listing.customer_listing:name', виклич метод - testListen()
+		}
+	    },
+	    testListen:function(importedValue){ - у цьому аргументі будуть дані які прийшли з імпорта у змінну foo при ініціалізації обєкта
+		console.log("Called Test Listen");
+		console.log("Imported Value: " + importedValue);
+		console.log(this);
+
+		this.a_new_value = 'Hey Look, something new';
+	    }
+	}); 
+
+	object = new OurClass2; - Коли я ініціалізую обєкт, Magento импортирует значение из customer_listing.customer_listing. 
+
+		- Затем, из-за того що вони у свойстві defaults, Magento вызовет testListen() (listens:{ foo:'testListen' }
+
+		- Также возможно настроить несколько обратных вызовов, слушающих одно и то же свойство. Вы можете увидеть это в ядре Magento с помощью методов cancel и updateActive.
+
+			#File: vendor/magento/module-ui/view/base/web/js/grid/filters/filters.js
+
+			listens: {
+			    active: 'updatePreviews',
+			    applied: 'cancel updateActive'
+			},
+
+	ТОбто - ініціалізація object = new OurClass2;, викличе метод - importedValue()
+
+		Called Test Listen
+		Imported Value: customer_listing.customer_listing
+		UiClass {_super: ƒ, ignoreTmpls: {…}, _requested: {…}, containers: Array(0), exports: {…}, …}
+		UiClass {_super: undefined, ignoreTmpls: {…}, _requested: {…}, containers: Array(0), exports: {…}, …}  Не знаю чому console.log(this); 2-чі відпрацював. this - це object = new OurClass2;
+
+
+
+ -------- Це доповнення до того що я писав вверху. Тут такий самий обєкт, тільки є ko = requirejs('ko'); і foo:ko.observable('default'), у свойстві defaults
+
+	- Вверху я писав, що метод testListen() викличеться тільки при імпорті, А імпорт при ініціалізації обєкта. Тобто один раз. На цьому прикладі метод testListen() буде викликатись кожного разу, коли свойство foo буде змінюватись - foo:ko.observable('default')
+
+	UiElement = requirejs('uiElement');
+
+	ko = requirejs('ko');
+
+	OurClass3 = UiElement.extend({
+	    defaults:{
+
+		foo:ko.observable('default'),
+
+		imports:{
+		   foo:'customer_listing.customer_listing:name',
+		},
+		listens:{
+		   foo:'testListen'
+		}
+	    },
+	    testListen:function(importedValue){
+		console.log("Called Test Listen");
+		console.log("Imported Value: " + importedValue);
+		console.log(this);
+
+		this.a_new_value = 'Hey Look, something new';
+	    }
+	}); 
+
+	object = new OurClass3; - це викличе метод testListen();       
+	object.foo("Updating the Value"); - i це викличе метод testListen();
+
+		- Фішки listens з викликом метода не будуть працювати з будь якими observable. Є умови:
+
+			- Свойство, которое вы хотите прослушать, должно быть указано в объекте listens
+
+	- Як я писав вверху, якщо не буде imports, listens не спрацює
+
+		- АЛЕ ЯКЩО БУДЕ ОБСЕРВАЛ І НЕ БУДЕ imports, то listens спрацює (викличеться метод testListen()), але не при ініціалізації обєкта, а при зміні значення обсервабл
+
+
+			UiElement = requirejs('uiElement');
+
+			ko = requirejs('ko');
+
+			OurClass5 = UiElement.extend({
+			    defaults:{
+				foo:ko.observable('default'),
+				listens:{
+				   foo:'testListen'
+				}
+			    },
+			    testListen:function(importedValue){
+				console.log("Called Test Listen");
+				console.log("Imported Value: " + importedValue);
+				console.log(this);
+
+				this.a_new_value = 'Hey Look, something new';
+			    }
+			});
+
+			object = new OurClass5; - При ініціалізації метод testListen() не спрацює
+
+			object.foo("Updating the value"); - При зміні обсервабл свойства foo метод testListen() СРАБОТАЄ!!!
+
+	- listens і строкові літерали
+			
+
+
+
+
+

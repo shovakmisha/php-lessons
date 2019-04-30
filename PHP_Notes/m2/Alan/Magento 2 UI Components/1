@@ -28,6 +28,8 @@
 
 	- Це робиться у цьому методі - appendLayoutConfiguration() - #File: vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php
 
+		- Не знаю чим мені це допоможе, але метод appendLayoutConfiguration() викликається у методі __toString()
+
 		public function appendLayoutConfiguration() - візьме цей json з скріптами і додасть його в темплейт
 		{
 		    $layoutConfiguration = $this->wrapContent(
@@ -62,11 +64,11 @@
 
 		- Получаю помилку DOMDocument should be created. Це із за того що я сконфігурував юі компонент pulsestorm_simple, але маджента не може знайти цей файл. Це пхп-шна помилка. маджента через пхп хоче прочитати конфіги pulsestorm_simple але не може їх знайти
 
-		- Щоб не було цього ексепша і маджента могла прочитати ці конфіги, треба ствроити цей файл конфігів тут - ui_component/[...].xml
+		- Щоб не було цього ексепша і маджента могла прочитати ці конфіги, треба ствроити цей файл конфігів тут - ui_component/[...].xml . Це не файл конфігів, це і є компонент
 
 			<!-- File: app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/ui_component/pulsestorm_simple.xml -->
 
-				- Фай має називатись як імя компонента - pulsestorm_simple.xml
+				- Файл має називатись як імя компонента - pulsestorm_simple.xml
 
 				- Це сторінка адмінки, тому арія adminhtml
 
@@ -177,7 +179,9 @@
 
 	<dataSource name="pulsestorm_simple_data_source"> - pulsestorm_simple (назва UI Component) + _data_source
 		<argument name="dataProvider" xsi:type="configurableObject">
+
 		    <!-- the PHP class that implements a data provider -->
+
 		    <argument name="class" xsi:type="string">Pulsestorm\SimpleUiComponent\Model\DataProvider</argument> - Я заглянув у клас (Magento\Ui\DataProvider\AbstractDataProvider) від якого він екстендиться і там були методи які звязувались з базою (Типу - $this->getCollection()->addFieldToSelect($field, $alias); .....) 
 
 		    <!-- redundant with the `dataSource` name -->

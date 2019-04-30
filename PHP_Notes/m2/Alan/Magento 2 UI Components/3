@@ -44,7 +44,7 @@
 
 		UiClass {_super: undefined, ignoreTmpls: Object, ...}
 
- 	- Конструктор вю модельок імплементує - uiClass/Magento_Ui/js/lib/core/class
+ 	- Конструктор вю модельок імплементує(наслідується) - uiClass/Magento_Ui/js/lib/core/class
 
 	- Конструктору вю моделі можна задати дефолтні значення
 
@@ -75,6 +75,93 @@
 
 
 
+ ------------------------- Magento 2: uiClass Data Features - https://alanstorm.com/magento_2_uiclass_data_features/ ---------------------------------
+
+ 1) Тож нагадаю ще раз. uiElement - це конструктор вю модельок. я ініціалізовую обєкт з нього. звичайне ооп, як в пхп - клас - обєкт
+
+	- Це що я пишу, це все в консолі
+
+	- var Element = requirejs('uiElement');
+ 
+	- var viewModel = new Element; - роблю з нього обєкт
+
+	- console.log(viewModel); - виведеться UiClass(uiClass/Magento_Ui/js/lib/core/class) . Алан не пояснював чому це, просто сказав що якщо захочу розібратись, треба буде глянути в його реалізацію - module-ui/view/base/web/js/lib/core/element/element.js
+
+ 2) 	var Element = requirejs('uiElement');
+
+	var viewModelConstructor = Element.extend({
+	    defaults:{
+		'message':'Hello World'}
+	    }
+	);
+
+	viewModel = new viewModelConstructor;
+	console.log(viewModel.message); - Hello World
+
+	- По простому, цей код var viewModelConstructor = Element.extend({...}); можна розглядати як class viewModelConstructor extends uiElement {}
+
+ 3) 	reg = requirejs('uiRegistry');
+
+	var viewModel = reg.get('customer_listing.customer_listing'); - точно не знаю шо це
+
+	var viewModel = reg.get('customer_listing.customer_listing_data_source'); - дані кастомерів
+
+ 4) Реєстрація моделі звичайно запутаніша, але в 2-х словах її можна описати так 
+
+	requirejs(['Magento_Ui/js/form/components/html', 'uiRegistry'], function(viewModelConstructorFormComponentHtml, registry){
+	    var viewModel = new viewModelConstructorFormComponentHtml;     
+	    registry.set('імя_моделі', viewModel); - Судячи з цього я можу зареєструвати якусь модель навіть з консолі декількома строчками.
+	});
+
+
+ 5) Функция импорта в объектной системе Magento 2 позволяет вам во время создания экземпляра связать свойство экземпляра объекта со свойством в зарегистрированном объекте uiRegistry - 
+
+	- Наприклад є зареєстрований модуль кастомера і з нього я витягую дані
+
+		reg = requirejs('uiRegistry');    
+		var viewModel = reg.get('customer_listing.customer_listing_data_source');
+		console.log(viewModel.data.items);
+		http://joxi.ru/823dpX3T98EGYA
+
+	- Строка двоеточия (:) разделена. Левая часть строки (customer_listing.customer_listing_data_source) - это раздел реестра, а правая часть строки (data.items) - её свойство данных.
+
+		var Element = requirejs('uiElement');
+		var viewModelConstructor = Element.extend({
+		    defaults:{
+			'imports':{ - http://joxi.ru/krDzDoEiK41e32
+			    ourLinkedRows:'customer_listing.customer_listing_data_source:data.items' - Кароче ісинтаксис і функціонал це якась маджентівська тема. По ходу це спеціально було розроблено щоб витягувати дані з реєстра. А витягує він його якось так мабуть - reg = requirejs('uiRegistry');  reg.get('customer_listing.customer_listing_datasource....');
+			}
+		    }
+		});         
+
+		viewModel = new viewModelConstructor;
+		console.log(viewModel.ourLinkedRows); - http://joxi.ru/823dpX3T98EyxA і все работає.
+
+ 6) Експорт - протилежне імпорту
+
+	reg = requirejs('uiRegistry');
+	reg.get('customer_listing.customer_listing_data_source'); - тут все стандартно.
+
+
+	reg = requirejs('uiRegistry');
+	var Element = requirejs('uiElement');
+	var viewModelConstructor = Element.extend({
+	    defaults:{
+		'message':'Hello World',
+		'exports':{
+		    message:'customer_listing.customer_listing_data_source:theMessagePropertyFromExport' - Після цього - reg.get('customer_listing.customer_listing_data_source'); буде ця змінна - http://joxi.ru/BA05vlZSMvl6xr . Тобто у експорт я записав змінну theMessagePropertyFromExport, яки буде у модуля реєстрації і значення цієї змінної буде значенням змінної message - http://joxi.ru/l2Z46oyTzRD4Qr
+		}
+	    }
+	});         
+
+	viewModel = new viewModelConstructor({ - після цього у модулі реєстра зміниться свойство theMessagePropertyFromExport - http://joxi.ru/BA05vlZSMvlGEr
+	    'message':'Goodbye World'
+	});
+
+	viewModelObject = reg.get('customer_listing.customer_listing_data_source');
+	console.log(viewModelObject.theMessagePropertyFromExport); - 'Goodbye World'
+
+	- !!! Другими словами, функция экспорта позволяет вам изменять объекты, которые уже существуют в uiRegistry.
 
 
 

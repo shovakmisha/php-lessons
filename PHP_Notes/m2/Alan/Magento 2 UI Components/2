@@ -45,7 +45,7 @@
 			define(['uiElement'], function(Element){
 			    viewModelConstructor = Element.extend({
 				defaults: {
-				    template: 'Pulsestorm_SimpleUiComponent/pulsestorm_simple_template' - це темплейт html(вю моделька) - app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/web/template/pulsestorm_simple_template.html
+				    template: 'Pulsestorm_SimpleUiComponent/pulsestorm_simple_template' - це темплейт html(вюшка) - app/code/Pulsestorm/SimpleUiComponent/view/adminhtml/web/template/pulsestorm_simple_template.html
 				}
 			    });
 
@@ -264,7 +264,7 @@
 	    <!-- ko template: getTemplate() --><!-- /ko -->
 	</div>
 
-	- Синтаксис такий дивний із за того, що файли xhtml можуть мати тільки одну верхню ноду, інакше він не пройде валідацію. Не треба боятись за ці атрибути. це ок. Рлюс після рендерігу їх не видно буде - вони видаляться у цьому методі - vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php
+	- Синтаксис такий дивний із за того, що файли xhtml можуть мати тільки одну верхню ноду, інакше він не пройде валідацію. Не треба боятись за ці атрибути. це ок. Плюс після рендерігу їх не видно буде - вони видаляться у цьому методі - vendor/magento/module-ui/TemplateEngine/Xhtml/Result.php
 
     											public function __toString()
 

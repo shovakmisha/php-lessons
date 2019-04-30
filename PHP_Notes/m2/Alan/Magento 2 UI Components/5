@@ -1,0 +1,243 @@
+
+ ------------------------ Magento 2: UI Component Retrospective - https://alanstorm.com/magento-2-ui-component-retrospective/ ---------------------------------
+
+ 1) Не дивлячись на вю гнучкісь юі компонентів, розробники маджента самі відмовляються від цієї парадигми. Наприклад мінікарта
+
+	- vendor/magento/module-checkout/view/frontend/layout/default.xml - xml лейаут
+
+	- vendor/magento/module-checkout/view/frontend/templates/cart/minicart.phtml - phtml темплейт
+
+		<script type="text/x-magento-init">
+		    {
+			"[data-block='minicart']": {
+			    "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+			},
+
+			-  $block->getJsLayout() - це джейсон. Тобто воно виглядає десь так
+
+				<script type="text/x-magento-init">
+				{
+				    "[data-block='minicart']": {
+					"Magento_Ui/js/core/app": {
+					    "components": {
+						"minicart_content": {
+						    "children": {
+							"subtotal.container": {
+							    "children": {
+								"subtotal": {
+								    "children": {
+								        "subtotal.totals": {
+								            "config": {
+								                "display_cart_subtotal_incl_tax": 0,
+								                "display_cart_subtotal_excl_tax": 1,
+								                "template": "Magento_Tax\/checkout\/minicart\/subtotal\/totals"
+								            },
+								            "children": {
+								                "subtotal.totals.msrp": {
+								                    "component": "Magento_Msrp\/js\/view\/checkout\/minicart\/subtotal\/totals",
+								                    "config": {
+								                        "displayArea": "minicart-subtotal-hidden",
+								                        "template": "Magento_Msrp\/checkout\/minicart\/subtotal\/totals"
+								                    }
+								                }
+								            },
+								            "component": "Magento_Tax\/js\/view\/checkout\/minicart\/subtotal\/totals"
+								        }
+								    },
+								    "component": "uiComponent",
+								    "config": {
+								        "template": "Magento_Checkout\/minicart\/subtotal"
+								    }
+								}
+							    },
+							    "component": "uiComponent",
+							    "config": {
+								"displayArea": "subtotalContainer"
+							    }
+							},
+							"item.renderer": {
+							    "component": "uiComponent",
+							    "config": {
+								"displayArea": "defaultRenderer",
+								"template": "Magento_Checkout\/minicart\/item\/default"
+							    },
+							    "children": {
+								"item.image": {
+								    "component": "Magento_Catalog\/js\/view\/image",
+								    "config": {
+								        "template": "Magento_Catalog\/product\/image",
+								        "displayArea": "itemImage"
+								    }
+								},
+								"checkout.cart.item.price.sidebar": {
+								    "component": "uiComponent",
+								    "config": {
+								        "template": "Magento_Checkout\/minicart\/item\/price",
+								        "displayArea": "priceSidebar"
+								    }
+								}
+							    }
+							},
+							"extra_info": {
+							    "component": "uiComponent",
+							    "config": {
+								"displayArea": "extraInfo"
+							    }
+							},
+							"promotion": {
+							    "component": "uiComponent",
+							    "config": {
+								"displayArea": "promotion"
+							    }
+							}
+						    },
+						    "config": {
+							"itemRenderer": {
+							    "default": "defaultRenderer",
+							    "simple": "defaultRenderer",
+							    "virtual": "defaultRenderer"
+							},
+							"template": "Magento_Checkout\/minicart\/content"
+						    },
+						    "component": "Magento_Checkout\/js\/view\/minicart"
+						}
+					    },
+					    "types": []
+					}
+				    },
+				    "*": {
+					"Magento_Ui/js/block-loader": "http://magento-2-1-1.dev/pub/static/frontend/Magento/luma/en_US/images/loader-1.gif"
+				    }
+				}
+				</script>
+
+		- Але цей джейсон не генерується юі компонентом. І тут не використовується XHTML щоб вивести дані. Тобто раніше на уроках, я описував як цей джейсон генериться через юі компоненти в хмл-ках, а тут він генериться тут - $block->getJsLayout() - Треба буде розібрати як там це робиться. Щоб прояснити, ці дані генеруються з бекенда.
+
+		- Цей джейсон настраюється у блоці - /view/frontend/layout/default.xml
+
+			<block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="Magento_Checkout::cart/minicart.phtml">
+					<arguments>
+					    <argument name="jsLayout" xsi:type="array"> // $block->getJsLayout()
+						<item name="types" xsi:type="array"/>
+						<item name="components" xsi:type="array">
+						    <item name="minicart_content" xsi:type="array">
+						        <item name="component" xsi:type="string">Magento_Checkout/js/view/minicart</item>
+						        <item name="config" xsi:type="array">
+						            <item name="template" xsi:type="string">Magento_Checkout/minicart/content</item>
+						        </item>
+						        <item name="children" xsi:type="array">
+						            <item name="subtotal.container" xsi:type="array">
+						                <item name="component" xsi:type="string">uiComponent</item>
+						                <item name="config" xsi:type="array">
+						                    <item name="displayArea" xsi:type="string">subtotalContainer</item>
+						                </item>
+
+								..............
+
+		- Можна і по логіці здогадатись, що спочатку зявився цей підхід, а потім вже придумали юі компоненти. Тобто робиться одна робота різними способами
+
+	- Також тут загружається лоадер
+
+		"*": {
+			"Magento_Ui/js/block-loader": "http://magento-2-1-1.dev/pub/static/frontend/Magento/luma/en_US/images/loader-1.gif"
+		    }
+
+		- Можливо десь знадобиться
+
+
+
+ ---------------------------------- Observables, uiElement Objects, and Variable Tracking - https://alanstorm.com/observables-uielement-objects-and-variable-tracking/ ----------------------------------
+
+ Мы запустим все наши примеры кода в консоли
+
+	- UiElement = requirejs('uiElement');
+
+	- ourViewModel = new UiElement;
+
+	//create a "observable object" and assign it to the `title` property of our object
+	
+		ourViewModel.title = ko.observable('Default Title');
+
+	//view the value of the observable object
+
+		console.log(ourViewModel.title());    
+
+	//set a new value for the observable object
+
+		ourViewModel.title('A new Title');
+
+	//view the new value of the observable object
+
+		console.log(ourViewModel.title());  
+
+ 2) Производные объекты Magento от uiElement (включая важные функции конструктора uiComponent и uiCollection) активно используют ko.observables в качестве свойств данных.
+
+	ourViewModel.on('title', function(value){
+	    console.log("Someone just set the title to: " + value);    
+	});
+
+	ourViewModel.title("A Third Title")
+
+	Виплюне - Someone just set the title to: A Third Title - Тобто це як івент change на свойстві title. При його зміні можна вішати ф-цію і вона відпрацює
+
+	- Мотод on є у кожного обєкта uiElement. Цей івент можна знайти тут -  Magento_Ui/js/lib/core/events 
+
+		- Якщо елемент обсервабл, uiElement установить subscriber на ного. Що робить subscriber я вже описував - https://alanstorm.com/knockout-observables-for-javascript-programmers/
+
+ 3) Також елементи які наслідуються від uiElement мають можливість трекінга їх свойств
+
+	UiElement = requirejs('uiElement');
+
+	//define a new constructor function based on uiElement
+	OurClass = UiElement.extend({
+	    defaults:{
+		tracks:{
+		    title: true,
+		    foo: true
+		}
+	    }
+	});   
+
+	ourViewModel = new OurClass;
+
+	ourViewModel.title = 'a default value';
+
+	ourViewModel.on('title', function(value){
+	    console.log("Another callback: " + value);
+	});
+
+	//set the value (notice the normal javascript assignment) and you should see the "Another callback" output
+
+	ourViewModel.title = 'a new value'; - Виходить якщо свойства знаходяться у tracks:{ title: true } то вони вже обсервабл
+
+		- tracks має знаходитись в свойстві defaults. Але не факт, треба провірити
+
+		- Объект track представляет собой набор пар ключ / значение.
+
+		- http://joxi.ru/Q2Kz7o6iLy7kBm якщо подивити на обєкт, то видно що тайтл має і гет і сет. Через них можна витягнути і засетити це свойство. По ходу це не пряме свойство яке можна буде витягнути через object.title, а тільки через метод get
+
+		- Хоча трекінг свойства обсервабл, вони не пройдуть тест на обсервабл - ko.isObservable(ourViewModel.title); - false
+
+			- Справа у тому, що трекінг це плагін нокаута а не звичайний обсервабл. Функціональність схожа, але реалізація різна
+
+			- Але витягнути це свойство можна і так - observableFunctionObject = ko.getObservable(ourViewModel, 'title')
+
+								  console.log(observableFunctionObject()); - Дивно, але це работає 
+
+			- В принципі понятно, але напишу. Якшо вюшка привязана до свойства яке трекається, то вона буде переренджуватись кожного разу як свойство зміниться
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

@@ -1,0 +1,302 @@
+ ------------------------------------------ Magento 2: UI Component Data Sources - https://alanstorm.com/magento-2-ui-component-data-sources/ ---------------------------------------
+
+ 1) Эта статья будет сосредоточена на Customer Listing -  В консолі можна буде дебажити якщо зайти в Customers > All Customers
+
+ 2) Я створював на минулих уроках валідний юі компонент, але виявилось що якщо нода <dataSource> знаходиться у ноді <container/> то вона ігнорується
+
+ 3) Magento_Ui/js/core/app - установлює вю моделі і реєструє їх. Тобто у xml файлах я пишу якій джейсон файл скріптів передасться на фронт. І при загрузці сторінки цей джейсон буде обробляти цей файл
+
+	- По суті в цьому файлі 2 сточки
+
+	return function (data, merge) {
+		types.set(data.types); - тут серіалізуються дані які знаходяться в x-magento-init 
+
+			- до прикладу візьму головну сторінку адмінки, їй передається такий джейсон - http://joxi.ru/RmzEkMwuYjNWRr. Звідси і починається його обработка. У головному файлі скіптів (app.js) є такий код - types.set(data.types); Він якраз і викликає його (сетить дані)
+
+			- data.types - це ці дані - http://joxi.ru/l2Z46oyTzRW8gr
+
+			- set: function (types (data.types)) {
+
+			    types = types || {};
+
+			    utils.extend(store, types); - utils - wе бібліотека андерскор, яка екстендить собі ще декілька маджентівських модулів - http://joxi.ru/ZrJzyo5iwbzDZr . Кароче наскільки я зрозумів андерскор у м2 грає велику роль. Багато функціоналу через неї робиться. Можна буде і мені нею користуватись
+
+	 		    console.log(store); - ТРЕБА БУТИ ОБЕРЕЖНИМ ПРИ ДЕБАГіНГУ. тому що воно випльовує в консольку вже відроблений скріпт. Тобто на даний момент у змнній store має бути дані обєкта types, так як вверху відпрацював - utils.extend(store, types); Але навіть коли я написав console.log(store); перед тим як андерскор заекстендив обєкт types у обєкт store, то store всеодно був заповнений.
+ Може це якась асинхронізація.
+
+				- http://joxi.ru/KAxB9qwcZvXGlm - Не знаю що це за екстенд, але работає він так - http://joxi.ru/KAxB9qwcZvXGlm
+
+			    console.log(types); - http://joxi.ru/Q2Kz7o6iLyJwym - це ці дані, які я передав з app.js у методі types.set(data.types);
+
+			    console.log(utils);
+
+			    _.each(types, function (data, type) {
+
+				// console.log(flatten(data));
+
+				store[type] = flatten(data);
+			    });
+			},
+
+			КАРОЧЕ ЦЕ ТРОХИ СХОЖЕ НА РЕГІСТРІ, АЛЕ ЦЕ НЕ ВОНО. Щоб витягнути дані які засетились, треба використати метод get 
+
+				typesReg = requirejs('Magento_Ui/js/core/renderer/types'); - це з консолі можна зробити
+
+				console.log(
+				    typesReg.get('text')
+				);
+
+				console.log(
+				    typesReg.get('customer_listing')
+				);
+
+		layout(data.components, undefined, true, merge);
+	    };
+
+ 4) Є такий код (в принципі це не то що тільки в phtml - він такий навіть ісходниках сторінок, які ініціалізують скріпт через xml (навіть на сторінких адмінки)) 
+
+	<script type="text/x-magento-init">{"*": {
+						    "*": {
+							"Magento_Ui/js/core/app": {
+							    "types": { /*...*/},
+							    "components": { /* handled by Magento_Ui/js/core/renderer/layout */}
+							}
+						    }
+						}
+
+	- Ну кароче, передаю в цей файл - Magento_Ui/js/core/app - 2 аргументи 
+
+ 5) Magento_Ui/js/core/renderer/layout - сложный модуль. Этот модуль отвечает за создание экземпляров объектов модели представления Knockout.js и их регистрацию в uiRegistry. Это делается с помощью данных из атрибутов компонентов визуализированного сценария x-magento-init.
+
+	- У цьому файлі 3 рази є код _.extend(layout, ... Алан казав це дивно, але головне що работає
+
+	- Воркфлоу такий, що запускається метод run
+
+		- У ньому запускається цей код - _.each(nodes || [], layout.iterator.bind(layout, parent)); - пройдеться по всіх компонентах, що знаходяться у x-magento-init
+
+		- layout - це і є цей файл(Magento_Ui/js/core/renderer/layout.js)
+
+ 6) создание экземпляров наших вю моделей и их регистрация в uiRegistry. Все это происходит здесь.
+
+	function initComponent(node, Constr) { - node - это объект, который содержит значения из свойства компонентов массива x-magento-init в Magento, а переменная Constr - UiClass
+
+		- Кароче це ваще якиїсь дебільний рівень абстракцій. Конструктоири вю можельок - це UiElement, якы екстендяться від UiClass, але в цьому методі бачу, що обєкти які з них створюються і реєстуються, робляться з UiClass(Constr). Піздец кароче 
+
+
+	    var component = new Constr(_.omit(node, 'children'));
+	    registry.set(node.name, component);
+	}
+
+		-цей аргумент node вже обработаний, а стає він обработаним тут 
+
+			build: function (parent, node, name) { - всі скріпти що знаходяться в x-magento-init це якісь обєкти вложені в обєкти. Всі вони продять через цей метод
+
+				- Також тут є код де використовується модуль  Magento_Ui/js/core/renderer/types - node = utils.extend({
+            														}, types.get(type), defaults, node);
+
+				- Також тут э ця строчка if (extendDeps && parent && parent.deps && type) {
+								node.deps = parent.deps;
+							    }
+
+					- Це тільки догадки, але скоріш за все тут ставиться свойство залежностей, про яке я писав вверху - http://joxi.ru/KAxB9qwcZvXGlm
+
+				- І після того як вона відработає, викликається - initComponent - http://joxi.ru/V2VbKoXUd8z9D2
+
+ 
+ 7) function loadSource(node) { - тут маджента загружає фабрику - view model constructor - Тобто створює обєкти з конструкторів
+
+	- require([source], function (constr) { - constr це UiClass(Constr) який буде передаватись в метод initComponent(node, Constr)
+
+	- loadDeps(node)
+	    .then(loadSource)
+	    .done(initComponent);
+
+		- Це що вони так дивно викликаються, це із за jQuery. Я писав в попередніх уроках, про виклик методів таким синтаксисом
+
+ 8) Дебагінг. Когда Magento встречает немного XML юі компонента. Наприклад такий 
+
+	File: vendor/magento/module-customer/view/adminhtml/ui_component/customer_listing.xml --> (тобто це код юі компонента)
+
+	<bookmark name="bookmarks">
+	    <argument name="data" xsi:type="array">
+		<item name="config" xsi:type="array">
+		    <item name="storageConfig" xsi:type="array">
+		        <item name="namespace" xsi:type="string">customer_listing</item>
+		    </item>
+		</item>
+	    </argument>
+	</bookmark>
+
+	- Цей код мержиться з даними з файла definition.xml
+
+	<!-- vendor/magento//module-ui/view/base/ui_component/etc/definition.xml -->
+
+	<bookmark class="Magento\Ui\Component\Bookmark">
+	    <argument name="data" xsi:type="array">
+		<item name="config" xsi:type="array">
+		    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
+		    <item name="displayArea" xsi:type="string">dataGridActions</item>
+		    <item name="storageConfig" xsi:type="array">
+		        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
+		        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
+		    </item>
+		</item>
+	    </argument>
+	</bookmark>
+
+	- І серіалізується в x-magento-init JSON/javascript. В загальному в цьому джейсоні можна побачити дані з цих двох склеїних xml, але є інфа, якої не має у xml (це дефолтні дані)
+
+	"bookmark": {
+	    "extends": "customer_listing",
+	    "current": {/* ... */},
+	    "activeIndex": "default",
+	    "views": {/* ... */},
+	    "component": "Magento_Ui\/js\/grid\/controls\/bookmarks\/bookmarks",
+	    "displayArea": "dataGridActions",
+	    "storageConfig": {/* ... */}
+	}, 
+
+		- Як я писав в попередніх файлах, у хмл можна вказати клас, який буде добавляти дані в цей джейсон - <bookmark class="Magento\Ui\Component\Bookmark"> 
+
+	- Кароче файл Magento_Ui/js/core/renderer/layout.js візьме цей джейсон, згенерований з двох xml, і через рекваєр загрузить його модуль (Magento_Ui/js/grid/controls/bookmarks/bookmarks)
+
+		- Цей модуль поверне конструктор вю моделі - http://joxi.ru/52agYDMfEgZ04r
+
+			- Не треба забувати що обєкт який зробиться з цього конструктора може мати дефолтні значення, які я описував раніше
+
+		- Коли маджента буде створювати обєкт з цього конструктора, маджента передасть масив даних у цей конструктор. Эти даные масива, заданные с помощью x-magento-init (который получен из свойства config(http://joxi.ru/823dpX3T9aKbPA) данных объекта ui_component), переопределят значения по умолчанию конструктора модели представления.
+
+			- Тобто тут перебиваються дефолтні значення 
+
+			#File: vendor/magento/module-ui/view/base/web/js/core/renderer/layout.js
+
+			function initComponent(node, Constr) {
+			    var component = new Constr(_.omit(node, 'children')); - для удаления свойства children
+			    registry.set(node.name, component);
+			}
+
+
+ 9) Це що я писав ввеху - значення конфігів модельок. так передаються дані. Але дані можуть передаватись ще одним способом - <dataSource>
+
+	<!-- File: vendor/magento/module-customer/view/adminhtml/ui_component/customer_listing.xml -->
+
+	<dataSource name="customer_listing_data_source">
+	    <argument name="dataProvider" xsi:type="configurableObject">
+		<argument name="class" xsi:type="string">Magento\Customer\Ui\Component\DataProvider</argument>
+		<argument name="name" xsi:type="string">customer_listing_data_source</argument>
+		<argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+		<argument name="requestFieldName" xsi:type="string">id</argument>
+		<argument name="data" xsi:type="array">
+		    <item name="config" xsi:type="array">
+		        <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+		        <item name="update_url" xsi:type="url" path="mui/index/render"/>
+		    </item>
+		</argument>
+	    </argument>
+	</dataSource>
+
+	- узел dataSource - это просто еще один компонент пользовательского интерфейса, который в конечном итоге окажется в uiRegistry. - http://joxi.ru/DmB8DjGUJgkBjA
+
+	Її Фабрика вю модели (Magento_Ui/js/grid/provider) возвращает view model constructor со следующими значениями по умолчанию
+
+		//File: vendor/magento//module-ui/view/base/web/js/grid/provider.js
+
+		return Element.extend({ - В принципі ці дані я і джейсоні бачу
+		    defaults: {
+			firstLoad: true,
+			storageConfig: {
+			    component: 'Magento_Ui/js/grid/data-storage',
+			    provider: '${ $.storageConfig.name }',
+			    name: '${ $.name }_storage',
+			    updateUrl: '${ $.update_url }'
+			},
+			listens: {
+			    params: 'onParamsChange',
+			    requestConfig: 'updateRequestConfig'
+			}
+		    },
+
+ 10) Вивести список юзерів - це на сторінці кастомерів в адмінці (<dataSource name="customer_listing_data_source"> це це що я вверху писав)
+
+	requirejs(['uiRegistry'], function(reg){
+	    dataSource = reg.get('customer_listing.customer_listing_data_source') - тепер понятно як складується це подвійне імя - customer_listing_data_source - це dataSource (якщо dataSource не має, то візьметься таке саме як і імя юі компонента по ходу)
+	    console.log(dataSource.data.items);    
+	});
+
+	http://joxi.ru/DmB8DjGUJgPM7A
+
+
+
+ ------- Кароче. Ось як з цим всім букетом працювати -------------
+
+ 1) Наприклад я в адмінці, на сторінці всіх кастомерів. І мені треба взнати як виводяться ці дані. (<dataSource поки не буду трогати)
+
+ 2) Шукаю куди привязуэться нокаут у домі. наприклад клас admin__data-grid-wrap, шукаю його по проекту - він у файлі - vendor/magento/module-ui/view/base/web/templates/grid/listing.html - Можна здогадатись що це вюшка, тепер шукаю його вю модель (компонент)
+
+	- Це файл - vendor/magento/module-ui/view/base/web/js/grid/listing.js Тепер треба знайти де він установлюється
+
+	- definition.xml - <columns class="Magento\Ui\Component\Listing\Columns" component="Magento_Ui/js/grid/listing">
+
+	
+
+ 3) Це сторінка - http://magento.two/admin_zfjo40/customer/index/index/key/7c07f7b8cf8ee20ad17a3c25bf429c1f3936d396459d6b86ab09ff8c7be2b72b/
+
+	По юрлу знаходжу лейаут customer_index_index і в ньому бачу, що весь контетн виводиться одним компонентом <uiComponent name="customer_listing"/> - Шукаю цей компонент
+
+ 4) Це і є мій юі компонент, і там є нода columns 
+
+ 5) Повертаюсь до темплейта - templates/grid/listing.htm Так виводяться рядки кастомерів у таблиці (циклом)
+
+	<tr class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
+		<td outerfasteach="data: getVisible(), as: '$col'"
+		    css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"/>
+	    </tr>
+
+		- Видно у змінній rows хранятся дані касторів. Ось як вони сюди попали. У вю модельці(listing.js) є код 
+
+			return Collection.extend({
+
+				defaults: {
+				    
+				    imports: {
+					rows: '${ $.provider }:data.items' - (про цей синтаксис я писав в ES6 - цей змынна в строці)
+
+						- imports - затягує дані з регістрі у мій обєкт. ${ $.provider } - Ця змінна є у моєму обєкті. Обєкт це вю моделька по суті. Назву її можна взнати різними способами. Щоб не запутатись. По суті, компонентів через джейсон приходить не так багато. Наприклад на сторінці кастомерів їх 2 http://joxi.ru/gmvpgNwUqdK95A . І не думаю що на інших сторінках їх буде більше. Зі скріна можнна взяти мій компонент. requirejs(['uiRegistry'], function(reg) {
+							    dataSource = reg.get('customer_listing.customer_listing');
+						})
+
+							- provider: "customer_listing.customer_listing_data_source" - в принципі ці дані можна і з консольки витягнути - http://joxi.ru/KAxB9qwcZv0dGm
+
+								- ця змінна provider в xml є
+
+									<argument name="data" xsi:type="array">
+										<item name="js_config" xsi:type="array">
+										    <item name="provider" xsi:type="string">customer_listing.customer_listing_data_source</item>
+										</item>
+									    </argument>
+				    - Тобто rows: 'customer_listing.customer_listing_data_source:data.items'
+
+					reg = requirejs('uiRegistry');
+
+					var viewModel = reg.get('customer_listing.customer_listing_data_source'); 
+
+					http://joxi.ru/D2PzQoZiqBE7lr
+
+-----------------------------------------------------
+
+Тобто дані хранятся тут var viewModel = reg.get('customer_listing.customer_listing_data_source');  а не в reg.get('customer_listing.customer_listing');
+
+	- reg.get('customer_listing.customer_listing_data_source'); це провайдер, тобто <dataSource
+
+-----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
