@@ -1,0 +1,301 @@
+
+ ------------------------------ Magento 2: Remaining uiElement Defaults - https://alanstorm.com/magento-2-remaining-uielement-defaults/ ---------------------------
+
+
+ ------------------------ Magento 2: UiElement Modules Defaults and UiRegistry Async Module Fetching - https://alanstorm.com/magento-2-uielement-modules-defaults-and/ -------------------------
+
+ 1) Вроді я це вже писав, але напишу ще раз - сторінка кастомерів в адмінці
+
+	- Єдина різниця що це не імпорт а modules
+
+	//normally we'd pull in RequireJS module via `define`
+	reg = requirejs('uiRegistry');
+	UiElement = requirejs('uiElement');
+
+	console.log ( reg.get('customer_listing.customer_listing') );
+
+	//create our new class/constructor-function with a modules default set
+	OurConstructorFunction = UiElement.extend({
+	    defaults:{
+		modules:{
+		    foo:'customer_listing.customer_listing'
+		}
+	    }
+	});    
+
+	//instantiate a new object
+	object = new OurConstructorFunction;
+
+	//call the now defined "foo" method to fetch the customer_listing.customer_listing registry entry
+	console.log( object.foo() );
+
+	//test that its the same object
+	console.log( object.foo() === reg.get('customer_listing.customer_listing'));
+
+ - Як це работає
+
+	requestModule: function (name) { name - ключ обэкта в modules:{
+		    var requested = this._requested;
+
+		    if (!requested[name]) {
+		        requested[name] = registry.async(name);
+		    }
+
+		    return requested[name];
+		},
+
+	далі async: function (query) { - query це name
+	    return async.bind(null, query, this);
+	},
+
+	далі function async(name, registry, method) {
+
+	    var args = _.toArray(arguments).slice(3);
+
+	    if (_.isString(method)) {
+		registry.get(name, function (component) {
+		    component[method].apply(component, args);
+		});
+	    } else if (_.isFunction(method)) {
+		registry.get(name, method);
+	    } else if (!args.length) {
+		return registry.get(name);
+	    }
+	}
+
+ 2) Тут ще алан описував чому uiElement (майже всі конструктори з якими я працюю) мають можливість тягнути дані з регістра. Не буду це тут писати, поки не бачу сенсу
+
+ 	- Кароче по великому рахунку цим займається метод async. Він дозволяє установлювати свойства даних регістра ще до того як я затягнув їх у свій обєкт 
+
+		reg = requirejs('uiRegistry');
+		UiElement = requirejs('uiElement');
+
+		OurConstructorFunction = UiElement.extend({
+		    defaults:{
+			modules:{
+			    bar:'ourUniqueRegistryName' - цих даних ще немає в регістрі
+			}
+		    }
+		});
+
+		//instantiate a new object
+		object = new OurConstructorFunction;
+
+		//use the bar method/callback now and it returns nothing
+		console.log( object.bar() ); - нічого не виведе
+
+		reg.set('ourUniqueRegistryName', 'something'); - присвою в регістрі цій змінній строчку 
+
+		//and now you can fetch the item
+		console.log( object.bar() ); і вона буде в моєму обєкті
+
+	- Доповнення цього ж функціоналу
+
+		var test = {
+		    hello:function(noun){
+			console.log("Hello " + noun);
+		    }
+		}          
+
+		reg.set('ourUniqueRegistryName', test);   
+
+		console.log( object.bar() );
+
+		//call the `hello` method by passing in the string "hello" as the first argument, and then the following arguments will be passed on to the hello call 
+   
+		object.bar('hello', "World"); - Hello World
+
+		- object.bar().hello("World") - Hello World
+
+
+ ---------- Magento 2: uiElement Maps Default - https://alanstorm.com/magento-2-uielement-maps-default/ ------------------------
+
+ 1) Тут Алан розказував що у кожного юі елемента (uiElement) є свойство maps
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+	defaults:{
+	    /* ... */
+	    maps: {
+		imports: {},
+		exports: {}
+	    },    
+	    /* ... */        
+	}
+
+	- Так воно встановлюється 
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/links.js
+
+	if (data) {
+	    setData(owner.maps, property, data);
+	    transfer(owner, data, property, true);
+	}    
+
+	- https://alanstorm.com/magento-2-understanding-the-links-default-in/ 
+
+
+ -------------------- Magento 2: uiElement’s Local Storage Module - https://alanstorm.com/magento-2-uielements-local-storage-module/ ----------------
+
+ 2) Це у файлі - vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+
+	storageConfig: {
+                provider: 'localStorage',
+                namespace: '${ $.name }',
+                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+            },
+            maps: {
+                imports: {},
+                exports: {}
+            },
+            modules: {
+                storage: '${ $.storageConfig.provider }'
+            }
+
+	reg = requirejs('uiRegistry');
+	UiElement = requirejs('uiElement');
+	object    = new UiElement;
+
+	console.log(object.storage() === reg.get('localStorage')); = Тобто я взяв з регістрі собі в обєкт localStorage (цей код знаходиться в default, тому він буде у всіх наслідників)
+
+	- #File: vendor/magento//module-ui/view/base/web/js/lib/core/storage/local.js це цей модуль - '../storage/local'(storage) який загружається в uiElement(core/element/element.js)
+
+		- Кароче цей файл загрузиться до мене на сторінку. Щоб подивити які методи я буду мати для роботи з локалсторедж, треба заглянути в цей файл, Звичайно там є set get remove ...
+
+	- але він тільки рекваєриться, більше з ним у модулі uiElement ніхто не маніпулює, там і змінної для нього немає
+
+	І у тому модулі є код, де звичайний локал сторедж реєструється в регістрі localStorage = window.localStorage,    registry.set('localStorage', storage);
+
+	reg = requirejs('uiRegistry');
+
+	var toSave = {
+	    key:'some sort of value'
+	};
+
+	reg.get('localStorage').set('foo', toSave); Алан каже що toSave зявиться не тільки в регістрі а і у браузерському localStorage - console.log( reg.get('localStorage').get('foo'));
+
+		- http://joxi.ru/4AkgeRYfo0WowA
+
+	- store() - по ходу це той же storage() але установлює дані в локалсторедж на пряму. Кароче можна глянути в статтю ще раз
+
+		OurConstructorFunction = UiElement.extend({
+		    'defaults':{
+			  'name':'someUniqueName'
+		     }
+		});   
+
+		object = new OurConstructorFunction;
+
+		object.foo = 'another value';
+		object.store('foo');
+
+		- кароче крутити цими локалстореджами можна як хочу
+
+ 	- restore(); - востановити дані локалсторедж. Але не буду розписувати так як це ризикований метод
+
+ 3) Маджента також використовує jQuery’s localStorage
+
+	var storage = $.initNamespaceStorage('mage-cache-storage').localStorage; - https://alanstorm.com/magento-2-the-uielement-statefull-default/ ----------------------
+
+	var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+
+
+
+ --------------- Magento 2: The uiElement “Statefull” Default 
+
+ 1) statefull позволяет вам создать объект uiElement со свойствами, которые будут автоматически сохранены в localStorage через абстракцию localStorage, которую мы обсуждали в предыдущем посте.
+
+	UiElement = requirejs('uiElement');
+
+	OurConstructorFunction = UiElement.extend({
+	    'defaults':{
+		  'name':'aUniqueNameForTheUiElement', - це обовязковий параметер. Як бачу в локал сторедж дані і хранятся в цьому імені 
+
+		  'tracks':{ - Це теж обовязково. Не обовязковий саме цей синтаксис. Наприклад у одному з маджентівських файлів так - this._super().track(['лалалал'])
+		      foo:true
+		  },              
+		  'statefull':{
+		      foo:true - Предполагаєся що я буду ініціалізовувати обєкт тільки 1 раз. Тож якщо в якогось обєкта будуть ці самі дані що і в мене, то вони не збкркжуться а залишаться старі. 
+
+				- true - це частина функціоналу, воно має бути. Не то що інакше все поламається, просто я не знаю що буде точно, а так точно работає. Можна глянути у метод щоб подивити чому так
+		  }
+	     }
+	});
+
+	object = new OurConstructorFunction;
+
+	object.foo = "Some Value for the foo property"; - http://joxi.ru/l2Z46oyTzRKaxr - aUniqueNameForTheUiElement":{"foo":"Some Value for the foo property"}}
+
+
+ 2) #File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+
+	initStatefull: function () { - тут все це робиться 
+
+ ------------------------ Magento 2: The uiElement Provider and Source Defaults - https://alanstorm.com/magento-2-the-uielement-provider-and-source/ --------------------------------
+
+ 1) коли я ініціалізую обєкт uiElement, викликається цей метод 
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+
+	initModules: function () {
+	    _.each(this.modules, function (name, property) {
+		if (name) {
+		    this[property] = this.requestModule(name);
+		}
+	    }, this);
+
+	    if (!_.isFunction(this.source)) {
+		this.source = registry.get(this.provider); тут сенс у тому, що якшо при ініціалізації у обєкта не має свойства source, підставляється дані зі свойства provider. Тож може бути що у обєкта ці 2 свойства будуть одинакові
+	    }
+
+	    return this;
+	},
+
+	- В принципі про ці свойства я ще десь описував в юі компонентах що вони налаштовуються і в хмл-ках.
+
+	reg = requirejs('uiRegistry');
+	viewModel = requirejs('uiRegistry').get('customer_listing.customer_listing.listing_top.fulltext');
+
+	console.log(viewModel.provider);
+	console.log(viewModel.source);
+
+	//returns true because the objects are the same object
+	console.log(viewModel.source === reg.get(viewModel.provider));
+
+
+ ----------------------- Magento 2: uiElement Name and NS Defaults - https://alanstorm.com/magento-2-uielement-name-and-ns-defaults/ ---------------------------------
+
+ 1) свойство обєкта namе - це фактично унікальне імя компонента. Під цим іменем компонент храниться в регістрі
+
+ 2) свойство обєкта ns - namespace. До прикладу якщо імя компонента customer_listing.customer_listing.foo.baz, то неймспейс його буде customer_listing
+
+ ------------------------------- Magento 2: uiElement Containers and _requested Defaults - https://alanstorm.com/magento-2-uielement-containers-and-requested/ -------------------
+
+ 1)  свойство обєкта containers - для хранения родительского элемента текущого uiElement. this(текуший обєкт).containers.push(parent); - у текущого обєкта буде його парент 
+
+ 2) а так установлюється requested
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+
+	requestModule: function (name) {
+	    var requested = this._requesetd;
+
+	    if (!requested[name]) {
+		requested[name] = registry.async(name);
+	    }
+
+	    return requested[name];
+	}, 
+
+ ------------------------- Magento 2: uiElement registerNodes Defaults - https://alanstorm.com/magento-2-uielement-containers-and-requested/ -------------------
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+
+	defaults:{
+	    /* ... */
+	    registerNodes: true, - Алан його описав дуже бегло і сказов що це свойство ваще не важливе
+	    /* ... */
+	}
+
+
+
+

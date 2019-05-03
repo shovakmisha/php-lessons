@@ -1,0 +1,233 @@
+
+ ------------------- Це продовження - Magento 2: uiElement Features and Checkout Application - https://alanstorm.com/magento-2-uielement-object-features-and-checkout-application/ -------------------
+
+ Тут Алан описував чекаут
+
+  ----------- UI Component Checkout Step Visibility - https://alanstorm.com/ui-component-checkout-step-visibility/ --------------
+
+
+
+ 1) #File: vendor/magento/module-checkout/view/frontend/web/js/model/step-navigator.js
+
+	next: function() { - метод отвечает за перемещение Checkout с одного степа на другой. При загрузці першого степа не відрабатує
+
+	var activeIndex = 0;
+	    steps.sort(this.sortItems).forEach(function(element, index) { -  скрывает все шаги і помічає останній видимий степ активним
+		if (element.isVisible()) {
+		    element.isVisible(false);
+		    activeIndex = index;
+		}
+	    });
+
+	if (steps().length > activeIndex + 1) { - делает следующий шаг видимым
+	    var code = steps()[activeIndex + 1].code;
+	    steps()[activeIndex + 1].isVisible(true);
+	    window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+	    document.body.scrollTop = document.documentElement.scrollTop = 0;
+	}
+
+		- метод isVisible() сетиться при реєстрації степа
+
+		#File: vendor/magento/module-checkout/view/frontend/web/js/model/step-navigator.js - look at the fourth parameter
+		
+		registerStep: function(code, alias, title, isVisible, navigate, sortOrder) {    
+		    //...
+		}
+
+ 2) Реєстрація степа викликається тут 
+
+	#File: vendor/magento/module-checkout/view/frontend/web/js/view/shipping.js
+
+	visible: ko.observable(!quote.isVirtual()),
+
+	stepNavigator.registerStep( - Тобто тут я викликаю метод registerStep() і передаю йому ці аргументи
+	    'shipping',
+	    '',
+	    $t('Shipping'),
+	    this.visible, _.bind(this.navigate, this),
+	    10
+	);    
+
+ 3)  как работает isVisisble
+
+	#File: vendor/magento//module-checkout/view/frontend/web/template/shipping.html - це темплейт шипінга (Точніше першого степа. Інші степи поки сховані)
+	<li id="shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
+
+		- module-checkout/view/frontend/web/js/view/shipping.js - це його вю моделька
+		- fadeVisible це fadeIn - http://joxi.ru/v293l81IZRyGzr
+
+		- хоча не важливо, але маджента його трохи переробила - #File: vendor/magento/module-ui/view/base/web/js/lib/knockout/bindings/fadeVisible.js
+
+		- Тобто visible() - це visible: ko.observable(!quote.isVirtual()) (js/view/shipping.js)
+
+ 4) степ пеймента - #File: vendor/magento/module-checkout/view/frontend/web/template/payment.html      
+
+	<!-- ko template: getTemplate() --><!-- /ko --> Там рендеряться декілька темплейтів, але Алан каже що вони не будуть рендеритись, поки цей спеп не буде візібл  
+
+		<li id="payment" role="presentation" class="checkout-payment-method" data-bind="fadeVisible: isVisible"> поки isVisible не буде тру, темплейти не будуть рендеритись
+
+			Також це може бути звязано з тим, що нокаут не працює з елементами дому, які не готові, а вони на момент першого степу display: none;
+
+
+
+
+
+ --------------------------- Magento 2 Checkout Progress Bar - https://alanstorm.com/magento-2-checkout-progress-bar/ -------------------------------------
+
+ 1) У теми люма є свої шрифтові іконки - http://joxi.ru/Vm6Z71Xi4Rpnym
+
+ 2)  когда пользователь нажимает кнопку «Далее», чтобы перейти от этапа доставки к этапу оплаты - http://joxi.ru/DmB8DjGUJgLDRA 
+
+	- Вона знаходиться в цьому ж темплейті #File: vendor/magento//module-checkout/view/frontend/web/template/shipping.html
+
+	- Ця кнопка це сабміт форми. Форма теж знаходиться у цьому темплейті <form id="co-shipping-method-form" submit="setShippingInformation"
+
+		- При кліку на кнопку «Далее» відпрацює метод setShippingInformation (js/view/shipping.js)
+
+			setShippingInformation: function () {
+			    if (this.validateShippingInformation()) { - понятно шо тут якась валыдацыя йде
+				setShippingInformationAction().done( - setShippingInformationAction() - тут зберігається шапінг інфа і колбеком викликається - done()
+
+					- це цей файл(модуль) vendor/magento/module-checkout/view/frontend/web/js/action/set-shipping-information.js	
+
+						define([ '../model/quote', 'Magento_Checkout/js/model/shipping-save-processor'
+						], function (quote, shippingSaveProcessor) {
+						    return function () {
+							return shippingSaveProcessor.saveShippingInformation(quote.shippingAddress().getType()); - Тобто по суті ця строка зберігає шипінг інфу
+
+								- А точніше цей метод - saveShippingInformation() (web/js/model/shipping-save-processor.js)
+						    };
+						});			
+
+				    function () {
+					stepNavigator.next();
+				    }
+				);
+			    }
+			},
+
+	- #File: vendor/magento//module-checkout/view/frontend/web/js/model/shipping-save-processor.js
+
+	saveShippingInformation: function (type) { - type == quote.shippingAddress().getType() == "new-customer-address"(це коли новий кастомер. Якщо буде не новий кастомер, буде інше)
+	    var rates = [];
+
+	    if (processors[type]) {
+		rates = processors[type].saveShippingInformation(); - Цей метод полюбому відпрацює тут Magento_Checkout/js/model/shipping-save-processor/default, тому що registerProcessor() не буде відпрацювувати (це і Алан сказав і я не бачив у коді щоб він визивався). Чому він буде відпрацьовувати у файлі Magento_Checkout/js/model/shipping-save-processor/default понятно якщо глянути у цей файл
+
+			- Тобто у цьому файлі js/model/shipping-save-processor/default.js - saveShippingInformation()
+
+				- return 'mage/storage'(storage).post
+
+	    } else {
+		rates = processors['default'].saveShippingInformation();
+	    }
+
+	    return rates;
+	}
+
+ 3) Продовжую з аякс запроса на збереження шипінг інфию За це відповідає метод - saveShippingInformation() (js/model/shipping-save-processor/default.js )
+
+	- resourceUrlManager.getUrlForSetShippingInformation(quote) - В quote храниться ця інфа - http://joxi.ru/8AnEVnwuzoPKo2
+
+		- saveShippingInformation: function () {
+
+			- payload = { - Кароче сюди збережеться шипінг і білінг адреса
+				addressInformation: {
+				    'shipping_address': quote.shippingAddress(),
+				    'billing_address': quote.billingAddress(),
+				    'shipping_method_code': quote.shippingMethod()['method_code'],
+				    'shipping_carrier_code': quote.shippingMethod()['carrier_code']
+				}
+			    };
+
+			- payloadExtender(payload); - http://joxi.ru/eAOz1oKi965Gb2
+
+			- fullScreenLoader.startLoader(); - Думаю цей лоадер можна використати буде і на моїх сторінках
+
+			- return storage('mage/storage').post(
+
+					('mage/storage' - це по суті обертка над джейкюерівським $.ajax  - http://joxi.ru/52agYDMfEgzLMr (хоча done i fail - являются стандартными обработчиками jQuery.ajax)
+
+					- resourceUrlManager.getUrlForSetShippingInformation(quote), - з quote я витягую юрл-ку
+
+						- resourceUrlManager - #File: vendor/magento//module-checkout/view/frontend/web/js/model/resource-url-manager.js
+
+						var params = this.getCheckoutMethod() == 'guest' ? { cartId: quote.getQuoteId()	} : {},  - Тут перевіряється, якщо кастомер не зареєстрований (return customer.isLoggedIn() ? 'customer' : 'guest';), тобто - guest, то ставиться айдішка для карзини (хз нашо)
+						    urls = {
+							'guest': '/guest-carts/:cartId/shipping-information',
+							'customer': '/carts/mine/shipping-information'
+						    };
+
+						return this.getUrl(urls, params); - Кароче цей метод обробить ці дані що йому прийшли і поверне щось таке - http://joxi.ru/n2Yg5o1fb7vPvr
+
+					- JSON.stringify(payload)
+
+------------------------------------------
+
+ Тепер не хочу розбирати цей пост запрос. Треба буде на потім залишити
+
+------------------------------------------
+
+					.done(
+						function (response) {
+						    quote.setTotals(response.totals); - обновляет некоторые значения в объекте / модуле Magento_Checkout / js / model / quote
+
+						    paymentService.setPaymentMethods(methodConverter(response['payment_methods'])); -  устанавливает доступные способы оплаты для другого объекта / модуля RequireJS, который (предположительно) будет использоваться на следующем шаге.
+
+							- methodConverter - это небольшая часть преобразования данных JSON на стороне сервера в формат, который хочет код на стороне клиента.
+
+						    fullScreenLoader.stopLoader();
+						}
+					    ).fail(
+						function (response) {
+						    errorProcessor.process(response); В цьому методі є код if (response.status == 401) { window.location.replace(url.build('customer/account/login/'));}
+
+							- ТОбто якщо статус 401 , треба знов залогінитись
+
+						    fullScreenLoader.stopLoader();
+						}
+					    );
+
+
+	----------------- Після цього я нов повертаюсь в js/view/shipping.js , де колбеком викликається метод stepNavigator.next();
+
+
+
+
+
+ ------------------------- Observable Arrays and Magento 2 Checkout - https://alanstorm.com/observable-arrays-and-magento-2-checkout/ ----------------------------------
+
+ 1) Шипінг методи залежать від адреси (по ходу вони на ходу рендеряться нокаутом). Щоб подивити їх через консольку - http://joxi.ru/1A5KpknTDzX9vm
+
+	service = requirejs('Magento_Checkout/js/model/shipping-service')
+
+	//fetch the rates, an observable array
+	ratesObservableArray = service.getShippingRates()
+
+	//view the rates
+	console.log(ratesObservableArray());
+
+	- Прямо з консольки його можна і видалити - ratesObservableArray.pop()
+
+--------- В принципі це логічно. Тобто відкриваю інспектор, дивлю що це за елемент - checkout-shipping-method-load - http://joxi.ru/KAxB9qwcZvxnzm - vendor/magento/module-checkout/view/frontend/web/template/shipping-address/shipping-method-list.html
+
+	- Шукаю хто використовує цей темплейт - shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list' це у файлі - js/view/shipping.js
+
+		- Це його темплейт #File: vendor/magento//module-checkout/view/frontend/web/template/shipping.html - і спраді його тут можна знайти - <render args="shippingMethodListTemplate"/>
+
+		- ТОбто js/view/shipping.js це вю моделька - вюшки 'Magento_Checkout/shipping-address/shipping-method-list'
+
+	- Magento_Checkout/shipping-address/shipping-method-list - тут є цикл який виводить методи шипінга
+
+		<!-- ko foreach: { data: rates(), as: 'method'} -->
+			<!--ko template: { name: element.shippingMethodItemTemplate} --><!-- /ko -->
+		<!-- /ko -->
+
+		- Якщо js/view/shipping.js це його вю моделька, то там я маю знайти rates()
+
+			- і знаходжу - rates: shippingService.getShippingRates() - ТОБТО ТЕ САМЕ ЩО Я ПИСАВ В КОНСОЛЬЦІ
+
+
+
+
+

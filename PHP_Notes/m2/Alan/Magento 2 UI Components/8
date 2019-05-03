@@ -1,0 +1,203 @@
+ 
+ ------------------- Це продовження - Magento 2: uiElement Features and Checkout Application - https://alanstorm.com/magento-2-uielement-object-features-and-checkout-application/ -------------------
+
+
+------------------ Нагадування - це флешбек ------------------------
+ Нагадаю що на сторынку чекаута скрыпти додаються так
+
+	<script type="text/x-magento-init">
+		{
+		    "#checkout": {
+		        "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+		    }
+		}
+	    </script>
+
+	- Тобто це не юі компонент - це $block->getJsLayout() в який і додаються ці всі аргументи через хмл-ку - vendor/magento/module-checkout/view/frontend/layout/checkout_index_index.xml
+
+		<block class="Magento\Checkout\Block\Onepage" name="checkout.root" template="Magento_Checkout::onepage.phtml" cacheable="false">
+				<arguments>
+				    <argument name="jsLayout" xsi:type="array">
+		 
+	- Кароче суть у тому що суть скріптів залишається та сама. Є вю модельки і вюшки. і тут вони і встановлюються. Цей хмл перетвориться у великий джейсон. В конечному рахунку буде те саме що я писав в юі компонентах. Тобто на сорсі сторінки буде якиїсь код до якого привяжеться цей джейсон
+
+		<script type="text/x-magento-init">
+			.........
+
+	- Плюс імя яке йому дістанеться буде не тільки тег name а й його паренти, типу <item name="shipping-address-fieldset"> == "checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset"
+
+		- Імя в регістрі в нього буде те саме - reg = requirejs('uiRegistry'); reg.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset')
+
+	- Тобто цей весь джейсон загрузив всі дані (вю модельки і тд), на сторінку чекаута і тепер на ній куча компонентів які можна витягнути
+
+------------------------- З цим всім повертаюсь до уроку -----------------------
+
+
+
+
+ ---------------------- How Magento’s Checkout Application Updates Shipping Rates - https://alanstorm.com/how-magentos-checkout-application-updates/ -------------------------------
+
+ 1) reg = requirejs('uiRegistry'); reg.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset.firstname') - view model першого філда в формі - http://joxi.ru/8AnEVnwuzo6yk2 - http://joxi.ru/l2Z46oyTzRq71r
+
+	- vendor/magento/module-ui/view/frontend/web/templates/form/field.html - це темплейт першого поля
+
+		<div class="control" data-bind="css: {'_with-tooltip': element.tooltip}">
+
+			<!-- ko ifnot: element.hasAddons() --> - element це по ходу як data. Тобто це якиїсь скоуп . Тому що у його вю модельці(Magento_Ui/js/form/element/abstract) є метод hasAddons()
+
+			    <!-- ko template: element.elementTmpl --><!-- /ko --> - elementTmpl: 'ui/form/element/input' (Magento_Ui/js/form/element/abstract)
+
+				- Його і з консольки можна витягнути - reg = requirejs('uiRegistry');  
+								       reg.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset.firstname').elementTmpl - "ui/form/element/input"
+
+					<input class="admin__control-text" type="text" data-bind="
+						event: {change: userChanges},
+						value: value, - value тягнеться з вю модельки. Воно обсервабл. Навіть з консольки можна глянути що у цьому інпуті - reg = requirejs('uiRegistry');   
+         
+								reg.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset.firstname').value()
+
+								reg.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset.firstname').value("Test")  - змінить на "Test"  
+     
+						hasFocus: focused,
+						valueUpdate: valueUpdate,
+						attr: {
+						    name: inputName,
+						    placeholder: placeholder,
+						    'aria-describedby': noticeId,
+						    id: uid,
+						    disabled: disabled
+					    }">
+
+
+			<!-- /ko -->
+
+ 2) requirejs('uiRegistry').get('checkout.steps.shipping-step.shippingAddress') - component: "Magento_Checkout/js/view/shipping" - тобто це та вю моделька про яку я писав у попередньому уроці
+
+	- Вона налаштовується в frontend/layout/checkout_index_index.xml, там є строчка де їй задається компонент - <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping</item>
+
+	- У него есть child view model, имя которой - shipping-address-fieldset
+
+		- Компонент у нього звичайна колекція - "uiComponent", темплейт теж колекції - "ui/collection"
+
+		initialize: function () {
+				fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset'; - Чому це її дитина і чому я маю до неї доступ, я писав у нагадуванні (вверху)
+
+		- shippingRatesValidator.initFields(fieldsetName); -  shippingRatesValidator - Magento_Checkout/js/model/shipping-rates-validator - Этот модуль отвечает за настройку проверки формы.
+
+			- там виконується цей код #File: vendor/magento/module-checkout/view/frontend/web/js/model/shipping-rates-validator.js
+
+				element.on('value', function () { - element це кожен філд форми. Тобто тут його велью(обсервабл) проходить валідацію. Як я писав shipping-address-fieldset це колекція(філди форми), а element це отдільний філд 
+
+				    clearTimeout(self.validateAddressTimeout);
+				    self.validateAddressTimeout = setTimeout(function () {
+					if (self.postcodeValidation()) {
+					    self.validateFields(); - За валідацію відповідає цей метод
+					}
+				    }, delay);
+				}); 
+
+				- Якщо пройтись по цепочці, то можна зрозуміти як з метода initFields код доходить до цього element.on('value', function () {
+
+
+
+	- В мене є компонент(вю моделька) shipping.js вокруг якого все крутиться. також на цій сторінці є шипінг методи. Про них я писав у попередніх уроках - http://joxi.ru/D2PzQoZiqBO3Pr
+
+ 3) Кароче перевіряю філди shipping-address-fieldset - shippingRatesValidator.initFields(fieldsetName); - Це не вся форма, тільки - http://joxi.ru/1A5KpknTDzN6Wm. Можна глянути у checkout_index_index.xml і подивити шо там за філди
+
+	- Тобто вся форма, але про це потім розпишу. Поки тільки це - http://joxi.ru/1A5KpknTDzN6Wm  - Кароче я хз як сюди requirejs('uiRegistry').get('checkout.steps.shipping-step.shippingAddress') попадає і firstname і інші поля. Поки так
+
+ 4) Алан у ході цієъ валідації хотів сказати що shippingAddress це не метод а наблюдаєме свойство quote (якщо пройтись по шляху валідації це можна буде побачити). 
+
+	 - Там є код, з якого це зрозуміло - quote.shippingAddress(shippingAddress); - кароче можна глянути якщо шо
+
+ 5) Rates Fetching
+
+	view/frontend/web/js/view/shipping.js - рекваєрить 'Magento_Checkout/js/model/shipping-service' i 'Magento_Checkout/js/model/shipping-rate-service'
+
+		- 'Magento_Checkout/js/model/shipping-rate-service' просто рекваєриться. Він більше ніде не використовується у /web/js/view/shipping.js. Тобто він 1 раз загрузився і все
+
+			- В ньому є код - quote.shippingAddress.subscribe(function () { який підписується на будь які зміни - quote.shippingAddress. Коли він зміниться, запуститься ця ф-ція
+
+				- getRates() -( #File: vendor/magento//module-checkout/view/frontend/web/js/model/shipping-rate-processor/new-address.js) - сделает ajax-запрос для способів доставки, а затем кеширует их в rateRegistry (модуль Magento_Checkout / js / model / shipping-rate-registry) . А також засетить ці дані у  Magento_Checkout/js/model/shipping-service
+
+					- А якраз ы з нього і витягуються шипігн методи
+
+	- ТОЖ ТУТ Я ОПИСАВ ШЛЯХ ПО ЯКОМУ МАДЖЕНТА ПРЕДЛЯГАЄ ШИПІНГ МЕТОДИ В ЗАЛЕЖНОСТІ ВІД АДРЕСИ. Ось чому тут напостой чекається звідки юзер.
+
+ ---------------------------------------------------
+ Можливо у цьому уроці я не записав всі деталі, тільки суть. Ящо шо можна передивити. Головне що суть уроку я записав 
+ ---------------------------------------------------
+
+
+ ---------------------- Magento 2: Checkout Application Order Placing - https://alanstorm.com/magento-2-checkout-application-order-placing/ -----------------------------------
+
+ 1) кожен метод оплати має свою вю модельку і свій Place Order - http://joxi.ru/brRz6oRi7LKa8r
+
+ 2) reg = requirejs('uiRegistry');
+    reg.get('checkout.steps.billing-step.payment.payments-list') - це список методів оплати
+
+	- Magento_Checkout/js/view/payment/list - вю моделька
+
+	- Magento_Checkout/payment-methods/list - темплейт
+
+	<!-- File: vendor/magento//module-checkout/view/frontend/web/template/payment-methods/list.html -->
+
+	<div class="items payment-methods">
+	    <!-- ko foreach: { data: getRegion('payment-method-items'), as: 'element'}  -->
+		<!-- ko template: element.getTemplate() --><!-- /ko -->
+	    <!-- /ko -->
+	</div>
+	<!-- ko ifnot: getRegion('payment-method-items')().length > 0 --><div class="no-payments-block"><!-- ko i18n: 'No Payment Methods'--><!-- /ko --></div><!-- /ko -->
+
+ ----------- Magento 2: Understanding UI Component Regions - https://alanstorm.com/magento-2-understanding-ui-component-regions/ ============ 
+
+ reg = requirejs('uiRegistry');
+
+ reg.get('checkout').regions - тобто регіони хранятся в регістрі
+
+ reg.get('checkout').getRegion('steps')() - поверне масив вю модельок. По хорошому його можна розділити на 2 частини
+
+	- reg.get('checkout') - це вже знайомо. так само як і на попередніх уроках
+
+	- getRegion('steps')() - витягнути прямого чайлда reg.get('checkout') у якого <displayAria>steps
+
+	- <displayAria> є і в файлі definition.xml - тобто це нода яка проходить валідацію юі компонентів. Вона і використовується в деяких
+
+	- І не треба забувати що displayAria теж попаде в конечний джейсон
+
+	- він тут - vendor/magento/module-ui/view/base/web/js/lib/core/collection.js
+
+	- регионы являются своего рода «теневой иерархией» для вю моделей, используемой, когда разработчик компонента не хочет отображать всех потомков цієї вю модели.
+
+#File: vendor/magento/module-checkout/view/frontend/web/template/onepage.html
+
+<!-- ko foreach: getRegion('steps') --> - це те саме що - requirejs('uiRegistry').get('checkout').getRegion('steps')()
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->      
+
+
+
+-------------------- Продовжую Magento 2: Checkout Application Order Placing ---------------------
+
+ 1) Далі Алан розбирав vendor/magento/module-checkout/view/frontend/web/template/payment-methods/list.html - список пеймент методів. За допомогою консольки ваще зрозуміло що тут робиться
+
+ 2) На даний момент в мене є 1 пеймент метод payment/method-renderer/checkmo-method 
+
+	- вюшка - Magento_OfflinePayments/payment/checkmo
+
+		- Тут є і ця кнопка - <span data-bind="i18n: 'Place Order'"></span>
+
+
+	- вю моделька - Magento_OfflinePayment/js/view/payment/method-renderer/checkmo-method
+
+		- Але в ній не має метода placeOrder(метод який викликаэться при кліку на <span data-bind="i18n: 'Place Order'"></span>). Дивлю в код і бачу що ця вю моделька екстендиться від 'Magento_Checkout/js/view/payment/default' і там вже є цей метод
+
+	КАРОЧЕ АЛАН ТАМ ПИСАВ В ДВОХ СЛОВАХ ЯК РОБИТЬСЯ ОПЛАТА, АЛЕ ЦЕ РОБИЛОСЬ ЧЕРЕЗ АЯКС ЗАПРОС ПРО ЯКИЙ Я ПОКИ НЕ ЗНАЮ, ТОЖ ПОТІМ ТРЕБА БУДЕ ГЛЯНУТИ ЩЕ РАЗ У ЦЮ СТАТТЮ 
+
+
+
+
+ 
+
+
+
