@@ -1,0 +1,204 @@
+
+ ------------------------ Magento 2: Knockout.js Template Primer - https://alanstorm.com/magento-2-knockout-js-template-primer/ -------------------------
+
+ --------------- Magento’s KnockoutJS Templates aren’t KnockoutJS Templates - https://alanstorm.com/magentos-knockoutjs-templates-arent-knockoutjs/ ----------------
+
+ 1) vendor/magento//module-ui/view/base/web/templates/collection.html
+
+	<each args="data: elems, as: 'element'">
+	    <render if="hasTemplate()"/>
+	</each>
+
+	привязки компонентов создают пользовательские теги, но некоторые бесполезные поиски в коде Magento не показывают очевидного места, где это было сделано для тега each или render.
+
+	- ko = require('ko')
+	- console.log(ko.bindingHandlers); - зарегистрированные обработчики привязки из консоли javascript - http://joxi.ru/823dpX3T9z9LaA
+
+	- Magento создает собственный макроуровень поверх шаблонов KnockoutJS. - для прикладу - https://magento.stackexchange.com/questions/124584/magento-2-whats-an-each-tag/124747#124747
+
+
+	jQuery.get('http://magento-2-1-0.dev/static/adminhtml/Magento/backend/en_US/Magento_Ui/templates/collection.html', function(result){
+	    var renderer = requirejs('Magento_Ui/js/lib/knockout/template/renderer')
+	    var fragment = document.createDocumentFragment();
+	    $(fragment).append(result);
+
+	    //fragment is passed by reference, modified 
+
+	    renderer.normalize(fragment);
+	    var string = new XMLSerializer().serializeToString(fragment);
+	    console.log(string);    
+	})
+
+ -------------------- Design Problems with Magento’s Knockout.js Template Extensions - https://alanstorm.com/design-problems-with-magentos-knockoutjs/ ----------------
+
+ Цією статтею Алан хоче показати що розробники мадженти напихали своїх кастомних атрибутів і тегів. Це легше читається, але де гарантія що хтмл у наступних версіях не додасть ці теги в стандартні
+
+ 1) <if args="foo">   //... </if> == <!-- ko if: foo --><!-- /ko -->
+
+	- Тобто - <each args="data: elems, as: 'element'"> </each> == <!-- ko foreach: {data: elems, as: 'element'} --><!-- /ko -->
+
+ 2) <p>We have some text that we love 
+	<b><if args="isQuestion">?</if></b>
+	<b><if args="isStatment">?</if></b>
+    </p>
+
+ 3) <div css="foo" html="bar"></div> == <div data-bind="css: foo, html: bar"></div>
+
+ 4) <div ko-value="foo"></div> == <div data-bind="value: foo"></div>
+
+ 5) Але <div ifnot="foo"></div> не трансформується в <div data-bind="ifnot: foo"></div>
+
+	- <div ifnot="foo"></div> == <!-- ko ifnot: foo --><div></div><!-- /ko -->
+
+6) 	<if args="..."></if>                : <!-- ko if: ... --><!-- /ko -->
+	<text args="..."></text>            : <!-- ko text: ... --><!-- /ko -->
+	<with args="..."></with>            : <!-- ko with: ... --><!-- /ko -->
+	<scope args="..."></scope>          : <!-- ko scope: ... --><!-- /ko -->
+	<ifnot args="..."></ifnot>          : <!-- ko ifnot: ... --><!-- /ko -->
+	<each args="..."></each>            : <!-- ko foreach: ... --><!-- /ko -->
+	<component args="..."></component>  : <!-- ko component: ... --><!-- /ko -->    
+
+ 7)
+
+	<strong css="foo"></strong>                : <strong data-bind="css: foo"></strong>
+	<strong attr="foo"></strong>               : <strong data-bind="attr: foo"></strong>
+	<strong html="foo"></strong>               : <strong data-bind="html: foo"></strong>
+	<strong with="foo"></strong>               : <strong data-bind="with: foo"></strong>
+	<strong text="foo"></strong>               : <strong data-bind="text: foo"></strong>
+	<strong click="foo"></strong>              : <strong data-bind="click: foo"></strong>
+	<strong event="foo"></strong>              : <strong data-bind="event: foo"></strong>
+	<strong submit="foo"></strong>             : <strong data-bind="submit: foo"></strong>
+	<strong enable="foo"></strong>             : <strong data-bind="enable: foo"></strong>
+	<strong disable="foo"></strong>            : <strong data-bind="disable: foo"></strong>
+	<strong options="foo"></strong>            : <strong data-bind="options: foo"></strong>
+	<strong visible="foo"></strong>            : <strong data-bind="visible: foo"></strong>
+	<strong template="foo"></strong>           : <strong data-bind="template: foo"></strong>
+	<strong hasFocus="foo"></strong>           : <strong data-bind="hasFocus: foo"></strong>
+	<strong textInput="foo"></strong>          : <strong data-bind="textInput: foo"></strong>
+	<strong component="foo"></strong>          : <strong data-bind="component: foo"></strong>
+	<strong uniqueName="foo"></strong>         : <strong data-bind="uniqueName: foo"></strong>
+	<strong optionsText="foo"></strong>        : <strong data-bind="optionsText: foo"></strong>
+	<strong optionsValue="foo"></strong>       : <strong data-bind="optionsValue: foo"></strong>
+	<strong checkedValue="foo"></strong>       : <strong data-bind="checkedValue: foo"></strong>
+	<strong selectedOptions="foo"></strong>    : <strong data-bind="selectedOptions: foo"></strong>
+
+ 8) 
+
+	<strong each="foo"></strong>               : <strong data-bind="foreach: foo"></strong>
+	<strong ko-value="foo"></strong>           : <strong data-bind="value: foo"></strong>
+	<strong ko-style="foo"></strong>           : <strong data-bind="style: foo"></strong>
+	<strong ko-checked="foo"></strong>         : <strong data-bind="checked: foo"></strong>
+	<strong ko-disabled="foo"></strong>        : <strong data-bind="disable: foo"></strong>
+	<strong ko-focused="foo"></strong>         : <strong data-bind="hasFocus: foo"></strong>
+
+ 9) Следующие три атрибута в итоге обернут теги в структуры управления без тегов
+
+	<strong if="foo"></strong>                 : <strong></strong>
+	<strong ifnot="foo"></strong>              : <strong></strong>
+	<strong outereach="foo"></strong>          : <strong></strong>
+
+ 10) По ходу в 9-му пункті нокаут створював обертку для чайлдів, а так не буде обертки
+
+	<strong innerif="foo"></strong> : <strong data-bind="if: foo"></strong>
+	<strong innerifnot="foo"></strong> : <strong data-bind="ifnot: foo"></strong>
+
+ 11) 
+
+	<strong disable="foo"></strong> : <strong data-bind="disable: foo"></strong>
+	<strong hasFocus="foo"></strong> : <strong data-bind="hasFocus: foo"></strong>
+
+
+
+
+ ----------------------- Magento 2: More Remote Knockout.js Custom Tags and Attributes - https://alanstorm.com/magento-2-more-remote-knockoutjs-custom-tags-and/ ----------------
+
+ 1) В доповнення до попереднього уроку 
+
+	<scope args="..."/>        : <!-- ko scope: ... --><!-- /ko -->
+	<translate args="..."/>    : <!-- ko i18n: ... --><!-- /ko -->
+	<repeat args="..."/>       : <!-- ko repeat: ... --><!-- /ko -->
+	<fastForEach args="..."/>  : <!-- ko fastForEach: ... --><!-- /ko -->
+	<render args="..."/>       : <!-- ko template: ... --><!-- /ko -->
+
+ 2) Тег <render /> также имеет интересную форму без аргументов, которая автоматически генерирует вызов getTemplate
+
+	- <render/>                  : <!-- ko template: getTemplate() --><!-- /ko -->
+
+ 3) 
+
+	<strong translate="..."></strong>
+	<strong data-bind="i18n: ..."></strong>
+	---
+	<strong range="..."></strong>
+	<strong data-bind="range: ..."></strong>
+	---
+	<strong keyboard="..."></strong>
+	<strong data-bind="keyboard: ..."></strong>
+	---
+	<strong afterRender="..."></strong>
+	<strong data-bind="afterRender: ..."></strong>
+	---
+	<strong autoselect="..."></strong>
+	<strong data-bind="autoselect: ..."></strong>
+	---
+	<strong outerClick="..."></strong>
+	<strong data-bind="outerClick: ..."></strong>
+	---
+	<strong collapsible="..."></strong>
+	<strong data-bind="collapsible: ..."></strong>
+	---
+	<strong openCollapsible="..."></strong>
+	<strong data-bind="openCollapsible: ..."></strong>
+	---
+	<strong closeCollapsible="..."></strong>
+	<strong data-bind="closeCollapsible: ..."></strong>
+	---
+	<strong toggleCollapsible="..."></strong>
+	<strong data-bind="toggleCollapsible: ..."></strong>
+	---
+	<strong staticChecked="..."></strong>
+	<strong data-bind="staticChecked: ..."></strong>
+	---
+	<strong simpleChecked="..."></strong>
+	<strong data-bind="simpleChecked: ..."></strong>
+	---
+	<strong simple-checked="..."></strong>
+	<strong data-bind="simpleChecked: ..."></strong>
+	---
+	<strong bindHtml="..."></strong>
+	<strong data-bind="bindHtml: ..."></strong>
+	---
+	<strong tooltip="..."></strong>
+	<strong data-bind="tooltip: ..."></strong>
+	---
+	<strong resizable="..."></strong>
+	<strong data-bind="resizable: ..."></strong>
+	---
+	<strong repeat="..."></strong>
+	<!-- ko repeat: ... --><strong></strong><!-- /ko -->
+	---
+	<strong outerfasteach="..."></strong>
+	<!-- ko fastForEach: ... --><strong></strong><!-- /ko -->
+	---
+	<strong ko-scope="..."></strong>
+	<strong data-bind="scope: ..."></strong>
+
+ 4) большинство этих тегов и атрибутов настраиваются в следующем модуле RequireJS. - vendor/magento/module-ui/view/base/web/js/lib/knockout/template/renderer.js
+
+	- он имеет открытый метод addNode и addAttribute - это означает, что другие модули могут добавлять обработчики для обработки новых узлов или атрибутов.
+
+
+
+
+
+ -------------------------------- Magento 2 UI Component Code Generation - https://alanstorm.com/magento-2-ui-component-code-generation/ ----------------------------------
+
+ 1) 
+
+
+
+
+
+
+
+
