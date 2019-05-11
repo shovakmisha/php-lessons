@@ -112,6 +112,8 @@
 
  1) Тут Алан розказував що у кожного юі елемента (uiElement) є свойство maps
 
+	- Magento использует maps для отслеживания того, что было импортировано / экспортировано в объект на основе uiElement.
+
 	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
 	defaults:{
 	    /* ... */
@@ -127,12 +129,26 @@
 	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/links.js
 
 	if (data) {
-	    setData(owner.maps, property, data);
+	    setData(owner.maps, property, data); - owner - це мій обєкт, maps це і є його свойство
 	    transfer(owner, data, property, true);
 	}    
 
-	- https://alanstorm.com/magento-2-understanding-the-links-default-in/ 
+ --------------- https://alanstorm.com/magento-2-understanding-the-links-default-in/ ---------------------
 
+	- я просто скопіював ці приклади зі статті. Щоб розібратись треба буде самому розбирати так як алан нічого толком і не сказав
+
+	- reg = requirejs('uiRegistry');
+	reg.get('checkoutProvider').shippingAddress.firstname;
+
+
+	#File: vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js
+	initLinks: function () {
+	    return this.setListeners(this.listens)
+		       .setLinks(this.links, 'imports')
+		       .setLinks(this.links, 'exports')
+		       .setLinks(this.exports, 'exports')
+		       .setLinks(this.imports, 'imports');
+	},
 
  -------------------- Magento 2: uiElement’s Local Storage Module - https://alanstorm.com/magento-2-uielements-local-storage-module/ ----------------
 

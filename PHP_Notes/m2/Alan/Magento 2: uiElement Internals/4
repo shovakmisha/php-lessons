@@ -1,0 +1,82 @@
+
+ ----------------------- Magento 2: uiClass Internals - https://alanstorm.com/magento-2-uiclass-internals/ -----------------------
+
+ 1) uiClass - це конструктор. По великому рахунку він робить 3 речі
+
+	Модуль создает функцию конструктора
+
+	Модуль добавляет некоторые новые свойства к этой функции конструктора
+
+	Модуль возвращает функцию конструктора
+
+ 2) воркфлоу такий що я роблю конструктори по такому принципу
+
+	define([
+	    'uiElement'
+	], function (Element) {
+
+	    return Element.extend({ 
+
+-----------------
+
+	Для прикладу візьму мій модуль
+
+	define(['uiElement','ko'], function(Element, ko){
+	    viewModelConstructor = Element.extend({
+		defaults: {
+		    template: 'Pulsestorm_SimpleValidUiComponent/pulsestorm_simple_template'
+		}
+	    });
+
+	    return viewModelConstructor;
+	});
+
+	Файл модуля uiElement - vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js - У ньому і виконується ця Element.extend (return Class.extend(Element);)
+
+		- Class - це і є uiClass. Тобто робиться цей код return Class.extend(Element); коли я роблю кастомні конструктори. По суті конструктор це uiClass
+
+			- Получається що return Class.extend(Element); (vendor/magento/module-ui/view/base/web/js/lib/core/element/element.js) спрацьовує ще до того як почав працювати код у моєму модулі
+
+				viewModelConstructor = Element.extend({
+					defaults: {
+					    template: 'Pulsestorm_SimpleValidUiComponent/pulsestorm_simple_template'
+					}
+
+		- Заходжу в метод Class.extend - vendor/magento/module-ui/view/base/web/js/lib/core/class.js - extend: function (extender) { - extender - це мій кастомний конструктор Class.extend(Element);
+
+			var parent      = this, // this == UiClass
+		        parentProto = parent.prototype,
+		        childProto  = Object.create(parentProto), - прототайп у UiClass пустий, тож це створюэться обєкт з пустоти
+		        child       = createConstructor(childProto, getOwn(extender, 'constructor')), - Тут все робиться. Тут і створюється конструктор
+
+					- Враховуючи то що getOwn повертає фолс і childProto по суті пустий, у createConstructor передаються пустякові аргументи
+
+					- function getOwn(obj, prop) {
+						return _.isObject(obj) && obj.hasOwnProperty(prop) && obj[prop];
+					    }
+		        defaults;
+
+ 3) Метод createConstructor
+
+	//File: vendor/magento//module-ui/view/base/web/js/lib/core/class.js    
+
+	function createConstructor(protoProps, consturctor) { consturctor == undefind(зазвичай). Це повернув метод getOwn().
+	    var UiClass = consturctor;
+
+		UiClass = function () { - встановлення дефолтного конструктора
+			var obj = this;
+
+			if (!_.isObject(obj) || Object.getPrototypeOf(obj) !== UiClass.prototype) {
+			    obj = Object.create(UiClass.prototype);
+			}
+
+			obj.initialize.apply(obj, arguments);
+
+			return obj;
+		    };
+
+	    UiClass.prototype = protoProps; - встановлює кастомний прототип
+	    UiClass.prototype.constructor = UiClass; - встановлює кастомний конструктор
+
+	    return UiClass;
+	}

@@ -1,0 +1,151 @@
+
+ ---------------------------- Magento 2 Object Manager - https://alanstorm.com/magento_2_object_manager/ --------------------------------
+
+ 1) Тут алан створив модуль який додавав команду в командну сроку і все працювало - bin/magento ps:tutorial-object-manager-1
+
+ 2) В мене є список кешів. Не обовязково чистити всі. З консольки можна вибрати які саме bin/magento cache:clean full_page
+
+ 3) php bin/magento list - список всіх команд
+
+ 4) Обєкт менеджер - #File: lib/internal/Magento/Framework/ObjectManager/ObjectManager.php - це сінглтон. ось в чрму це проявляється
+
+	- Наприклад є якиїсь клас - Pulsestorm\TutorialObjectManager1\Model\Example з методом - getHelloMessage() який повертає змінну $message = 'Hello Magento!';
+
+	$manager = $this->getObjectManager();
+
+	    $object  = $manager->create('Pulsestorm\TutorialObjectManager1\Model\Example'); - створюю оюєкт через обєкт менеджер цього класу   
+	    $object->message = 'Hello PHP!'; і переоприділяю цю змінну
+	    $output->writeln(
+		$object->getHelloMessage() - цей метод повертає змінну message, а так як я її переоприділив, то метод поверне переоприділену - message = 'Hello PHP!';
+	    );                
+
+	- Зразу під ним пишу цей код
+	    $object  = $manager->create('Pulsestorm\TutorialObjectManager1\Model\Example'); - заново створюю обєкт через обєкт менеджер з цим класом  
+	    $output->writeln(
+		$object->getHelloMessage() і цей метод виведе змінну message, яка і є в класі - Pulsestorm\TutorialObjectManager1\Model\Example
+	    );  
+
+	--------------------------- те саме -----------------
+
+	$manager = $this->getObjectManager();
+	$object  = $manager->get('Pulsestorm\TutorialObjectManager1\Model\Example'); - get. По суті це теж створення обєкта
+	$object->message = 'Hello PHP!';
+	$output->writeln(
+	    $object->getHelloMessage()
+	);
+
+	$object  = $manager->get('Pulsestorm\TutorialObjectManager1\Model\Example'); - тільки тепер я не створюю(create) заново метод, а беру (get)  
+	$output->writeln(
+	    $object->getHelloMessage() - message = 'Hello PHP!'; - Тобто це сінглтон. Щоб було все ясно - це і є верхній обєкт - тобто 1 обєкт
+
+									- Синглтон - это объект, который может быть создан только один раз.
+	);
+
+	- Не знаю як це допоможе, але у м2 create/get  те саме що в м1 Mage::getModel(...); / Mage::getSingleton(...);
+
+		- Тобто $object->create - це не буде сінглтон і рекомендіції що його не можна використовувати через сінглтон не вірні так як він ним не являється. А get - вже сінглтон
+
+
+
+
+ ------------------------- Magento 2’s Automatic Dependency Injection - https://alanstorm.com/magento2_dependency_injection_2015/ ---------------------------
+
+ 1) Dependency Injection - наприклад є такий код 
+
+	public function getFormattedPrice($sku)
+	{
+	    $db  = new DBHandler;
+	    $row = $db->query('SELECT price FROM products WHERE sku = ?', $sku); - беру ціну з бази
+
+	    $formatter = new PriceFormatter;
+
+	    return $formatter->asDollars($row['price']); - і віддаю її в правильному форматі
+	}
+
+	- ПРоблема в тому що це хардкод. Так вже краще
+
+	public function getFormattedPrice($sku, $db, $formatter) - це і є залежності. Я внедряю в цей метод залежності
+	{
+	    $row = $db->query('SELECT price FROM products WHERE sku = ?', $sku);
+	    return $formatter->asDollars($row['price']);
+	}
+
+
+ - Але що якщо є такий код. 
+
+	public function prepareDataForDisplay()
+	{
+
+	    $data             = new stdClass;
+	    $db              = new DBHandler;
+	    $formatter         = new PriceFormatter;
+	    $data['price']     = $this->getFormattedPrice($row['price']);
+
+	}
+
+	public function getFormattedPrice($sku, $db, $formatter) - Це робочий код. Воно мало б працювати. Алан у цьому уроці і буде розказувати, що ці аргументи не з повітря беруться. Взагалі DI кожного фреймворка і заключається в тому щоб зробити цей функціонал. Кожен робить по різному. Внизу розпишу, як м2 це робить
+	{
+	    $row = $db->query('SELECT price FROM products WHERE sku = ?', $sku);
+	    return $formatter->asDollars($row['price']);
+	}
+
+
+--------------------- 
+
+2) Важчий приклад 
+
+class Example {
+
+    protected $messageObject;
+
+	public function __construct() // Cуть  у тому що щоб працював 1 функціонал у іншому функціоналі, полюбому б треба було щоб 1 залежав від іншого (Наприклад метод який витягує дані із бази залежить від підключення до бази. Маджента просто зробила ці залежності динамічнішими.)
+
+	{
+		$object = new Message; // цей клас з цієї ж папки. У ньому є метод - getMessage() - ('Hello Again World!')
+		$this->messageObject = $object;
+		
+		Щоб не писати цей хардкод, маджента і придумала цей синтаксис - function __construct(Message $message){$this->messageObject = $message}
+
+		- До речі це робиться через рефлекшни. Можна буде кинути понти
+	}
+	
+    public function sendHelloAgainMessage()
+    {
+        return $this->messageObject->getMessage();    
+    }
+}
+
+
+
+
+
+ --------------------- Magento 2 Object Manager Preferences - https://alanstorm.com/magento_2_object_manager_preferences/ --------------------
+
+ 1) public function __construct(MessageHolderInterface $mhi) { - MessageHolderInterface - цей інтерфейс переоприділений в di.xml
+        var_dump(
+            get_class($mhi) - тут виведеться не ынтерфейс а вже переопредылений в di.xml клас
+        );
+        exit;
+        $this->message_holder = $mhi;
+    }
+
+2) Алан змінив файл di.xml і просто почистив кеш - php bin/magento cache:clean - і зміни застосувались - не треба було робити setup:di:compile. Мабуть суть у тому що почистивши кеші я переназначив клас який буде брати обєкт менеджер, і з цієї точки зору перекомілювувати класи справді не має сенсу. Вони лежать собі і хай лежать а я просто візьму собі потрібний. А то що він ще не згенерований - не проблема - він би мав генеруватись на льоту як мінімум в дквелоп моді
+
+ 2) Кароче ці всі <preference в файлі di.xml це реврайти в мадженті 1. Це Алан сказав. Не то що це 1 в 1, але їх можна так розглядувати
+
+	- Хоча <preference має 1 превосходство над реврайтами. Не то що це преймущество, просто це краще з точки зору проектування проекту. Наприклад э такий код
+
+		- public function __construct(Messenger $messenger) - У конструкторі буде ініціалізовуватись обєкт з класом Messenger. Але в файлі di.xml я перепориділив цей клас І сказав, що коли буле запрашуватись для ініціалізації клас Messenger, візьми клас Messenger3 - <preference
+									    for="Pulsestorm\TutorialObjectPreference\Model\Messenger"
+									    type="Pulsestorm\TutorialObjectPreference\Model\Messenger3" />
+
+			- У першій мадженті реврайти дозволяли описувати клас Messenger3 як захочу і в ньому могло бути ваще якась ліва інфа і була б путаниця, наприклад я заінжектив собі фабрику продуктів, а там методи для роботи з корзиною. А + якщо методи для роботи з корзиною не працюють то не понятно чому. Кароче каша.
+
+			- Щоб такого не було, вирішили притримуватись якоїсь базової логіки і структури. Наприклад у цьому випадку клас Messenger який я переоприділив на Messenger3 імплементує інтерфейс MessageHolderInterface
+
+
+
+
+
+
+	

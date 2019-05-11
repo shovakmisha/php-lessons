@@ -1,0 +1,143 @@
+
+ ------------------------------- Magento 2: uiElement Standard Library Primer - https://alanstorm.com/magento-2-uielement-standard-library-primer/ ---------------------------------
+
+ 1) Underscore 
+
+	- var foo = {};  _.isObject(foo);    //returns true
+
+		- Але в скріпті ф-ція це теж обєкт, тож var foo = function(){}; _.isObject(foo); - треба бути уважним
+
+		- Тут Алан нагадав то що спеціаліст колись розказував - foo =  new String("one,two,three");  _.isObject(foo);  //returns true
+
+	-  _.each - позволяет вам проходить через все пары ключ / значение в объекте, массиве или «подобном массиву» вещам в javascript.
+
+		_.each({a:1, b:2, c:3}, function(value, key){
+		    console.log("Key:"   + key);
+		    console.log("Value:" + key);
+		});
+
+			var object = {hi:'there'};
+			_.each({a:1, b:2, c:3}, function(value, key){
+			    console.log("Key:"   + key);
+			    console.log("Value:" + key);
+			    console.log(this);
+			}, object);   - тут трохи запутано так як міняється контекст
+
+	- Underscore: extend 
+
+		var final = {a:1,b:2,c:3};
+
+		var firstSource =  {d:4,e:5,f:6}; 
+		var secondSource = {g:7,h:8,i:9};    
+
+		_.extend(final, firstSource, secondSource); -  ключи из firstSource и secondSource копируются в final. Метод extends также возвращает ссылку на первый аргумент
+
+			returnedValue = _.extend(final, firstSource, secondSource);     
+			console.log(returnedValue === final); //return true
+
+		console.log( final ); - a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9
+
+ 2) mageUtils - vendor/magento/module-theme/view/base/requirejs-config.js - "mageUtils": "mage/utils/main", - #File: vendor/magento/magento2-base/lib/web/mage/utils/main.js
+
+	- Кароче він хранить у собі ці модулі - return _.extend(utils, require('./arrays'), require('./compare'), require('./misc'), require('./objects'),require('./strings'), require('./template')
+
+	а)  mageUtils.extend - Не тільки в underscore є метод extend
+
+		requirejs(['mageUtils'], function(utils){
+		    console.log(utils.extend);
+		});
+
+		#File: vendor/magento/magento2-base/lib/web/mage/utils/objects.js
+
+		extend: function () {
+		    var args = _.toArray(arguments);
+
+		    args.unshift(true);
+
+		    return $.extend.apply($, args);
+		},
+
+		- Помните, как мы упоминали, _.extend делает поверхностную копию любых вложенных объектов или массивов? Ну, mageUtils.extend служит для той же цели, что и _.extend, за исключением того, что он делает глубокую копию. Это означает, что он клонирует любые вложенные массивы и объекты, поэтому полученный объединенный объект не содержит ссылок на оригинал. Метод mageUtils.extend достигает этого, оборачивая метод extends jQuery.
+
+	b) mageUtils.nested
+
+		requirejs(['mageUtils'], function(utils){
+		    base = {}
+		    utils.nested(base, 'a.b.c', 'easy as one two three'); // base.a.b.c = 'easy as one two three';   - засетить дані в свойство c
+
+			- utils.nested(base, 'a.b.c',); - витягне дані з свойства - с
+
+		    console.log(base);
+		});
+
+		Object
+		    a: Object
+			b: Object
+			    c: "easy as one two three"
+
+	с) mageUtils.omit - omit служит аналогичной цели что и nested, за исключением того, что он удаляет узлы из вложенной иерархии
+
+		requirejs(['mageUtils'], function(utils){
+		    base = {};
+
+		    //create the nodes
+		    utils.nested(base, 'a.b.c', 'easy as one two three');
+		    utils.nested(base, 'a.b.d', 'that\'s not how the song goes');
+
+		    //remove some
+		    utils.omit(base, 'a.b.c');
+
+		    console.log(base);
+		});
+
+		Object
+		    a: Object
+			b: Object
+			    d: "that's not how the song goes"
+
+	d) mageUtils.template - Этот метод является абстракцией для предоставления буквальной поддержки шаблона ES6 браузерам, которые их не поддерживают.
+
+		- mage/utils/template - это то место, где живет буквальная абстракция шаблона Magento.
+
+ 3) wrapSuper - mage/utils/wrapper / this._super();
+
+	requirejs(['mage/utils/wrapper'], function(wrapper){
+
+	    //define a function
+	    var hello = function (noun) {
+		noun = noun ? noun : "World";
+		console.log("Hello " + noun);
+		console.log(this);
+	    };
+
+	    //create a function with `wrapper.wrapSuper` based on
+	    //the `hello` function
+	    var obj = {
+		goodbye: wrapper.wrapSuper(hello, function (noun) {
+		    noun = noun ? noun : "World";
+
+		    //call the original `hello` function
+		    this._super();
+		    console.log("Goodbye " + noun);                        
+		})
+	    };  
+
+	    obj.goodbye("Planet");
+	});
+
+	Hello Planet
+	[Object]        //console.log(this)
+	Goodbye Plant
+
+
+
+
+
+
+
+
+
+
+
+
+

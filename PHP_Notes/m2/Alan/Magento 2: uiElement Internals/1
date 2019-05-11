@@ -1,0 +1,200 @@
+
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+				Magento 2: Defaults, uiElement, Observables, and the Fundamental Problem of Userland Object Systems
+
+				https://alanstorm.com/magento-2-defaults-uielement-observables-and-the-fundamental-problem-of-userland-object-systems/ 
+
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ 1) 	UiElement = requirejs('uiElement');
+	ko        = requirejs('ko');
+
+	// here we define a constructor function that inherits everything from the UiElement constructor function, with an additional default
+
+	OurConstructorFunction = UiElement.extend({
+	    'defaults':{
+		  'foo': ko.observable('A default value')
+	     }
+	});
+
+	object1 = new OurConstructorFunction;
+
+	object2 = new OurConstructorFunction;
+
+	// view the default observable values
+
+	console.log(object1.foo());
+	console.log(object2.foo());
+
+	// change the value of the `object1` observable but not the `object2` observable
+
+	object1.foo("Changed Value");
+
+	// view the observable values, and see that **both** have changed
+
+	console.log(object1.foo());
+	console.log(object2.foo());
+
+	- Проблема здесь заключается в следующем - console.log(object1.foo === object2.foo); true
+
+		- При использовании с объектами оператор === проверяет, относятся ли две переменные к одному и тому же объекту.
+
+		- А свойство foo - це обєкт. object1 і object2 ссилаються на 1 і той же обєкт foo  
+
+
+ ---------------- Magento 2: Javascript Primer for uiElement Internals - https://alanstorm.com/magento-2-javascript-primer-for-uielement-internals/ -----------------
+
+ 1) Про прототипи мабуть краще клянути на уроки выд спеціаліста. Тут алан розказував про новий синтаксис
+
+	var a = {};
+	a.foo = 'Bar, set on A';          
+	b = Object.create(a);    // объект b, который использует объект a в качестве прототипа. b.__proto__ == a. наскільки я зрозумів, це саме прототип а не конструктор - (прототипне наслідування)
+	console.log(b.foo);     //logs "Bar, set on A"
+
+		- при цих наслідуваннях пригодиться ф-ція has​OwnProperty() для перевірки власних значень
+
+ 2) как Magento и RequireJS работают вместе
+
+	- RequireJS public/private Patterns
+
+	// Package_Module/js/lib/some/module/name
+
+	define([/* dependencies *]], function([/* dependency arguments*/]){
+	    var somePrivateVariable;
+
+	    var somePrivateFunction = function(){
+		//...
+	    }        
+
+	    return {
+		somePublicVariable:'',
+		somePublicFunction:function(){
+		    console.log(this.somePublicVariable);
+		    console.log(somePrivateVariable);
+		    console.log(somePrivateFunction);
+		}
+	    }
+	});
+
+	//later on 
+
+	requirejs(['Package_Module/js/lib/some/module/name'], function(moduleName){
+	    moduleName.somePublicVariable = 'Hello World';
+	    moduleName.somePublicFunction();    //works        
+	    moduleName.somePrivateFunction();   //doesn't work, because a method was never defined on the object
+	});
+
+	- На цьому прикладі поламалась моя теорія про модулі. а з цього коду вже понятніше як работають модулі
+
+
+ ------------------------ Tracing Javascript’s Prototype Chain - https://alanstorm.com/tracing-javascripts-prototype-chain/
+
+ 1) 	foo = {};
+	console.log( foo.__proto__ === Object.prototype); - true - Object це не оглобальний обэкт javascript це просто обєкт. Це саме було б якби я замість обєкта написав масив або ф-цію
+
+		foo = [];
+		console.log( foo.__proto__ === Array.prototype); - true
+
+	---------------------------------------------- Ответвление про прототипи -------------------------------
+
+	- Прототип - це батько обэкта. var a = {}; a.foo = 'Bar, set on A'; b = Object.create(a);    // объект b, который использует объект a в качестве прототипа. b.__proto__ == a. наскільки я зрозумів, це саме прототип а не конструктор - (прототипне наслідування)
+
+	console.log(b.foo); - у обэкта b вже зразу зявляться елементи які були у обєкта a, вони перейшли по наслідуванню. Обєкт a це прототип
+
+	- Свойство constructor: це буде метод, який відпрацює при іціціалізації оюєкта, який буде створюватись на основі цього обєкта
+
+	- Наслідування тільки по прототипах - http://joxi.ru/KAxB9qwcZVwVgm. Тобто дочірнім елементам передаються тільки ті свойства, які знаходяться у свойстві прототип, а не всі свойства які є в обєкта
+
+		- Тобто parent.prototype == child.__proto__
+
+	- Наприклад у обэкта (не глобального, просто звичайного обэкта), є свойство прототип у якого є метод toString() - Значить воно буде у всіх хто від нього наслідується
+
+	---- З цього можна зробити логічний вивід, що всі не примітивні типи наслідуються від Object.prototype. Але це не той обєкт що {}. Це цого дід. Типу є абстрактний глобальний обєкт. Від нього наслідуються всі інші типи (Object, Array, Function) через свойство глобального обэкта prototype
+
+		- Єдине що Object і глобальний обєкт джаваскріпта майже не відрізняються або зовсім не відрізняються console.log( Object.__proto__.__proto__ === Object.prototype); //true - Тобто це я зрівняв проротип головного обєкту скріпта і протопип звичайного обєкта
+
+
+	1) function Person(){}; - ф-ція обєкт
+
+		- Person.prototype - Обєкт. Через нього відбувається наслідування
+
+			- Обєкт Person.prototype має свойство constructor у якому є метод constructor - Person.prototype.constructor == function Person(){};
+
+				- Person.prototype.constructor - це буде ф-ція Person у які буде це свойство prototype
+
+		- var xxx = new Person(); - Я ініціалізував обєкт. І при цьому запустився конструктор. Якщо я створив обєкт за допомогою конструктора Person.prototype.constructor, я буду мати доступ до всіх елементів, які лежать в Person.prototype
+
+	--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+  2) 	foo = {};
+	console.log( Object.__proto__ === Object.prototype); - false
+
+	console.log( Object.__proto__.__proto__ === Object.prototype); - true
+
+ 3)  https://alanstorm.com/2016/images/javascript-object-hierarchy/js-object-hierarchy.png - Тобто, щоб витягнути клас обєкт верхнього рівня, треба
+
+	- Object.__proto__.__proto__ == Array.__proto__.__proto__ == Function.__proto__.__proto__ - Це все одне і те саме. Вони ведуть на прототип головного обєкта джаваскріпта
+
+		- Function.__proto__.__proto__.__proto__ - Три це вже null
+
+ 4) І саме головне - Function.__proto__.__proto__ - Так виглядає головний обєкт - http://joxi.ru/4AkgeRYfoj14gA
+
+	- Function.__proto__.__proto__.constructor == function Object()
+
+ 5) Воркфлоу. Покажу на масиві, так як на ньому важче запутатись. Але це відноситься і дло обєктів і до ф-цій. 
+
+	- Є головний обєкт джаваскріпта - це функція Object(). (Якщо в консолі ввести Object, виведе цю ф-цію) І в нього є свойство прототайп. По ньому і йде все наслідування - 
+
+	- у прототипа обєкта є дані http://joxi.ru/4AkgeRYfoj14gA які передадуться всім іншим обєктам (обєкт, масив, ф-ція) і серед них метод constructor.
+
+	- Прототип хранить у собі свойство constructor. Це і буде головний обєкт - http://joxi.ru/gmvpgNwUqeB5dA - Тобто ф-ція . constructor це ф-ція яка створила обєкт, типу клас
+
+		- Object.prototype.constructor = function Object
+
+			- Ну а в головні ф-ції скріпта Object є свойство prototype. Трохи запутано, але це важливо зрозуміти. Це і є основа джаваскріпта
+
+	-  Тобто я не буду мати доступу до методів у головному обєкті. Вони не прийдуть по наслідству. Перейдуть тільки ті, які буди у свойстві prototype. Щоб витягнути методи, які є в головному обєкті джаваскріпта, треба буде достукатись до нього через дерево прототипів в коли дойду до прототипа, який знаходиться в головному обєкті, треба буде написати свйство constructor і це вже буде годовний обєкт
+
+	--------------------------------------------------
+
+	- Про головний обєкт все. Я так і не поняв як робляться типи Object, Array, Function. По ідеї мало б бути якось так - function Array = Object(){}. Але це вже на системному рывні важко віддебажити. Якби було так, то Array.__proto__  повертав би  Object.prototype, але він повертає ""
+
+		- Тож як звязуються Object, Array, Function з головним обэктом я не знаю. там э якась прослойка, яка не выдображаэться. Через неъ можна тыльки перепригнути
+
+			- Object.__proto__.__proto__ == Array.__proto__.__proto__ == Function.__proto__.__proto__ - Це все одне і те саме. Вони ведуть на прототип головного обєкта джаваскріпта
+
+ 6) 	foo = [];
+	console.log(foo.__proto__ === Array.prototype); - тобто foo = new Array()
+
+ 7) console.log( Function.prototype === Function.__proto__ );  - До того ж Навідміну від масивів і обєктів Function.prototype тільки для читання. і змінити їх не можна 
+
+	- Це ніде не описано, але виходить так що є 2 абстрації ф-цій Function - дитя і парент
+
+		- Array.__proto__.constructor - Object.__proto__.constructor - Function.__proto__.constructor - вони всі ведуть на function Function() - получається що це якась прослойка між головним обєктом і Object Array Function
+
+ 8) 	function foo(){};
+	bar = function(){};
+	baz = new Function;
+
+	- Свойство прототайп створюється кожного разу коли створюється нова ф-ція
+
+	console.log(foo.prototype, bar.prototype, baz.prototype); - це свойство цих ф-ції
+
+		- bar.__proto__.constructor - Але так як воно створено не було через new, то я не маю доступу до foo.prototype через baz.__proto__
+
+		var Foo = function(){};
+		object = new Foo;    
+		console.log(object.__proto__ === Foo.prototype);  а тепер все ок
+
+	
+
+
+
+
+

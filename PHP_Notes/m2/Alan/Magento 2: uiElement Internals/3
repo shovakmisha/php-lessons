@@ -1,0 +1,196 @@
+
+ ---------------------- Magento 2: Using the uiClass Object Constructor - https://alanstorm.com/magento-2-using-the-uiclass-object-constructor/ ---------------------------
+
+ 1) uiClass - створює конструктори. Від нього екстендиться UiElement
+
+ 2) requirejs(['uiClass'], function(UiClass){
+
+	    var OurFirstConstructorFunction = UiClass.extend({ - Це типу створення конструктора
+		'defaults':{
+		    'message':'Hello World'
+		},
+		hello:function(){ - Цей метод буде у всіх обєктів які наслідуються від OurFirstConstructorFunction. Тобто методи не треба писати в обєкті 'defaults' щоб вони наслідувались. А ЯКЩО ЦЕ БУДЕ ЗВИЧАЙНА ЗМІННА А НЕ МЕТОД ТО ЇЇ ВЖЕ ТРЕБА БУДЕ ПИСАТИ В 'defaults' ІНАКШЕ ВОНА НЕ БУДЕ НАСЛІДУВАТИСЬ
+		    console.log(this.message);
+		}
+	    });
+
+	    var object = OurFirstConstructorFunction();
+
+	    object.hello();     //calls hello method of our object
+	});  
+
+	- По суті це те саме що
+
+		var OurJavascriptConstructorFunction(){
+		    this.message = 'Hello World';
+		    this.hello = function(){
+			console.log(this.message);
+		    }        
+		}
+
+		var object = new OurJavascriptConstructorFunction;
+		object.hello();
+
+ 3) - requirejs(['uiClass'], function(UiClass){
+	    var OurFirstConstructorFunction = UiClass.extend({
+		'defaults':{
+		    'noun'   :'World',
+		    'verb'   :'Hello',
+		    'message':'${$.verb} ${$.noun}'
+		},
+		hello:function(){
+		    console.log(this.message);
+		}
+	    });
+
+	    var object = OurFirstConstructorFunction();
+
+	    object.hello();     //calls hello method of our object
+	}); 
+
+ 4) Я вже розбирав раніше літерали
+
+	'defaults':{
+		    'noun'   :'World',
+		    'verb'   :'Hello',
+		    'message':'${$.verb} ${$.noun}' // message: Hello World
+		},
+
+	- Маджента дає можливість ігнорувати їх 'defaults':{
+						    'noun'   :'World',
+						    'verb'   :'Hello',
+						    'message':'${$.verb} ${$.noun}', - у цьому випадку це значення не буде парситись, а так і залишиться - '${$.verb} ${$.noun}'
+						    'ignoreTmpls':{
+							'message': true - не обробляй свойство 'message'
+						    }
+						},
+
+ 5) Прототипи теж можна використовувати 
+
+	var ourPrototypeObject = {'foo':'bar'};
+	var OurConstructorFunction = function(){
+	};    
+	OurConstructorFunction.prototype = ourPrototypeObject;
+	object = new OurConstructorFunction;
+
+
+ 6) 	- requirejs(['uiClass'], function(UiClass){
+	    var OurFirstConstructorFunction = UiClass.extend({
+		'defaults':{
+		    'message':'Hello World'
+		},
+		hello:function(){
+		    console.log(this.message);
+		}
+	    });
+
+	    var OurSecondConstructorFunction = OurFirstConstructorFunction.extend({
+		'defaults':{
+		    'message':'Hello World!  You look great!',
+		    'message2':'How can we help you today'
+		},
+		greetings:function(){
+		    this.hello();
+		    console.log(this.message2);
+		}
+	    });
+
+	    var object = new OurSecondConstructorFunction();
+
+	    object.greetings();     //calls hello method of our object
+	});
+
+	Hello World!  You look great!
+	How can we help you today
+
+	Тобто суть у тому що я заекстендив метод - у якому був метод hello(). Я його викликав, але під час виклику туди вже підставився свойство 'message' з обєкта OurSecondConstructorFunction
+
+ 7) ТАКИЙ ЕКСТЕНД ТЕЖ МОЖЕ БУТИ
+
+	requirejs(['uiClass'], function(UiClass){
+	    var OurFirstConstructorFunction = UiClass.extend({
+		'defaults':{
+		    'message':'Hello '
+		},
+		hello:function(thing){
+		    console.log(this.message);
+		}
+	    });
+
+	    var OurSecondConstructorFunction = OurFirstConstructorFunction.extend({ - Тобто екстенд екстенда
+		hello:function(thing){
+
+			-----------------
+			this._super(thing); - Це теж буде работати. Викличе батьківський метод hello(). Так викликаються батьквські методи
+
+				- Когда объектная система Magento видит вызов this._super, она ищет родительский объект для метода с тем же именем, а затем вызывает этот метод.
+			-----------------
+		    console.log("Our Redefined Hello Method");
+		}
+	    });
+
+	    var object = new OurSecondConstructorFunction;
+
+	    object.hello("World");     //calls hello method of our object
+	});  
+
+ 8) initialize & initConfig - Это два метода, автоматически определяемые для любого объекта, созданного из функции конструктора uiClass (или любой функции конструктора, которая наследуется от конструктора uiClass)
+
+	- Тобто ці методи запускаються при ініціалізіції обєкта
+
+	requirejs(['uiClass'], function(UiClass){
+	    var OurConstructorFunction = UiClass.extend({
+		initialize:function(options){ ініціалізовує разом з даними які зробились після конфігурації. Magento будет вызывать метод initialize всякий раз, когда создается объект
+		    this._super(options); - це ОБОВЯЗКОВО
+		    console.log('Initialized!');
+		},
+		initConfig:function(options){ - Конфігурує обєкт. вызывается всякий раз, когда ініціалізовується объект.
+
+		    this._super(options); - це ОБОВЯЗКОВО
+		    console.log("Config Inited!");
+		}
+	    });
+
+	    object = new OurConstructorFunction;        
+	});
+
+	Цікаво в якомк порядку вони відпрацьовують
+
+	Config Inited!
+	Initialized!
+
+ 9) Magento имеет тенденцию следовать шаблону, в котором единственный модуль RequireJS определяет и возвращает одну функцию конструктора.
+
+	- По понятних причинах uiCollection не дотримується цього паттерну
+
+	- Але це важливо. Набагато легше дебажити код і взагалі це круто
+
+ 10) //File: vendor/magento//module-ui/view/base/web/js/lib/core/class.js        
+
+	Class = createConstructor({ - тобто викликаэться ще раз createConstructor() але вже з іншими параметрами. цей Class якраз і повертає цей модуль
+	    initialize: function (options) {
+		/* ... */
+	    },
+
+	    initConfig: function (options) {
+		/* ... */
+	    }
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
