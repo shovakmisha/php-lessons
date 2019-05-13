@@ -1,0 +1,166 @@
+
+ ----------------------------------- Magento 2 Object Manager Argument Replacement - https://alanstorm.com/magento_2_object_manager_argument_replacement/ -------------------------------
+
+ 1) Argument replacement - основа інєкцій в мадженті.
+
+	- Наприклад є клас class Example {
+
+				    public $scaler1;
+				    
+				    public function __construct(
+					$scaler1='foo'     
+				    {
+					$this->scaler1      = $scaler1;
+				    }
+
+	- Я хочу його десь використовувати 
+
+		$object_manager = $this->getObjectManager();        
+		$object         = $object_manager->create('Pulsestorm\TutorialObjectManagerArguments\Model\Example'); - у цього обєкта буде змінна $scaler1, яка == 'foo'
+
+	- А що якщо я не хочу щоб змінна $scaler1 що знахожиться в $object дорівнювала 'foo'
+
+	<!-- File: app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml -->
+
+	<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+	    <type name="Pulsestorm\TutorialObjectManagerArguments\Model\Example">
+		<arguments>
+		    <argument name="scaler1" xsi:type="string">bar</argument> - Нода <argument дозволяє змінити свойство обєкта який приходить у конструктор. Тобто помимо плюшки з інтерфейсом (типом обєкта), DI мадженти також дозволяють змінювати дані(у даному випадку свойства) обєкта, який приходить у конструктор.
+
+			- Це дуже важливо. Тобто по суті це зміна обєкта Pulsestorm\TutorialObjectManagerArguments\Model\Example по всьому проекту і з цим треба бути осторожним. По ходу це не то що в лейаутах, що просто викликаю метод обєкта і задаю йому якісь аргументи, це я міняю свойства класу при ініціалізації з нього обєкта. Завжди коли з класу робиться обєкт. Тобто ці налаштування я прописую обєкт менеджеру - коли будеш робити клас з цього обєкту, заміни у нього це, це, це ...
+
+				- Мабуть краще буде екстендити нативний клас і з ним вже треба буде робити зміни щоб не поламати нативний функціонал
+
+			- Можна строку(не тільки строку, всі скалярні) поміняти і на обєкт, але не рекомендується. Та і пріцює це дивно. 
+
+				- <argument name="scaler1" xsi:type="object">Pulsestorm\TutorialObjectManagerArguments\Model\SomethingCompletelyDifferent</argument> - коли ыныцыалызуэться цей обэкт, то функція gettype скаже що це не обєкт а масив.
+
+		</arguments>
+	    </type>
+	</config>
+
+
+ --------------------------------------------------------------
+
+	- Цей же самий код, тільки замість $scaler1='foo' буде обєкт (+ константи)
+
+	class Example {
+
+	    public $object1;
+	    
+	    public function __construct(
+		ExampleArgument1 $object1 - (ExampleArgument1 це - class ExampleArgument1)
+	    {
+		$this->object1 = $object1;
+	    }
+
+		- Тут так само, як і в попередньому уроці - ExampleArgument1 $object1 цей код в конструктрорі - це призведення до типу. Тобто $object1 має бути типу класа ExampleArgument1
+
+		- Тож якщо я напишу 
+
+		<!-- File: app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml -->
+
+			<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+			    <type name="Pulsestorm\TutorialObjectManagerArguments\Model\Example">
+				<arguments>
+				    <argument name="object1" xsi:type="string">bar</argument> - це буде помилка, так як object1 має бути обєкт типу ExampleArgument1, а я передав просто строку
+				</arguments>
+
+				<arguments>
+				    <argument name="object1" xsi:type="object">Pulsestorm\TutorialObjectManagerArguments\Model\SomethingCompletelyDifferent</argument> - А так вже не буде помилки, це вже проходить валідацію. Модна здогодатись, що обєкт SomethingCompletelyDifferent екстендиться від ExampleArgument1 і тому його тип валідний
+
+					- xsi:type="object" - це я вказую обєкт менеджеру, що строку Pulsestorm\TutorialObjectManagerArguments\Model\SomethingCompletelyDifferent треба сприймати як клас
+
+					---------------------------------
+
+					<argument name="scaler2" xsi:type="const">Magento\Integration\Model\Integration::SETUP_TYPE</argument> - ЦЕЙ СИНТАКСИС ТЕЖ РАБОТАЄ. Тобто вказую тип константа xsi:type="const і шо за константа Magento\Integration\Model\Integration::SETUP_TYPE
+
+					---------------------------------
+
+				</arguments>
+			    </type>
+			</config>
+
+	- Цей же самий код, тільки замість $scaler1='foo' буде масив
+
+		class Example {
+
+		    public $thearray;
+		    
+		    public function __construct(
+			$thearray=['foo']) 
+		    {
+			public $thearray;
+		    }
+
+		<!-- File: app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml -->
+
+		<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+		    <!-- ... -->
+		    <type name="Pulsestorm\TutorialObjectManagerArguments\Model\Example">
+			<arguments>
+			    <argument name="thearray" xsi:type="array"> - тип масив. У свойстві thearray є масив $thearray=['foo']), але після цього вона змінилась на масив з цими 3-ма елементами
+				<item name="0" xsi:type="string">science</item>
+				<item name="baz" xsi:type="string">baz</item>
+				<item name="bar" xsi:type="string">bar</item>
+			    </argument>
+
+				- По хорошому, масив не мав би перезаписувась, він мав би тільки мержитись. Обєкти, строки, буліани, ... перезаписуються а масиви мержаться
+
+					- Для прикладу клас який працює з консолькою. Я його доповнив у файлі di.xml і додав туди свою команду 
+
+						<type name="Magento\Framework\Console\CommandList">
+							<arguments>
+							    <argument name="commands" xsi:type="array">
+								<item name="testbedCommand" xsi:type="object">Pulsestorm\TutorialObjectManagerArguments\Command\Testbed</item>
+							    </argument>
+							</arguments>
+						    </type>
+
+					- У цьому файлі я описав що буду виводити в консольці, але щоб це зробити, треба врізатись в стандартний маджентівський клас - Magento\Framework\Console\CommandList який працює з консолькою. Як бачу я переписав аргумент commands(масив) і добавив тути мій клас. Він не перетре весь функціонал роботи з консолькою, просто додасть у цей масив і мій функціонал
+
+			</arguments>
+		    </type>
+		</config>  
+
+ 2) Цей файл lib/internal/Magento/Framework/Console/CommandList.php, про який я писав вверху, обробляє всі команди типа bin/magento
+
+	- До прикладу це очищення кеша #File: app/code/Magento/Backend/Console/Command/CacheCleanCommand.php
+
+		class CacheCleanCommand extends AbstractCacheTypeManageCommand
+		{
+		    //...
+		}
+
+	- А так він підключається
+
+	<!-- #File: app/code/Magento/Backend/Console/Command/CacheCleanCommand.php -->
+
+	<type name="Magento\Framework\Console\CommandList">
+	    <arguments>
+		<argument name="commands" xsi:type="array">
+		    
+		    <item name="cacheCleanCommand" xsi:type="object">Magento\Backend\Console\Command\CacheCleanCommand</item>
+		    
+		</argument>
+	    </arguments>
+	</type>
+
+ 3) всі типи що є на даний момент
+
+	xsi:type="array"
+	xsi:type="string"
+	xsi:type="object"
+	xsi:type="boolean"
+	xsi:type="const"
+	xsi:type="number"
+	xsi:type="string"
+	xsi:type="init_parameter" - це по суті таа ж сама константа
+	xsi:type="null"
+
+
+
+
+
+
+
