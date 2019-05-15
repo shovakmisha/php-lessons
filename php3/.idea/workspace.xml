@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae3a8ce5-95b4-4449-938e-011fa0e8850d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" beforeDir="false" afterPath="$PROJECT_DIR$/../PHP_Notes/m1/Alan - Magento for PHP MVC Developers/3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m1/Роутінг/2" beforeDir="false" afterPath="$PROJECT_DIR$/../PHP_Notes/m1/Роутінг/2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/soap/server.php" beforeDir="false" afterPath="$PROJECT_DIR$/demo/soap/server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news/news.php" beforeDir="false" afterPath="$PROJECT_DIR$/news/news.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vagrant/projects/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../vagrant/projects/html/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vagrant/projects/magento.on/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../vagrant/projects/magento.on/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PHP_Notes/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Command/Testbed.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/Example.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument1.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument2.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/SomethingCompletelyDifferent.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/module.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PHP_Notes/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/registration.php" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,48 +35,77 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/soap/server.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
-              <caret line="4" column="23" lean-forward="true" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+              <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/news/news.php">
+        <entry file="file://$PROJECT_DIR$/oop/classes/SuperUser.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-78">
-              <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
-              <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
-              <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
-              <folding>
-                <element signature="e#10#44#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/news/test.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/soap/stock.wsdl">
+        <entry file="file://$PROJECT_DIR$/oop/classes/User.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="32" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="33" />
+            <state relative-caret-position="51">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/soap/client.php">
+        <entry file="file://$PROJECT_DIR$/oop/classes/UserAbstract.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="2" lean-forward="true" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
+            <state relative-caret-position="34">
+              <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oop/abstract.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-428" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oop/extend.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-530" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oop/new.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-479" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oop/red.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/oop/users.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="2" lean-forward="true" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -102,8 +134,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1834" />
-    <option name="y" value="34" />
+    <option name="x" value="1985" />
+    <option name="y" value="-4" />
     <option name="width" value="1855" />
     <option name="height" value="1084" />
   </component>
@@ -113,7 +145,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -137,15 +168,28 @@
               <item name="php3" type="462c0819:PsiDirectoryNode" />
               <item name="news" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="php3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="php3" type="462c0819:PsiDirectoryNode" />
+              <item name="oop" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="php3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="php3" type="462c0819:PsiDirectoryNode" />
+              <item name="oop" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vagrant/projects/stock" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.gutterIcons" />
@@ -174,11 +218,12 @@
       <updated>1549898658226</updated>
       <workItem from="1549898659803" duration="1927000" />
       <workItem from="1549957400075" duration="9785000" />
+      <workItem from="1557824325176" duration="66000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11712000" />
+    <option name="totallyTimeSpent" value="11778000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -190,9 +235,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="34" width="1855" height="1084" extended-state="6" />
+    <frame x="1985" y="-4" width="1855" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13432837" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13598673" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -205,7 +251,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.21003135" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.20489296" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -224,6 +270,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/demo/soap/new_test.php" />
+    <entry file="file://$PROJECT_DIR$/demo/soap/server.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/news/news.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+          <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+          <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/news/test.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/demo/soap/stock.wsdl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -231,35 +297,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/news/test.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/news.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-78">
-          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
-          <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
-          <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
-          <folding>
-            <element signature="e#10#44#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/soap/new_test.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/soap/client.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="2" lean-forward="true" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
+          <caret line="11" column="2" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/soap/server.php">
+    <entry file="file://$PROJECT_DIR$/oop/classes/SuperUser.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/classes/User.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/classes/UserAbstract.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/abstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-428" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/extend.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-530" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/new.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-479" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/red.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="4" column="23" lean-forward="true" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+          <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oop/users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="2" lean-forward="true" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
         </state>
       </provider>
     </entry>

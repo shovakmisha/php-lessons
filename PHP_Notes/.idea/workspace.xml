@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3548b656-4906-409b-90bf-4626a2a141f0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/PHP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PHP.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vagrant/projects/magento.on/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../vagrant/projects/magento.on/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vagrant/projects/magento.on/app/code/local/Alanstormdotcom/Helloworld/controllers/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../vagrant/projects/magento.on/app/code/local/Alanstormdotcom/Helloworld/controllers/IndexController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Command/Testbed.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/Example.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument1.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument2.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/SomethingCompletelyDifferent.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/module.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/registration.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../php3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../php3/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,12 +20,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/m1/Реквест флоу - накочування вебсайтів і сторів">
+        <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="100" column="24" lean-forward="true" selection-start-line="100" selection-start-column="24" selection-end-line="100" selection-end-column="24" />
+            <state relative-caret-position="308">
+              <caret line="68" column="74" lean-forward="true" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -30,6 +36,7 @@
     <findStrings>
       <find>list</find>
       <find>core_config_data</find>
+      <find>trait</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -37,6 +44,13 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 1" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="65" />
@@ -50,7 +64,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -58,15 +71,33 @@
               <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
               <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="Специалист" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="Специалист" type="462c0819:PsiDirectoryNode" />
+              <item name="Уровень 2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="Специалист" type="462c0819:PsiDirectoryNode" />
+              <item name="Уровень 3" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../php3" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -92,20 +123,20 @@
       <updated>1517150756294</updated>
       <workItem from="1517150758014" duration="249000" />
       <workItem from="1549632724203" duration="377000" />
+      <workItem from="1557823881236" duration="512000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="626000" />
+    <option name="totallyTimeSpent" value="1138000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1514649" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15312327" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -117,6 +148,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -129,8 +161,95 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/m1/Реквест флоу - накочування вебсайтів і сторів">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="100" column="24" lean-forward="true" selection-start-line="100" selection-start-column="24" selection-end-line="100" selection-end-column="24" />
+        <state relative-caret-position="228">
+          <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/5">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="22" lean-forward="true" selection-start-column="22" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-13">
+          <caret line="1" column="67" lean-forward="true" selection-start-line="1" selection-start-column="67" selection-end-line="1" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="9" column="58" lean-forward="true" selection-start-line="9" selection-start-column="58" selection-end-line="9" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 6">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 2/1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 2/2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 2/3.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 2/4.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 2/5.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="68" column="74" lean-forward="true" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
         </state>
       </provider>
     </entry>

@@ -1,0 +1,140 @@
+
+ ------------------------- Magento 2 Object Manager Virtual Types - https://alanstorm.com/magento_2_object_manager_virtual_types/ ------------------------------
+
+ 1) virtual type - це створення підкласу для існуючого класу - class OurVirtualTypeName extends \Pulsestorm\TutorialVirtualType\Model\Argument1
+
+	- Argument1 - це клас для якого я хочу створити віртуальний тип
+
+	- Але я це буду робити не через код, а через фай di.xml 
+
+		<virtualType name="ourVirtualTypeName" type="Pulsestorm\TutorialVirtualType\Model\Argument1"></virtualType> - name - це глобальне імя цього віртуального типу. Це все що треба шоб задати віртуальний тип - це буде віртуальний тип класу - Pulsestorm\TutorialVirtualType\Model\Argument1
+
+		- Просте створення віртуального типу ніяк не повліяє на систему
+
+		- На один клас можна створити декілька віртуальних типів. Типу це як віртульні доми в реакті - віртуальні копії оригінала
+
+ 2) Кароче я створив віртуальний тип. В попередньому уроці, я переписував свойства і аргументи обєкта у файлі di.xml
+
+	<type name="Pulsestorm\TutorialVirtualType\Model\Example">
+		<arguments>
+		    <argument name="the_object (свойство цього обэкта)" xsi:type="object"> Some Class - цей клас я присвою свойству цього обєкта </argument> Але тут можна присвоїти свойству the_object віртуальний тип(клас) ourVirtualTypeName . Цей що я створив вверху 
+
+			<argument name="the_object" xsi:type="object">ourVirtualTypeName</argument> і не буде помилки - все ок. Свойству the_object присвоївся віртуальний тип Pulsestorm\TutorialVirtualType\Model\Argument1 - Не знаю чи че буде звідси зрозуміло, якщо не буде, треба буде глянути в код цього уроку. В мене є оригінальний клас - Pulsestorm\TutorialVirtualType\Model\Argument1. Він передається у конструктор Example (__construct(Argument1 $the_object)) - Тобто у di.xml я переоприділив свойство Argument1 $the_object у класі Example і тепер це свойство має не обєкт Pulsestorm\TutorialVirtualType\Model\Argument1 а віртуальний тип Pulsestorm\TutorialVirtualType\Model\Argument1 - все ок все работає, нічого не змінилось, все як було.
+			
+		</arguments>
+	    </type>
+
+ 3) Як работають ці віртуальні типи. Я створив віртуальний тип класа. Це не можна розглядати як екстенд. У екстендженому класі можна змінювати поведінку батька - міняти методи, свойства і тд
+
+	- У віртуальному типі єдине що можна зробити - це який депенденсі буде заінжекшений у клас. І то тільки у віртуальний клас а не у оригінал 
+
+	<virtualType name="ourVirtualTypeName" type="Pulsestorm\TutorialVirtualType\Model\Argument1"> - створюю віртуальний тип на основі цього класу
+
+		<arguments>
+		    <argument name="the_argument" xsi:type="object">Pulsestorm\TutorialVirtualType\Model\Argument3</argument> міняю йому свойство яке передається в конструктор 
+
+			- Тобто в оригіналі - __construct( $the_argument) у конструктор передається Argument2 а я передаю Argument3. І ще раз. Це у віртуальний тип а не у оригінал
+
+		</arguments>
+
+	    </virtualType>
+
+ 4) Воркфлоу цього уроку 
+
+	1) Клас Testbed методом execute() виводить дані (свойства і їх значення) класа - Pulsestorm\TutorialVirtualType\Model\Example у методі - showNestedPropertiesForObject()
+
+	2) Обєкт класа Pulsestorm\TutorialVirtualType\Model\Example створюється через обєкт менеджер
+
+		class Example {
+		    public $property_of_example_object;
+
+		    public function __construct(Argument1 $the_object) { $this->property_of_example_object = $the_object; }
+			--------
+
+			class Argument1 { - Тобто цей клас попадає у конструктор класу Example
+
+			    public $property_of_argument1_object;
+			    public function __construct(Argument2 $the_argument)
+			    {
+				$this->property_of_argument1_object = $the_argument;
+			    }
+			}
+
+	3) У консольці вивожу:
+
+		#a) тип змінної $the_object(яка знаходиться у конструкторі класа Example) і з якого класу був створений її обєкт (Argument1)
+
+		#б) тип змінної $the_argument(яка знаходиться у конструкторі класа Argument1 ) і з якого класу був створений її обєкт (Argument2)
+
+		#с) І вкінці вивожу свойства обєкта створений з класу Pulsestorm\TutorialVirtualType\Model\Argument1 через обєкт менеджер. Тобто не через депенденсі класу Example, а напряму.
+
+			- Це свойство $the_argument і клас який йому присвоїться - буде - $the_argument
+
+			- І також вивожу в консольку свойство $the_argument, і обєкт, який присвоївся цій змінній $the_argument (Argument2).
+
+	------- Ці дані на момент коли через di.xml я ше не перноприділив нічого -------------
+
+ 	4) І тепер у файлі di.xml я створив віртуальний тип ourVirtualTypeName на клас Argument1, переоприділив його свойство the_argument на Argument3
+
+		<virtualType name="ourVirtualTypeName" type="Pulsestorm\TutorialVirtualType\Model\Argument1">
+			<arguments>
+			    <argument name="the_argument" xsi:type="object">Pulsestorm\TutorialVirtualType\Model\Argument3</argument>
+			</arguments>
+		    </virtualType>
+
+		- АЛе то що я створив віртуальний тип нічого не робить, треба його десь застосувати
+
+		<type name="Pulsestorm\TutorialVirtualType\Model\Example">
+			<arguments>
+			    <argument name="the_object" xsi:type="object">ourVirtualTypeName</argument>
+			</arguments>
+		    </type>
+
+		- ПІСЛЯ ЦЬОГО вивід у консольці
+
+			#а) не змінить. Хоча я в di.xml заміняв його свойство the_object на віртуальний тип (<argument name="the_object" xsi:type="object">ourVirtualTypeName</argument>), але віртуальні аргументи можуть змінити депенденсі тільки у віртуального класа, а клас Example - реальний, тож це залишиться як було
+
+				class Example {
+				    public $property_of_example_object;
+
+				    public function __construct(Argument1 $the_object) { $this->property_of_example_object = $the_object; }
+
+					В консольці виведеться свойство the_object це обєкт і він був створений з класу Argument1
+
+			#б) У консольці виведеться Argument3. Це із за того, що в di.xml я змінив у класа Example, його депенденсі що передається в конструктор на віртуальний тип the_object
+
+				- Це важливо. У реального the_object буде віртуальний тип <virtualType name="ourVirtualTypeName" type="Pulsestorm\TutorialVirtualType\Model\Argument1">, а у віртуального типу(він є і реальний, але на даний момент він віртуальний) є аргумент  $the_argument яке я вже можу переоприділити, так як Argument1 - віртуальний. В депенденсі я його переоприділив на Argument3, тому він в консольці і виводиться
+
+			#с) І вкінці вивожу свойства обєкта створений з класу Pulsestorm\TutorialVirtualType\Model\Argument1 через обєкт менеджер. Це той самий що в пункті #б) тільки реальний а не віртуальний. У нтого нічого не змінилось. Виводиться свойство $the_argument - тип обєкт, створений класом Pulsestorm\TutorialVirtualType\Model\Argument2. Кароче все без змін
+
+
+ 5) Ще одне що може збити з току. Це в нативному коді мадженти
+
+	#File: app/code/Magento/Catalog/etc/di.xml
+
+	<type name="Magento\Catalog\Model\Session"> - Тут міняю аргумент у класа Session
+	    <arguments>
+		<argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument> 
+	    </arguments>
+	</type>
+
+	- Але прикол в тому що цого класу Magento\Catalog\Model\Session\Storage не існує. Це не клас, це назва віртуального типу. І знаходиться він тут 
+
+	#File: app/code/Magento/Catalog/etc/di.xml 
+
+	<virtualType name="Magento\Catalog\Model\Session\Storage" - Тобто імя віртуального типу може мати таку назву. Нагадаю що назви віртуальних типів мають бути унікальні по всій системі
+		     type="Magento\Framework\Session\Storage"> - І це буде його клас
+	    <arguments>
+		<argument name="namespace" xsi:type="string">catalog</argument>
+	    </arguments>
+	</virtualType>
+
+
+
+
+
+	
+
+	
+
+

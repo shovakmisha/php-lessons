@@ -1,0 +1,133 @@
+
+ ------------------------------- Magento 2 Object Manager: Proxy Objects - https://alanstorm.com/magento_2_object_manager_proxy_objects/ -----------------------------------
+
+ - Нагадаю, що коли ініціалізовується якийсь клас, наприклад class Example {
+
+								    protected $fast;
+								    protected $slow;
+
+								    public function __construct(FastLoading $fast, SlowLoading $slow) - Спочатку ініціалізу.ться ці обєкти
+								    {
+									$this->fast = $fast;
+									$this->slow = $slow;
+								    }
+
+									- А потім вже обєкт Example
+
+ 1) Кароче в консольці в методі execute() робляться декілька  методів, почну з першого createService()
+
+	1) Через обєкт менеджер створюється сінглтон $service = $om->get('Pulsestorm\TutorialProxy1\Model\Example'); Перед і після створення є часові мітки, щоб знати скільки часу займає його створення.
+
+	2) Клас 'Pulsestorm\TutorialProxy1\Model\Example' у конструкторі має код і він виконається при своренні з нього обєкта
+
+		class Example {
+
+		    protected $fast;
+		    protected $slow;
+
+		    public function __construct(FastLoading $fast, SlowLoading $slow)
+		    {
+			$this->fast = $fast;
+			$this->slow = $slow;
+		    }
+
+			- FastLoading - Простий клас у конструкторі якого виводиться текс
+
+			- SlowLoading - А от у нтого у конструкторі є код який виводить текст, а потім - sleep(3); Тож виходить, що при ініціалізації обєкта 'Pulsestorm\TutorialProxy1\Model\Example', у його конструкторі буде ініціалізовуватись обєкт SlowLoading, яки стопарне виконування коду на 3 секунди
+
+				- І це можна тут побачити - http://joxi.ru/YmEzDojiwLv8O2 - Створення обєкта зайняло більше 3 секунд
+
+ 2) Робота метода createService присвоюється змінній $service = $this->createService($output); І потім викликаються методи. Це просто методи, які не мають зацмати багато часу на виконання, так як щоб їх викликати, не треба заново створювати обєкти
+
+	$this->sayHelloWithFastObject($service, $output);
+
+		- $service->sayHelloWithFastObject(); А обєкти не треба заново створювати, так як $service - це сінглтон обєкта Pulsestorm\TutorialProxy1\Model\Example і в ньому вже є цей метод
+
+        $this->sayHelloWithSlowObject($service, $output); - тут те саме що і до верхнього, просто цей метод з іншого обєкту.
+
+ 3) Кароче виходить ситуація, що обєкт Example в депенденсі має обєкт який дуже довго ініціалізується. І тепер в мене проблема. Я хочу використовувати обєкт Example, але щоб він не грузився довго. Це робиться за допомогою паттерна Proxy. У файлі di.xml пишу
+
+	#File: app/code/Pulsestorm/TutorialProxy2/etc/di.xml - Щоб прояснити, клас SlowLoading, який тормозить систему, знаходиться не в модулі TutorialProxy2, він знаходиться в app/code/Pulsestorm/TutorialProxy1/Model/SlowLoading.php
+
+	- <type name="Pulsestorm\TutorialProxy1\Model\Example"> - Цей обкт
+		<arguments>
+		    <argument name="slow" xsi:type="object">Pulsestorm\TutorialProxy1\Model\SlowLoading\Proxy</argument> - Міняю депенденсі, яке довго грузиться __construct(FastLoading $fast, SlowLoading $slow) - на проксі 
+		</arguments>
+	    </type>
+
+	- Після цього, маджента згенерує цей проксі файл - generated/code/Pulsestorm/TutorialProxy1/Model/SlowLoading/Proxy.php
+
+		- namespace Pulsestorm\TutorialProxy1\Model\SlowLoading;
+
+		- class Proxy extends \Pulsestorm\TutorialProxy1\Model\SlowLoading 
+				implements \Magento\Framework\ObjectManager\NoninterceptableInterface
+
+	- Справа у тому, що коли обєкт менеджер бачить клас з іменем проксі (як в цьму випадку, коли я переоприділив його в файлі di.xml), він зразу генерить цей клас у папку generated.
+
+		- Не обовязково щоб клас Proxy знаходився в di.xml. $object_manager->create('Pulsestorm\TutorialProxy1\Model\Example\Proxy'); - це теж створить файл в папці generated. Ну і обєкт менеджер створить з нього обєкт
+
+			- Тобто коли обєкт менеджер бачить що клас закінчується на Proxy, він автоматом створює обєкт, який екстендиться від Pulsestorm\TutorialProxy1\Model\Example
+
+ 		- Але проксі обєкт має мати батька від якого наслідуватись, якщо його не буде, буде помилка. Якби класа Pulsestorm\TutorialProxy1\Model\Example не було, була б помилка
+
+ 2) Що робить цей проксі обєкт? Алан каже що він повишає перформанс, але то що я бачу, то не стає набагато краще. Але не суть
+
+	- Клас з якого зробився проксі class SlowLoading {
+					    public function __construct()
+					    {
+						echo "Constructing SlowLoading Object","\n";
+						sleep(3); - Умовно це тормозить систему
+					    }
+
+	- Я замінив в файлі di.xml цей клас що тормозить, на проксі - class Proxy extends \Pulsestorm\TutorialProxy1\Model\SlowLoading implements \Magento\Framework\ObjectManager\NoninterceptableInterface
+
+									public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, 
+												    $instanceName = '\\Pulsestorm\\TutorialProxy1\\Model\\SlowLoading', $shared = true)
+									    {
+										$this->_objectManager = $objectManager;
+										$this->_instanceName = $instanceName;
+										$this->_isShared = $shared;
+									    }
+
+		- Як бачу, я не викликаю тут батьківський конструктор проксі, що тормозить систему. Тобто не я, а сама маджента не викликає його. + Якщо придивитись у конструктор, то це не маджентівська реалізація депенденсі, коли з класу робиться обєкт, тут змінній передається дефолтне значення класу - $instanceName = '\\Pulsestorm\\TutorialProxy1\\Model\\SlowLoading'. Тобто у конструкторі не ініціалізується клас, отже і конструктор який тормозить систему не викликається
+
+		- Методи що були в батька проксі, передались йому + ще декілька __sleep() __sleep() __sleep() __sleep()
+
+			- Але перенеслись тільки public методи батька
+
+			- Але Методи не просто перенеслись, за викликаються за допомогою protected function _getSubject()
+														{
+														    if (!$this->_subject) {
+															$this->_subject = true === $this->_isShared
+															    ? $this->_objectManager->get($this->_instanceName)
+															    : $this->_objectManager->create($this->_instanceName);
+														    }
+														    return $this->_subject;
+														}
+
+				- $this->_subject = true === $this->_isShared ? $this->_objectManager->get($this->_instanceName) : $this->_objectManager->create($this->_instanceName);
+
+					- Це означає, що якщо змінна $shared (в конструкторі == тру), то створиться сінглтон обєкт з батьківського класу, а якщо ні, то створиться звичайний обєкт. Типу:
+
+						$this->_subject = true === $this->_isShared ? $this->_objectManager->get('\\Pulsestorm\\TutorialProxy1\\Model\\SlowLoading') 
+											    : $this->_objectManager->create('\\Pulsestorm\\TutorialProxy1\\Model\\SlowLoading');
+
+			- Наприклад якщо у батька є метод public function sayHelloWithSlowObject() {
+        									$this->slow->hello(); } 
+
+				- А у проксі він буде виглядати так public function hello() {
+        									return $this->_getSubject()->hello(); } - Тобто навіть коли з проксі я просто викликаю якиїсь метод, то конструктор батька (який тормозить систему) запрацює. У такому випадку виглядає це не дуже. Всерівно його методи будуть тормозити систему. Але суть у тому, що я робив цей проксі клас не для того щоб використовувати шого методи, а щоб клас Example (який в залежностях і має цей тормознутий клас) не тормозив при створенні. 
+
+ 3) Вверху я писав, що заміна на проксі обєкт не так сильно пришвидшує створення класу Example. Але коли скріпт запустився ще раз, то вже стало набагато краще - з 44 мілісекунд на 13. Нагадаю, що у конструкторі класу який затримував систему, був стопарь виконання коду на 3 секунди. Як бачу цей стопарь при ініціалізації класу Example не застосувався. Цього я і добивався.
+
+	- Чому ж тоді коли перший раз було повільніше? Із за того що треба було час, щоб згенерувати цей файл в папку generated
+
+ https://devdocs.magento.com/guides/v2.0/config-guide/cli/config-cli-subcommands-compiler.html
+
+ https://github.com/magento/devdocs/issues/325
+
+
+
+
+
+			
