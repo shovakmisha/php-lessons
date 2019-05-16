@@ -1,0 +1,92 @@
+
+ ------------------------------ Magento 2 Object Manager: Instance Objects - https://alanstorm.com/magento_2_object_manager_instance_objects/ ---------------------------------
+
+ 1) Я вже писав про те що у обєкт менеджера є 2 методи щоб створити обєкт
+
+	$object  = $manager->create('Pulsestorm\TutorialInstanceObjects\Model\Example');
+	$object  = $manager->get('Pulsestorm\TutorialInstanceObjects\Model\Example');
+
+	- Але як маджента вирішує який метод використовувати, коли ці класи є в деперденсі (в конструкторі) і їх треба ініціалізовувати
+
+		use Pulsestorm\TutorialInstanceObjects\Model\Example;
+		
+		public function __construct(Example $example)
+		{
+		    //is $example created with `get` or `create`?
+		    $this->example = $example?
+		}
+
+		- ПО ЗАМОВЧУВАННЮ ВСІ ОБЄКТИ ЯКІ СТВОРЮЮТЬСЯ В ДЕПЕНДЕНСІ - СІНГЛТОНИ ( $ОbjectManager->get('some class') )
+
+		- Якщо я хочу щоб це був не сінглтон, а новий інстанс ( $ОbjectManager->create('some class') ) - мені треба це вказати у файлі di.xml
+
+			<config>
+			    <type name="Pulsestorm\TutorialInstanceObjects\Model\Example" - name має бути таким як і клас, з якого я хочу створювати обєкт.
+				  shared="false"> - Можна глянути на попередній урок про Proxy. Там теж використовувався "shared" щоб взнати що створювати чи сінглтон чи звичайний новий обєкт. Якщо false, значить створиться новий обєкт (create) 
+
+				<!-- ... arguments/argument tags here if you want to change injected arguments - Тут можна добавити аргументи, щоб кастомізувати обєкт -->
+			    </type>
+			</config>
+
+ 2) Наскільки я зрозумів, цей shared передається завжди. Тобто якщо я його не передаю його, вын сверівно передається як тру і створиться сінглтон 
+
+ 3) Я це і так поняв, що коли я ініціалізовую обєкти не через депенденсі, то їх не можна кастомізовувати файлом di.xml і ця фішка з shared не буде звичайно работати.
+
+ 4) Коли використовується метод get для створення обєкта, ці всі обєкти складуються в _sharedInstances. Тут 
+
+	#File: lib/internal/Magento/Framework/ObjectManager/ObjectManager.php
+
+	public function get($type)
+	{
+	    $type = ltrim($type, '\\');
+	    $type = $this->_config->getPreference($type);
+	    if (!isset($this->_sharedInstances[$type])) {
+		$this->_sharedInstances[$type] = $this->_factory->create($type);
+	    }
+	    return $this->_sharedInstances[$type];
+	}
+
+	- Алан про це нічого не казав і це тільки мої догадки, але по ходу всі сінглтони маджента буде хранити тут http://joxi.ru/Dr8RE7kCoD1DJ2 і щоб їх взяти - залізе у цей скріпт if (!isset($this->_sharedInstances[$type])) { - тут вже буде сінглтон і його і поверне і не буде створювати новий - $this->_sharedInstances[$type] = $this->_factory->create($type);
+
+ 5) Але ця фішка з shared теж не ідеальна. Наприклад я добавив ініціалізацію не сінглтона в депенденсі сінглтона. То цей сінглтон всеодно один раз створиться і все. Получається додавати йому в депенденсі не сінглтон не має сенсу.
+
+	- Особливо це проблема кои я працюю з продуктами, базою, цмс пейджами
+
+	- Звісно я можу створити старим добрим $product = new \Magento\Cms\Model\Page; Але тоді в мене не буде фішок які дає обєкт менеджер. ДЛЯ ЦЬОГО ПРИДУМАЛИ ФАБРИЧНІ ОБЄКТИ
+
+ 6) Фабрика
+
+	 class Testbed extends Command {
+	   protected $pageFactory;
+
+	   public function __construct(\Magento\Cms\Model\PageFactory $pageFactory ) - 
+	   {
+	       $this->pageFactory = $pageFactory;
+	       parent::__construct();
+	   }
+
+	- $page = $this->pageFactory->create(); - Потім з цього факторі обєкту я створюю цмс пейдж обєкт, використовуючи метод create(). Метод create() це факторівський метод.
+
+		- Це саме що коли в м1 - $page = Mage::getModel('cms/page');
+
+		 - $page автоматом буде мати CRUD методи load, getData, getCollection, etc. Я не знаю як саме воно звязує ці методи з фабрикою, але наскільки памятаю в мене були помилки, якщо я не створював ці класи модельки для звязку з базою.
+
+ 7) Кожного разу коли код бачить клас, який закінчується на Factory і автолоадер не може загрузити цей клас (він генерується у папку generated) - цей файл перегенеровується у папку generated
+
+ 8) Як я поняв що факторі із за того використовується, коли я не хочу щоб були сінглтони. Тобто для елементів, які мають дані які постійно оновлюються (продукти, цмс пейджі, цмс блоки)
+
+	- Типу сынглтон створився 1 раз ы кожного разу коли мены треба цей обєкт маджента перевіряє а він вже є? якщо є то вже не буде створювати і генерити цей файл. А з фабрикою не так. Кожного разу, коли я буду просити фабрику, буде переініціалізовуватись обєкт, і перегинерюватись 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
