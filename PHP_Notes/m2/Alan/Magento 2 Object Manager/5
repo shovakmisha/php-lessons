@@ -79,8 +79,121 @@
 
 
 
+ --------------------- Magento 2 Object Manager Plugin System - https://alanstorm.com/magento_2_object_manager_plugin_system/ -------------------------------
+ 
+ - Плагіни - це частина паттерна interceptor(перехватчик).
+
+	- Великий плюс, що коли я міняв клас плагіна, не треба було чистити кеші, перегенеровувати класи - файлик автоматом перегенеровувався.
+
+ 1) Імя плагіна має бути таке як назва класу + унікальне - name="pulsestorm_tutorial_plugin_model_example_plugin"
+
+	- По ходу внутрі плагіна теж можна писати теги і доконфігуровавати клас, але цього не було в прикладі
 
 
+ 2) Клас має називатись Plugin, хоча запрацює з будь якою назвою
+
+ 3) SortOrder - це порядок виконання коли на 1 клас э декылька плагінів.
+
+ 4) disabled - не факт що цей атрибут буде работати
+
+ 5) <type name="Pulsestorm\TutorialPlugin\Model\Example"> <plugin name="pulsestorm_tutorial_plugin_model_example_plugin" type="Pulsestorm\TutorialPlugin\Model\Example\Plugin"
+
+	- Кароче я написав плагін. Клас Example, який я плагіную, кинутий в депенденсі public function __construct(Example $example)
+													$this->example = $example; 
+
+	. Із за того що він в депенденсі, його і можна плагінувати в файлі di.xml. Але коли я беру його клас - get_class($this->example) - то це не буде ні оригінальний клас ні клас плагіна. Це буде -  Pulsestorm\TutorialPlugin\Model\Example\Interceptor - Цей клас генерить маджента автоматом в папку generated. В ньому вже є методи класа, який я плагіную.
+
+	- Але не дивлячись на то що в цього згенерованого класу є всі методи, метод який виконався не береться з нього, а береться з класу який я плагіную.
+
+	Алан каже що не треба паритись над класом Pulsestorm\TutorialPlugin\Model\Example\Interceptor, так як це тільки прослойка яка автоматом генерується
+
+ 6) class Interceptor extends \Pulsestorm\TutorialPlugin\Model\Example implements \Magento\Framework\Interception\InterceptorInterface - це зненерований клас
+
+	public function getMessage($thing = 'World', $should_lc = false) - це клас який він переробив з огригінального
+	    {
+		$pluginInfo = $this->pluginList->getNext($this->subjectType, 'getMessage');
+		if (!$pluginInfo) {
+		    return parent::getMessage($thing, $should_lc);
+		} else {
+		    return $this->___callPlugins('getMessage', func_get_args(), $pluginInfo);
+		}
+	    }
+
+	- Це оригінальний клас
+
+	public function getMessage($thing='World', $should_lc=false) {
+		echo "Calling the real " . __METHOD__, "\n";
+		$string = 'Hello ' . $thing . '!';
+		if($should_lc)         {
+		    $string = strToLower($string);
+		}
+		return $string; 
+	}
+
+ 
+
+ 7) Афтер плагін - public function afterGetMessage($subject, $result) - приймаэ 2 аргументи
+	
+	- $subject (обєкт який викликав цей метод (Pulsestorm\TutorialPlugin\Model\Example\Interceptor))
+
+-----------------------
+		- Кароче якщо $subject викликає цей метод, то це не дивно що протектед методи не можна плагінити. Протектед методи можна визивати у чайлдах обєкта, а тут получається, що метод викликає цей обєкт - Pulsestorm\TutorialPlugin\Model\Example\Interceptor - а він не чайлд \Pulsestorm\TutorialPlugin\Model\Example. Це для всіх плагінів, не тільки для Афтер
+
+			- Може є якась можливість переробити цей протектед метод в файлі di.xml. Звісно ж проще просто переписати клас у якому цей протектед метод, але можна буде загуглити.
+-----------------------
+	- $result (то що повертає оригінальний метод getMessage())
+
+ 8) Бефоре плагін - public function beforeGetMessage($subject, $thing='World', $should_lc=false)
+	
+	- Змінної $result як в афтер плагіна тут не має, так як на момент виконання бефор плагіна, основний плагін ще не почав виконуватись
+
+	- $subject - це так само як і в афтер плагіна. 
+
+	- Інші аргументи це копії аргументів оригінального метода - їхня назва і дефолтні значення - має бути такі самі
+
+	Наприкдад є такий плагін
+
+	public function beforeGetMessage($subject, $thing='World', $should_lc=false) - Це я тіьки переписав дефолнті значення. Якщо при виклику оригінального метода, я вкажу ці аргументи, то вони перекриють і аргументи цього плагіна і аргументи оригінального метода. Але то що я написав їх тут ще нічого не означає.
+	    {
+		echo "Calling " . __METHOD__,"\n";
+
+		// return ['Changing the argument', $should_lc]; - щоб переписати агрументи, які передаються плагіну, треба повернути їх як тут. Тоді це перепише навіть аргументи, які я передав при виклику метода. З цими агрументи буде виконуватись оригінальний метод 
+	    }
+
+ 9) Мабуть краще пояснити як работає ераунд плагі, як показати приклад - не можна
+
+	public function aroundGetMessage($subject, $procede, $thing='World', $should_lc=false)
+	    {
+		echo 'Calling' . __METHOD__ . ' -- before',"\n"; - код виконається перед виконанням оригінального методу
+
+		$result = $procede(); - Це виконання оригінального методу. Це анонімна ф-ція (Closure - https://php.net/manual/en/functions.anonymous.php)
+
+		echo 'Calling' . __METHOD__ . ' -- after',"\n"; - код виконається після виконання оригінального методу
+
+		return $result; - це то шо поверне оригінальний метод. Якщо тут напишу '', поверне ''.
+	    }
+
+	- По суті це і бефор і афтер плагін одночасно + оригінальний метод можна взагалі не викликати. Тобто він заміниться на цей плагін у якому я не викличу оригінальний.
+
+		- Але з цим треба бути дуже осторожним, так як якщо я не викличу $procede(); то і прирветься ципочка всіх виконаних плагінів на цьому методі. 
+	
+ 10) В принципі цей ераунд плагін можна розглядати як 
+
+	class Namespace_Module_Model_Someclass extends Mage_Core_Model_Someclass
+
+	public function someMethod($foo, $baz, $bar)
+	{
+	    $this->_doSomeBeforeStuff($foo, $baz, $bar);
+	    $result = parent::someMethod($foo, $baz, $bar);
+	    $result = $this->_doSomeAfterStuff($result);
+	    return $result;        
+	}
+
+	- Але найбільше розлічіє між плагіном і цим реврайтом у тому що плагіни дозволяють робити декілька плагінів на 1 метод (і використовувати сорт ордери щоб ).
+
+ 11) Коли я роблю 2 плагіни на 1 метод - ретурн работає тільки в останнього (в нього сорт ордер більший)
+
+	 - Але ретурн у першого плагіна не безполезний. Він якраз і передається другому плагіну. Тож другий планін подулить не то що повертає оригінальний метод, а то що повертає перший плагін
 
 
 
