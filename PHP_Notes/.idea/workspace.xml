@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3548b656-4906-409b-90bf-4626a2a141f0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Command/Testbed.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/Example.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/ExampleArgument2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/Model/SomethingCompletelyDifferent.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/di.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/etc/module.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 Object Manager/magento2-tutorial-objectmanager-arguments-master/app/code/Pulsestorm/TutorialObjectManagerArguments/registration.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../php3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../php3/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="68" column="74" lean-forward="true" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
+            <state relative-caret-position="325">
+              <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
             </state>
           </provider>
         </entry>
@@ -53,10 +44,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="-4" />
-    <option name="width" value="1855" />
-    <option name="height" value="1084" />
+    <option name="x" value="64" />
+    <option name="y" value="-11" />
+    <option name="width" value="1857" />
+    <option name="height" value="1092" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -97,7 +88,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../php3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -124,17 +115,18 @@
       <workItem from="1517150758014" duration="249000" />
       <workItem from="1549632724203" duration="377000" />
       <workItem from="1557823881236" duration="512000" />
+      <workItem from="1558444985767" duration="96000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1138000" />
+    <option name="totallyTimeSpent" value="1234000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15312327" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15478165" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -248,8 +240,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="68" column="74" lean-forward="true" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
+        <state relative-caret-position="325">
+          <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
         </state>
       </provider>
     </entry>

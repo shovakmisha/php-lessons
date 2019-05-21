@@ -1,0 +1,17 @@
+{
+    "name": "pulsestorm/composer-plugin-example",
+    "description": "Simple example of a composer plugin.",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "minimum-stability": "alpha",
+    "require": {
+        "composer-plugin-api": "^1.0"
+    },
+    "autoload":{
+        "psr-4":{
+            "Pulsestorm\\Composer\\Example\\":"src/"
+        }
+    },    
+    "extra":{     
+        "class":"Pulsestorm\\Composer\\Example\\Plugin"
+    }}

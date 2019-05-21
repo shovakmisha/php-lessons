@@ -1,0 +1,322 @@
+
+ ------------------------ Magento 2: Composer, Marketplace, and Satis - https://alanstorm.com/magento_2_composer_marketplace_and_local_satis_mirrors/ -------------------------------
+
+ 1) https://repo.magento.com/ - хранилище пакетів композера для мадженти. Раніше вроді тільки звідси можна було установлювати пакети. Це маркетплейс 
+
+ 2) Marketplace работает на PHP Composer. Маркетплейс (repo.magento.com) - істочник для куплених розширень (модулів, плагінів) иадженти
+
+ 3) Ціль цього уроку, як зробити щоб композеровські пакети були в мене локально.
+
+ 4) По ходу композер це якесь хранилище з даними - і коли я пишу в консольці - composer require foo/bar - я пошу в цього хранилища пакет який знаходиться за цаєю адресою (ну або з цим аліасом або іменем - це вже не так важливо) 
+
+	- В свою чергу композер дає мені таку відповіь - ось - я знайшов пакет який тобі треба - записав дані цього пакета в composer.lock і по тих даних скачав пакет.
+
+	- Кароче цей маркетрлейс як я поняв, як якась обертка над оригінальним композером - де оригінальний композер хранить свої пекеджі - https://packagist.org/
+
+	- Але ні маркетплейс ні пекеджліст композера не хранять пакети з екстеншенами. Вони провсто вказують юрл-ки де знаходяться ці пакети.
+
+ 5) auth.json - по цьому файлу маджента оприділяє хто я і які в мене можуть бути модулі. 
+
+	"repo.magento.com": {
+	      "username": "7a03b501cda64e321f0d2f9f054f66ba",
+	      "password": "5a632988d04e85f36a788751580981e1"
+	    },
+
+	- Це дані з якими я зареєстрований як мадженто користувач. Тут оприділяється чи моя версія комюніті чи ентерпрайз, які я купив модулі. Кароче все. Коли я встановлював мадженту я мусів зареєструватись на маркетплейсі щоб мені дали цей ключ. Цей ключ унікальний для кожного проекту мадженти.
+
+	- Я путався, але і Алан каже що принаймні для комюніті дивно шо файл auth.json є. Для установки комюніті едішн так точно. Наприклад якщо задумка розробників була в тому щоб відслідкувати всіх користувачів мадженти, навіть тестових, то навіщо викладувати код репозиторія мадженти на гітхаб. Його ж можна просто скачати і установити мадженту
+
+ 6) Є можливість дати композеру шукати пакети по інших адресах
+
+	//File: composer.json
+	{
+	    //...
+	    "repositories": [
+		{
+		    "type": "composer",
+		    "url": "https://repo.magento.com/"
+		}
+	    ],
+
+	- Якщо я напишу composer require foo/bar - комозер буде сприймати це як - у мене є якісь налаштування для repositories. Тому в першу чергу пакет foo/bar треба буде шукати тут - https://repo.magento.com/ (https://repo.magento.com/ - це маркетплейс)
+
+ 7) Я не скажу точно (не хочу херити проект щоб це перевірити), але наскільки я поняв, що налаштування маджентівськими пекеджами композера були по феншую, треба ввести цю команду - composer create-project --repository=https://repo.magento.com/ magento/project-community-edition magento2 і тоді маджента буде шукати модулі для встановлення у маркетплейсі і як у даному випадку модулі комюніті едішн 
+
+ 7) composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition <installation directory name>
+
+	- Це по ходу установка мадженти через композер. Ну не установка, а базові налаштування композера перед composer install
+
+	- --repository-url=https://repo.magento.com/ - маджентівський композеровський репозиторій знаходиться за цією адресою - https://repo.magento.com/ - цей флаг якраз і додає налаштування в композер, щоб він шукав тут пакети в першу чергу. Це я кажу, що magento/project-community-edition загрузиться з https://repo.magento.com/ в папку <installation directory name>
+
+ 8) Як тільки я куплю якиїсь екстеншн з маркетплейса, він має зявись у моєму профілі маркетплейса (My Account). Як я поняв після того я зможу установити його через композер
+
+ 9) System -> Web Setup Wizard - Це маджентівський Component Manager. Тобто через адмінку можна управляти маркетплейсівськими екстеншнами.
+
+	- Цей компонент менеджер - це GUI(графический пользовательский интерфейс) - по ходу можна установлювати компоненти не тільки через консольку а і через адмінку
+
+ 10) Це піздец як дивно і я не знаю нахер я це пишу, але Алан каже що коли я заходжу в акаунт маркетплейса, у ньому хранятся і пекеджі для комюніті версії і пекеджі для екомерс версії мадженти. І для пекеджів мадженти які я купив. Кароче все якось на кучу.
+
+ 11) Лайфхак - щоб маджента швидже розверталась і щоб розвертання мадженти не залежало від того чи маркетплейс доступний, можна розмістити пекеджі локально на проекті і в композері вказати його локальну адресу.
+
+ 12) По суті, є 3 місця де я можу хранити пекеджі композера - КОМПОЗЕРІВСЬКИЙ packagist.org, маджентівський https://repo.magento.com/ і гіт. Але по суті вони не храняться там наскільки я зрозумів, там просто храняться юрлки пекеджів. Якщо я не хочу, щоб мій проект залежав від цих сервісів, я можу хранити пекеджі у якомусь іншому місці - локально. Для цьог у композера є satis. мої локальні пекеджі. 
+
+	- Тобто у мене є композер, він звертається до Packageist, у якому вказано де лежать пакети модулів і плагінів.
+
+	- http://blog.servergrove.com/wp-content/uploads/2015/04/satis.002.png - це сатіс. Тобто він як і композерівський пекеджліст - прослойка між пакетами і композером. Якщо я назначу главним сатіс, то спочатку він буде загружати пакети з сатіс, а потім з пекеджліста.
+
+
+
+ ------------------------ Magento 2: Composer Plugins - https://alanstorm.com/magento_2_composer_plugins/ ---------------------------------------
+
+ - Кароче, у першій статті Алан розказував про встановлення мадженти через композер і плюшки звязані з цим. Я не хотів заново встановлювати мадженту щоб протестити це. Тому у 2-му уроці можуть бути відсилки на першу статтю. Або якісь пояснення до першої статті.
+
+ 1) Наприклад я додав собі такий код у composer.json Цього достатньо щоб загрузити пакет(плагін) композера. 
+
+	- Не треба звертати увагу що це плагін, так працюють всі пакети композера
+
+	{
+	    "repositories":[
+		{
+		    "type":"vcs", - кажу коомпозкру що мій пакет прийде з version control system. Тобто вверху я писав про прослойку Packageist, у якій писало де лежать плагіни. То якщо вони лежать в гіті, і я напишу  "type":"vcs" - все запрацює. цей type можна розглядати як провайдер
+		    "url":"git@github.com:astorm/composer-plugin-example.git" - цей пакет(плагін) знаходиться за цією адресою в гіті
+		}
+	    ],
+	    "require":{
+		"pulsestorm/composer-plugin-example":"0.0.1" - пакет(плагін) буде в цій папці. Я не впевнений що версію саме так треба вказувати, думаю це залежить від ситуації
+	    }
+	}
+
+	- заходжу в папку з цим composer.json і запускаю composer install. Тобто це не мусить бути якась особа папка Композер установлений глобально і де б я не був, можна запихнути туда composer.json і запустити - composer install
+
+-----------------------
+
+ 2) З цим всім я запустив composer install. Тобто все що мені треба, це файлик composer.json в якому треба прописати ці базові декілька строчок, все інше в в самому пакеті на гіті. Ці файли прийшли з гіта мені в проект
+
+	- Єдине що дивно що файли записались у папку vendor (у папку з якої я запускав composer install), а інше все понятно. З одного файлика ось скільки стало - http://joxi.ru/brRz6oRi7V4p9r
+
+
+	- є файл src/Plugin.php. Там є методи які допомагають відслідкувати як працює композер. Ці методи будуть кидаюти логи у файл який я створив спеціально для цього.
+
+		- Як я поняв цей Plugin.php це якиїсь обсервер над композером. Його методи слухають що робить композер. Це вроді як нативний функціонал композера, який можна розширяти
+
+	public static function getSubscribedEvents() - слухати івенти композера, які я написав у масиві
+	{
+	    return array(
+		'post-install-cmd' => 'installOrUpdate',
+		'post-update-cmd' => 'installOrUpdate',            
+	    );
+	}
+
+	- post-install-cmd і post-update-cm це івенти композера, які я слухаю. Коли вони відбуваються, я запускаю метод installOrUpdate()
+
+	public function activate(Composer $composer, IOInterface $io) - композер викличе цей метод кожного разу як композер запуститься. 
+	{
+		file_put_contents('/tmp/composer.log', __METHOD__ . "\n",FILE_APPEND);
+	}
+
+	public function installOrUpdate($event)
+	    {
+		file_put_contents('/tmp/composer.log', __METHOD__ . "\n",FILE_APPEND);
+		file_put_contents('/tmp/composer.log', get_class($event) . "\n",FILE_APPEND);            
+	    }
+
+ 3) Після того як я запустив composer install(або update) у кастомному лог файлі зявились записи які записав туди цей плагін клас
+
+	Pulsestorm\Composer\Example\Plugin::activate - Спочатку запрацює метод activate()
+	Pulsestorm\Composer\Example\Plugin::installOrUpdate потім installOrUpdate()
+	Composer\Script\Event - цей клас який передався аргументом в installOrUpdate($event - це він) - Мабуть цим Алан хотів показати наскільки композер тісно працює з пхп і те що його дії можна відслідковувати. 
+
+ 4) Також у папці vendor створилась папка composer після того як я запустив команду composer install. Я не знаю звыдки взялись там файли, але це вони якось автоматом підтягнулись.
+
+ 5) Так виглядає composer.json плагіна який лежить на гіті.
+
+	{
+	    "name": "pulsestorm/composer-plugin-example",
+	    "description": "Simple example of a composer plugin.",
+	    "type": "composer-plugin", - Ця строчка робить із пакета плагін 
+	    "license": "MIT",
+	    "minimum-stability": "alpha",
+	    "require": {
+		"composer-plugin-api": "^1.0" - Якщо це плагін, то цю строчку теж треба вказувати. На какую версию API плагина нацеливается ваш плагин.
+	    },
+	    "autoload":{
+		"psr-4":{
+		    "Pulsestorm\\Composer\\Example\\":"src/"
+		}
+	    },    
+	    "extra":{     
+		"class":"Pulsestorm\\Composer\\Example\\Plugin" - Ось це вже мій клас у якому я дебажив як працює цей плагін. Так как Composer должен будет создать экземпляр этого класса, это означает, что вам понадобится что-то в разделе автозагрузки, которое гарантирует, что PHP загрузит файл определения класса. В нашем случае мы использовали стандартный автозагрузчик PSR-4 (вверху "autoload")
+	    }}
+
+ 6) find vendor/ -name composer.json | xargs grep 'composer-plugin' - команда щоб знайти всі плагіни композера у папці vendor. воно буде шукати записи composer-plugin по файликах composer.json
+
+ 7) Зазвичай композерівські плагіни створюються щоб модифікувати поведінку пекеджів кампозера
+
+	- find vendor/ -name composer.json | xargs grep 'composer-plugin' цією командою я знайшов плагін (мабуть єдиний) мадженти в файлі vendor/magento/magento-composer-installer/composer.json 
+
+		- Тут те саме що ы в моэму плагіні - autoload":{
+							"psr-4":{
+							    "Pulsestorm\\Composer\\Example\\":"src/"
+							}
+						    },    
+						    "extra":{     
+							"class":"Pulsestorm\\Composer\\Example\\Plugin"
+						    }}
+
+		- Це цей файл - vendor/magento/magento-composer-installer/src/MagentoHackathon/Composer/Magento/Plugin.php - Тут теж є метод activate() i getSubscribedEvents()
+
+			- Кароче цей плагін теж слухає команди composer install and composer update
+
+			- шукає у установлених пекеджах файли composer.json і у них шукає - "map": [
+
+				- У цьому "map": [ знаходиться шляхи до файлів які мають рознестись у інші папки, а точніше з папки у якій знаходиться цей композерівський пекедж у папку проекту. До прикладу "map": [
+            [
+                ".htaccess",
+                ".htaccess"
+            ],
+            [
+                ".htaccess.sample",
+                ".htaccess.sample"
+            ],
+            [
+                "CHANGELOG.md",
+                "CHANGELOG.md"
+            ],
+            [
+                "COPYING.txt",
+                "COPYING.txt"
+            ],
+
+		- Ці файли перенесуться а папку проекту. І тепер понятно звідки вони тут зявились - http://joxi.ru/8AnEVnwuz0wWZ2 . Ну або в папку ліби - http://joxi.ru/l2Z46oyTzkBeEr
+
+			- Тепер понятно звідки зявляються файли в папці lib
+
+	[
+                "lib/internal/LinLibertineFont",
+                "lib/internal/LinLibertineFont"
+            ],
+
+		- Тобто цей плагін по великому рахунку копіює файли з однієї папки в іншу. Якось так
+
+			cp -r vendor/magento/magento2-base/lib/internal/Cm lib/internal/Cm
+			cp -r vendor/magento/magento2-base/lib/internal/LinLibertineFont lib/internal/LinLibertineFont
+
+
+
+
+
+  ------------------------- Magento 2: Composer and Components - https://alanstorm.com/magento_2_composer_and_components/ -----------------------
+
+ 1) Є 4 види компонентів в мадженті
+
+	Modules - vendor/magento/module-admin-notification/registration.php - ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_AdminNotification', __DIR__);
+
+	Themes - magento.two/vendor/magento/theme-frontend-luma/registration.php - ComponentRegistrar::register(ComponentRegistrar::THEME, 'frontend/Magento/luma', __DIR__);
+
+		- тип - ComponentRegistrar::THEME,
+
+		- імя компонента - 'frontend/Magento/luma'
+
+	Language Packs
+
+	Code Libraries
+
+	- До інших 2-х я не шукав приклади їхньої реєстрації, але як бачу ComponentRegistrar - у всіх різний
+
+
+ 2) Мадженто буде шукати компоненти по цих шляхах
+
+	app/code/*/*/cli_commands.php
+	app/code/*/*/registration.php
+	app/design/*/*/*/registration.php
+	app/i18n/*/*/registration.php
+	lib/internal/*/*/registration.php
+	lib/internal/*/*/*/registration.php
+
+ 
+
+ 3) Помимо psr-4, секція autoload має ше одну цікаву підсекцію - files
+
+	#File: vendor/magento/module-catalog/composer.json
+	{
+	    "name": "magento/module-catalog",
+	    //...
+	    "autoload": { - Алан каже що ця секція автолоад важлива, щоб в кінечному рахунку цей модуль встановився vendor/magento/module-catalog/registration.php а також з цією секцією встановлення займає набагато менше часу
+ 
+		"files": [
+		    "registration.php"
+		],
+		"psr-4": {
+		    "Magento\\Catalog\\": ""
+		}
+	    }
+	    //...
+	}
+
+ 4) Так будуть виглядати реєстрація всіх видів компонентів
+
+
+	Module
+
+	#File: vendor/magento/module-weee/registration.php
+	<?php
+
+	\Magento\Framework\Component\ComponentRegistrar::register(
+	    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+	    'Magento_Weee',
+	    __DIR__
+	);
+
+	Theme
+
+	#File: vendor/magento/theme-frontend-luma/registration.php
+
+	\Magento\Framework\Component\ComponentRegistrar::register(
+	    \Magento\Framework\Component\ComponentRegistrar::THEME,
+	    'frontend/Magento/luma',
+	    __DIR__
+	);
+
+	Library
+
+	#File: vendor/magento/framework/registration.php
+	<?php
+
+	\Magento\Framework\Component\ComponentRegistrar::register(
+	    \Magento\Framework\Component\ComponentRegistrar::LIBRARY,
+	    'magento/framework',
+	    __DIR__
+	);
+
+	Language Pack
+
+	#File: vendor/magento/language-de_de/registration.php
+	<?php
+
+	\Magento\Framework\Component\ComponentRegistrar::register(
+	    \Magento\Framework\Component\ComponentRegistrar::LANGUAGE,
+	    'magento_de_de',
+	    __DIR__
+	);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
