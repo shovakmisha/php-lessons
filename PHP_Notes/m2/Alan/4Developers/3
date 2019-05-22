@@ -129,6 +129,41 @@ Magento 2 так само як і м1, використовує ActiveRecord
 
  ------------------------------ Magento 2: Understanding Object Repositories - https://alanstorm.com/magento_2_understanding_object_repositories/ ------------------------------
 
+ - паттерн Repositories.
+
+	- Наприклад в мене є якиїсь клас, який має доступ до даних (наприклад до бази, до файлової системи, кароче до всього що можна уявити). 
+
+	- Клас репозиторій має мати можливість працювати з цими істочниками даних (міняти, вибирати, удаляти, ...). Щоб не йти далеко від сущності, строюється не клас а інтерфейс у якому є основні методи для роботи з цим істочником клас репозиторія буде імплементувати цей інтерфейс
+
+-----------
+ 
+  - На скільки я зрозумів суть паттерна репозиторі у тому, щоб через цей клас репозиторі можна було працювати з даними звідки захочу. Тобто з апішки, ще з якоїсь балди. Тож це не то що не правильно використовувати репозиторі у блоках наприклад, просто навряд розробники мадженти або я буду створювати функціонал для роботи з цими даними настільки багатий як через звичайні класи. Є сенс використовувати репозиторі у випадках коли я пишу якиїсь модуль і до мого модуля хтось буде стукатись апішкою.
+
+	- Плюс, якщо робота зі звичайними класами має бути проста (не треба паритись що я посилаю через метод, або які типи даних я получаю), то робота з рипозиторієм має бути вдвічі легша. Простенькі, понятні методи, щоб були понятні кожному 
+
+		- Чим абстракніший клас репозиторі, тим краще. Для хорошого прикладу можна привести PDO - коли не вжливо що це за база. Є 1 метод для роботи з базою і не важливо з якою базою я буду працювати я як у цій базі витягуються дані. У пдо є свій метод і все - він всім підходить
+
+	- Може краще зрозумію якщо подивлю на клас репозиторі. Як він витягує колекцію продуктів
+
+		public function __construct(
+		    //...
+		    \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory, - Тобто репозиторі абстракція. А по суті коли я працюю з продуктами через репозиторі, я процюю з Magento\Catalog\Model\ResourceModel\Product\CollectionFactory. З цього можна зрозуміти, що якщо захочу працювати з продуктами, можна буде це робити через Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+
+			- + цей ResourceModel це взагалі атавізм з першої мадженти. Це не я так вирішив це Алан каже. Це вроді не всі продуктові модельки працюють через \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory. Наскільки я зрозумів це відноситьься до беспосередньо цього класу і до репозеторі, який має цей клас в залежностях депенденсі.
+
+		) {
+		    $this->collectionFactory = $collectionFactory;
+		}
+
+		public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+		{
+		    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+		    $collection = $this->collectionFactory->create();
+		    //...
+		}
+
+ ------------------------
+
  - Кароче у цьому уроці я працював з командною строкою. В пхп файлах я писав логіку. В залежності від команд які буду вводити, командна строка буде виводити різне
 
 	- умовно я ввів php bin/magento ps:examples і виконався код 
@@ -137,9 +172,203 @@ Magento 2 так само як і м1, використовує ActiveRecord
 		$page = $repo->getById(2);
 		echo get_class($page),"\n"; - це вивелось в командній строці
  
- 1) API на основе RESTful с аутентификацией oAuth
+ ( API на основе RESTful с аутентификацией oAuth )
 
- 2) Треба перечитати про оюєкти в мадженті, а потім повернутись до цієї статті
+ 2) Тут Алан розказував про паттерн Repositoriy. Він каже що він використовується всюди - product, category, CMS page, etc - для кожного з них є репозиторі обєкт. І кожен з них імплементує свій інтерфейс
+
+	Щоб було ясніше, по проектах я бачив такі класи - Magento\Cms\Model\PageRepository - за них я і буду розказувати.
+
+	- Почну я з cms/page objects - Magento\Cms\Model\PageRepository - це репозиторі обєкт для цмс пейдж обєктів.
+
+ 3) Скажу зразу. Це не фекторі і не проксі. Не має такого що є клас Magento\Cms\Model\Page і в папку generated добавиться клас Magento\Cms\Model\PageRepository. Клас Magento\Cms\Model\PageRepository існує фізично.
+
+ 4) Якщо заглянути у клас Magento\Cms\Model\PageRepository, можна побачити що він імплементує інтерфейс PageRepositoryInterface по методах якого можна буде зрозуміти, що буде робити репозиторі обєкт - save(), getById(), getList(), delete(), deleteById()
+
+	- Та і в ідеалі не має бути важливо з чим я працюю, чи з цмс пейджами чи з продуктами, методи для взяття інфи мали б бути одинакові.
+
+ 5) Тож репозиторій - це простий спосіб працювати з якимось даними. Далі я буду описувати як маджента працює з даними через репозиторі
+
+ - Наприклад так я витягаю цмс пейджу 
+
+	$repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');
+        $page = $repo->getById(2);
+
+ - міняю тайтл в цмс пейджі
+
+	$repo = $this->objectManager->get('Magento\Cms\Model\PageRepository');
+        $page = $repo->getById(2);
+        echo $page->getTitle(),"\n";
+        $page->setTitle($page->getTitle() . ', Edited by code!');
+        $repo->save($page); - тобто ці дані попадуть в базу
+
+ - Если вы хотите дублировать страницу, вы можете загрузить дубликат страницы, установить для ее идентификатора значение NULL и передать дублированный объект в репозиторі.
+
+	- Я перевіряв, воно справді зробить дублікат, а не видалить сторінку з бази
+
+	$repo = $this->objectManager->get('Magento\Cms\Model\PageRepository');
+	$page = $repo->getById(2);
+	$page->setId(null);
+	$page->setTitle('My Duplicated Page');
+	$repo->save($page);                
+	echo $page->getId(),"\n";
+
+ - Видалити сторінку можна двома методами. Або передати репозиторі айдішку, або всю сторінку
+
+	$repo->delete($page);
+	$repo->deleteById($page_id);
+
+ 6) Далі буде йти мова про продуктовий репозиторій - Magento\Catalog\Model\ProductRepository. Наприклад тепер вже буде буде ясно де шукати чому тут буде помилка
+
+	$repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');        
+	$repo->getList(); - Argument 1 passed to Magento\Catalog\Model\ProductRepository\Interceptor::g etList() must implement interface Magento\Framework\Api\SearchCriteriaInter face, none given
+
+		- У інтерфейсі є метод getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria); і він требує щоб йому передали обєкт критерії пошуку.
+
+	- Так вже заработає
+
+		$repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');        
+		$search_criteria = $this->objectManager->create(
+		    'Magento\Framework\Api\SearchCriteriaInterface'
+		);
+		$result = $repo->getList($search_criteria);
+		$products = $result->getItems();
+		foreach($products as $product)
+		{
+		    echo $product->getSku(),"\n";
+		} 
+
+ 7) Search Criteria це якиїсь обєкт який вказує мо яких критеріях витягувати дані з бази. Але щоб задати фільтри, я не використовував його методи фільтрування, а передав йому аргументом обєкти фільтрування Magento\Framework\Api\Filter і Magento\Framework\Api\Search\FilterGroup. Кароче можна заглянути в код і подивити як я фільтрував дані. Я тут трохи понаписував прикладів як фільтрувати продукти по ску. А точніше по імені ску.
+
+	- Але не думаю що ці криерії підійдуть усім репозиторіям. Скоріш за все так фільтрувати можна буде тільки продукти 
+
+	$filter = $this->objectManager->create('Magento\Framework\Api\Filter');
+        $filter->setData('field','sku');
+        $filter->setData('value','WSH11%');
+        $filter->setData('condition_type','like');
+
+		- За ці критерії пошуку мабуть краще подивити у самому класі, але також щоб убідитись у їх валідності, можна заглянути у цей інтерфейс - vendor/magento/framework/Api/CriteriaInterface.php - Тут є константи для цих - fields filters orders
+
+	$filter_group = $this->objectManager->create('Magento\Framework\Api\Search\FilterGroup'); - Я не дуже поняв що це за групи фільтрів і навіщо ця прослойка між фільтром і критерією пошуку
+        $filter_group->setData('filters', [$filter]);
+
+	$search_criteria = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaInterface');
+        $search_criteria->setFilterGroups([$filter_group]);
+
+	$repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');
+        $result = $repo->getList($search_criteria);
+        $products = $result->getItems();
+
+ - Але коли є не важкі запити, builder дозволяє писати їх скорочено. Тобто не треба буде створювати філтр, потім групу фільтрів і додавати їх в серч критері білдер
+
+	$search_criteria = $this->objectManager
+	->create('Magento\Framework\Api\SearchCriteriaBuilder')
+	->addFilter('sku','WSH11-28%Blue', 'like')
+	->create();
+
+	- Мабуть десь внутрі і є написано що цей простенький запит в 3 строчки, насправді те саме що вверхні довгі запити, але то вже таке. 
+
+ ВАЖЛИВО. У своєму коді я створював декілька фільтрів('Magento\Framework\Api\Filter') і декілька груп фільтрів('Magento\Framework\Api\Search\FilterGroup'); Вроді я це писав у коді, але коли обєднувати фільтри і додавати їх в групи фільтрів - це буде or, а якщо обєднувати групи фільтрів - це буде AND. Тобто створюю фільтр
+
+	$filter = $this->objectManager->create('Magento\Framework\Api\Filter');
+        $filter->setData('field','sku');
+        $filter->setData('value','WSH11%');
+        $filter->setData('condition_type','like');
+
+	Потім створюю ще 1
+
+	$filter2 = $this->objectManager->create('Magento\Framework\Api\Filter');
+        $filter2->setData('field','sku');
+        $filter2->setData('value','WSH11%');
+        $filter2->setData('condition_type','like');
+
+	і добавляю його в групу фільтрів 
+
+	$filter_group = $this->objectManager->create('Magento\Framework\Api\Search\FilterGroup');
+        $filter_group->setData('filters', [$filter, $filter2]);
+
+		- Потім цей $filter_group додасться в серч критерію
+
+		- Цей запит буде виглядати як - WHERE sku LIKE 'WSH11-28%Blue' OR sku = 'WSH11-28%Red'
+
+	А ЯКЩО ЯКЩО Я ДОДАМ ЩЕ ОДНУ ГРУПУ ФІЛЬТРІВ ЯК ЦЮ ТО ЦЕ ВЖЕ БУДЕ ВИГЛЯДАТИ ЯК AND - кароче, треба глянути у код, я це там розписав 
+
+-------------------------------
+
+ Суть у тому що Алан каже що це тільки для продуктів я ця фішка з фільтрами. Але якщо так, то то що я писав що має бути 1 рівень абстракції для роботи і для цмс блоків і для продуктів - вже не дійсне, принаймні з фільтрами
+
+ Якщо глянути у цей файл - vendor/magento/module-catalog/Model/ProductRepository.php , можна подивити як реалізовані фільтри при діставанні продуктів. Тобто метод називається getList() так як і для цмс-пейджів, але із за того що реалізація діставання продуктів і сторінок дуже різна, повну абстракцію (навіть з фільтрами не вдалось реалізувати).
+
+------------------------------
+
+------------
+
+ - Можливо краще можна буде зрозуміти, якщо подивити як подібний функціонал реалізований на м1
+
+	$items = Mage::getModel('catalog/product')
+	->getCollection()
+	->addFieldToFilter('sku',['like'=>'WSH11-28%Blue']);    
+
+	foreach($items ...){}
+ 
+
+---------------------
+
+
+	- Кароче це я витягнув з бази продукти, ску яких починається з WSH11. Якщо цей варіант фільтрування мені не подобається, можна вибрати інший(Builder) - вони еквівалентні.
+
+	//create our filter
+	$filter = $this->objectManager
+	->create('Magento\Framework\Api\FilterBuilder')
+	->setField('sku')
+	->setConditionType('like')
+	->setValue('WSH11%')
+	->create();
+
+	//add our filter(s) to a group
+	$filter_group = $this->objectManager
+	->create('Magento\Framework\Api\Search\FilterGroupBuilder')
+	->addFilter($filter)
+	->create();
+	// $filter_group->setData('filters', [$filter]);
+
+	//add the group(s) to the search criteria object
+	$search_criteria = $this->objectManager
+	->create('Magento\Framework\Api\SearchCriteriaBuilder')
+	->setFilterGroups([$filter_group])
+	->create();
+
+
+ - І вкінці - ось як треба правильно работати з ними через депенденсі, а не так як я в своїх прикладах через обєкт менеджер
+
+	<?php
+	namespace Pulsestorm\RepositoryTutorial\Model;
+	/**
+	* Example of automatic constructor dependency injection
+	* for repository and filter objects
+	*/
+	class Helper
+	{
+	    protected $pageRepository;
+	    protected $productRepository;
+	    protected $filterBuilder;
+	    protected $filterGroupBuilder;
+	    protected $searchCriteriaBuilder;
+
+	    public function __construct(
+		\Magento\Cms\Model\PageRepository $pageRepository, 
+		\Magento\Catalog\Model\ProductRepository $productRepository,
+		\Magento\Framework\Api\FilterBuilder $filterBuilder,
+		\Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
+		\Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder    
+	    )
+	    {
+		$this->pageRepository           = $pageRepository;
+		$this->productRepository        = $productRepository;
+		$this->filterBuilder            = $filterBuilder;
+		$this->filterGroupBuilder       = $filterGroupBuilder;
+		$this->searchCriteriaBuilder    = $searchCriteriaBuilder;
+	    }
+	}
 
 
 
