@@ -83,6 +83,8 @@
 	reg = requirejs('uiRegistry');
 	reg.get('pulsestorm_simple.pulsestorm_simple').message("Change Me"); - змінить свойство message.
 
+	- Element - це Magento_Ui/js/lib/core/element/element - він побудований на основі бібліотеки андерскор. Тож мабуть і функціонал андерскору в нього є
+
  6) В хромі модулі RequireJS можна знайти так - https://alanstorm.com/2016/images/simple-ui-knockout/sources.png
 
  7) Щоб знайти вюшку, яку я підключив через вю модель - https://alanstorm.com/2016/images/simple-ui-knockout/xhr.png 
@@ -139,7 +141,7 @@
 						</argument>         
 					    </htmlContent>
 
-		- І ВСЕ РАБОТАЄ КОЛЕКЦІЯ, ДАНІ ВИВОДЯТЬСЯ - reg = requirejs('uiRegistry'); 
+		- І ВСЕ, РАБОТАЄ КОЛЕКЦІЯ, ДАНІ ВИВОДЯТЬСЯ - reg = requirejs('uiRegistry'); 
 							    > viewModelConstructor = reg.get('pulsestorm_simple.pulsestorm_simple') 
 							    > viewModelConstructor.elems() - http://joxi.ru/brRz6oRi7Oe6Jr
 
@@ -168,9 +170,9 @@
 				> reg.get(function(item){
 				    console.log(item.name);
 				})
-				pulsestorm_simple.pulsestorm_simple
-				pulsestorm_simple.pulsestorm_simple.first_ever_child
-				pulsestorm_simple.pulsestorm_simple.second_ever_child
+				pulsestorm_simple.pulsestorm_simple - це колекція
+				pulsestorm_simple.pulsestorm_simple.first_ever_child - це діти колекції
+				pulsestorm_simple.pulsestorm_simple.second_ever_child - це діти колекції
 
 				- viewModelConstructor = reg.get('pulsestorm_simple.pulsestorm_simple.first_ever_child')
 

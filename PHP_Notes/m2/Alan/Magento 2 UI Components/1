@@ -5,6 +5,12 @@
 
 		- Тобто якщо в мене є файл юі компонента (ui_component/[...].xml) , то він звязаний з файлом ui_component/etc/definition.xml
 
+------------------------
+
+	- Ці аліаси uiElement:      'Magento_Ui/js/lib/core/element/element' для скріптів Алан називає Рекваєрівськими map key 
+
+------------------------
+
  -------------------------------------------- Magento 2: Introducing UI Components - https://alanstorm.com/magento_2_introducing_ui_components/
 
  1) тег <uiComponent /> - упрощена система лейаутів для адмінки. 
@@ -112,7 +118,7 @@
 
 			</argument>
 
-			- Якщо не вказати який щаблон рендерити, викинеться ексепшн - Exception #0 (Magento\Framework\Exception\LocalizedException): Object DOMDocument should be created.
+			- Якщо не вказати який шаблон рендерити, викинеться ексепшн - Exception #0 (Magento\Framework\Exception\LocalizedException): Object DOMDocument should be created.
 
 			- Я написав цей кусок коду, який вказує темплейт у файлі pulsestorm_simple.xml і всеодно работало
 
@@ -132,8 +138,6 @@
 	- Це із за того що створений мною definition.xml (змержений) не проходить валідацію файла - vendor/magento/module-ui/etc/ui_definition.xsd
 
 	- Magento\Framework\Config\Dom::validateDomDocument - Цей метод відповідає за валідацію
-
-		- (Алан каже що в статтях про обєкти він про це розказував)
 
 	- По ходу, створення нових нод для юі компонентів ваще погана ідея. великі заморочки з валідацією їх 'xml-ок'
 
@@ -285,7 +289,7 @@
 
 		public function getDataSourceData()
 		{
-		    return ['data' => $this->getContext()->getDataProvider()->getData()];
+		    return ['data' => $this->getContext()->getDataProvider()->getData()]; - Так як обєкт Simple це обєкт всього компонента, тому у нього і є доступ до дата провайдера, так як він знаходиться у ньому. З цього можна зробити висновок що Сімпл може достукатись до всіх своїх чайлдів і потім цю інфу можна буде вивести у xhtml темплейті  
 		}
 
 		#File: app/code/Pulsestorm/SimpleUiComponent/Model/DataProvider.php
@@ -300,6 +304,8 @@
 		}    
 		
 		- Вроді так правильніше передавати дані. Хоча работає якщо прердавати просто з метода - getDataSourceData()
+
+		
 
 
 

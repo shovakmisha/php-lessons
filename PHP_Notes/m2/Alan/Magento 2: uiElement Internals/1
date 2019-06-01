@@ -192,6 +192,19 @@
 		object = new Foo;    
 		console.log(object.__proto__ === Foo.prototype);  а тепер все ок
 
+		------------------------------- Ще 1 приклад -------------------------------------------
+
+    var FooConstructor = function(){
+        this.message = "Hello World";
+    };
+
+    var foo = new FooConstructor;
+    foo.message // Hello World
+
+
+    var xxx = FooConstructor
+    xxx.message // undefined
+
 	
 
 

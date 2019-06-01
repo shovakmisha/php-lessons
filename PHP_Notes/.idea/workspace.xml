@@ -3,6 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="3548b656-4906-409b-90bf-4626a2a141f0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/1" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/2" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/3" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/4" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/6" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m2/Alan/Magento 2: uiElement Internals/1" beforeDir="false" afterPath="$PROJECT_DIR$/m2/Alan/Magento 2: uiElement Internals/1" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +18,39 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
+            <state relative-caret-position="1343">
+              <caret line="79" column="57" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2: uiElement Internals/1">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3485">
+              <caret line="205" column="28" selection-start-line="205" selection-start-column="28" selection-end-line="205" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/1">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/2">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/3">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="87">
+              <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
             </state>
           </provider>
         </entry>
@@ -28,6 +62,9 @@
       <find>list</find>
       <find>core_config_data</find>
       <find>trait</find>
+      <find>constructor</find>
+      <find>__proto__</find>
+      <find>crea</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -40,6 +77,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Специалист/Уровень 4/Неназваний документ 1" />
+        <option value="$PROJECT_DIR$/m2/Alan/Magento 2: uiElement Internals/1" />
+        <option value="$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/3" />
       </list>
     </option>
   </component>
@@ -55,12 +94,38 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
               <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="m2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="m2" type="462c0819:PsiDirectoryNode" />
+              <item name="Alan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="m2" type="462c0819:PsiDirectoryNode" />
+              <item name="Alan" type="462c0819:PsiDirectoryNode" />
+              <item name="Magento 2 UI Components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PHP_Notes" type="462c0819:PsiDirectoryNode" />
+              <item name="m2" type="462c0819:PsiDirectoryNode" />
+              <item name="Alan" type="462c0819:PsiDirectoryNode" />
+              <item name="Magento 2: uiElement Internals" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="PHP_Notes" type="b2602c69:ProjectViewProjectNode" />
@@ -83,7 +148,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -116,17 +180,19 @@
       <workItem from="1549632724203" duration="377000" />
       <workItem from="1557823881236" duration="512000" />
       <workItem from="1558444985767" duration="96000" />
+      <workItem from="1558944922557" duration="8251000" />
+      <workItem from="1559027310693" duration="1776000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1234000" />
+    <option name="totallyTimeSpent" value="11261000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15478165" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1580984" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -240,8 +306,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Специалист/Уровень 3/Неназваний документ 1">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
+        <state relative-caret-position="1343">
+          <caret line="79" column="57" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2: uiElement Internals/1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3485">
+          <caret line="205" column="28" selection-start-line="205" selection-start-column="28" selection-end-line="205" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/1">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/2">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/m2/Alan/Magento 2 UI Components/3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
         </state>
       </provider>
     </entry>

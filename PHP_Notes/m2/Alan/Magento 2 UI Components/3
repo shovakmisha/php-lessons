@@ -137,6 +137,8 @@
 		viewModel = new viewModelConstructor;
 		console.log(viewModel.ourLinkedRows); - http://joxi.ru/823dpX3T98EyxA і все работає.
 
+    - Щоб до кінця розуміти наскільки це важлива штука, цими імпортами я легко у вюшці можу вивести дані будь якого зареєстрованого компонента
+
  6) Експорт - протилежне імпорту
 
 	reg = requirejs('uiRegistry');

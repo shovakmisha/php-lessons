@@ -3,6 +3,20 @@
 
  1.1) Magento 2: Understanding the links default in uiElement Objects - https://alanstorm.com/magento-2-understanding-the-links-default-in/
 
+	- Тут Алан розказував про лінки
+
+		defaults: {
+			/* ... */
+			links: {
+			    value: '${ $.provider }:${ $.dataScope }'
+			}
+			/* ... */            
+		    },
+
+		reg.get('checkoutProvider').shippingAddress.firstname;
+
+		- Алан каже що це типу імпорта експорта. Може вони якось синтаксисом відрвзняються. Кароче Алан тут досить мало про нього написав.
+
  1.2) Understanding uiElement’s `listens` default - https://alanstorm.com/understanding-uielements-listens-default/
 
 	- прослушивания default
@@ -32,6 +46,7 @@
 		}
 	    },
 	    testListen:function(importedValue){ - у цьому аргументі будуть дані які прийшли з імпорта у змінну foo при ініціалізації обєкта
+
 		console.log("Called Test Listen");
 		console.log("Imported Value: " + importedValue);
 		console.log(this);
@@ -40,7 +55,7 @@
 	    }
 	}); 
 
-	object = new OurClass2; - Коли я ініціалізую обєкт, Magento импортирует значение из customer_listing.customer_listing. 
+	object = new OurClass2; - Коли я ініціалізую обєкт, Magento импортирует значение из customer_listing.customer_listing.
 
 		- Затем, из-за того що вони у свойстві defaults, Magento вызовет testListen() (listens:{ foo:'testListen' }
 
@@ -91,7 +106,7 @@
 	    }
 	}); 
 
-	object = new OurClass3; - це викличе метод testListen();       
+	object = new OurClass3; - це викличе метод testListen();
 	object.foo("Updating the Value"); - i це викличе метод testListen();
 
 		- Фішки listens з викликом метода не будуть працювати з будь якими observable. Є умови:
@@ -157,7 +172,7 @@
 	    defaults:{
 		foo:ko.observable('default'),
 		listens:{
-		   'registry_item_for_testing:foo':'testListen'-Запутано. раніше було так, що лістенер слухав свойство обєкта у якому він знаходиться і це свойство знаходилось або в імпорті або в  defaults
+		   'registry_item_for_testing:foo':'testListen'- Запутано. раніше було так, що лістенер слухав свойство обєкта у якому він знаходиться і це свойство знаходилось або в імпорті або в  defaults
 								Когда вы используете синтаксис 'registry_item_for_testing:foo', то я напряму вже маю звязок з регістрі і вказую що в регістрі є мій обєкт, який храниться у свойстві registry_item_for_testing і у обєкта є обсервабл свойство foo. Коли воно буде змінюватись, виклич метод testListen()
 		}
 	    },

@@ -74,14 +74,15 @@
 
 		- У ньому запускається цей код - _.each(nodes || [], layout.iterator.bind(layout, parent)); - пройдеться по всіх компонентах, що знаходяться у x-magento-init
 
+			- Але скоріш за все не по свіх компонентах, а пр всіх нодах, що є в <script type="text/x-magento-init">. Тобто це дуже сходе на екстенд хмл-ок
+
 		- layout - це і є цей файл(Magento_Ui/js/core/renderer/layout.js)
 
  6) создание экземпляров наших вю моделей и их регистрация в uiRegistry. Все это происходит здесь.
 
-	function initComponent(node, Constr) { - node - это объект, который содержит значения из свойства компонентов массива x-magento-init в Magento, а переменная Constr - UiClass
+	function initComponent(node, Constr) { - node - это объект, который содержит значения из свойства компонентов массива x-magento-init в Magento ( це по ходу - http://joxi.ru/Y2Lz0oWi7LGLjr ), а переменная Constr - UiClass
 
 		- Кароче це ваще якиїсь дебільний рівень абстракцій. Конструктоири вю можельок - це UiElement, які екстендяться від UiClass, але в цьому методі бачу, що обєкти які з них створюються і реєстуються, робляться з UiClass(Constr). Піздец кароче 
-
 
 	    var component = new Constr(_.omit(node, 'children'));
 	    registry.set(node.name, component);
@@ -259,7 +260,7 @@
 				defaults: {
 				    
 				    imports: {
-					rows: '${ $.provider }:data.items' - (про цей синтаксис я писав в ES6 - цей змынна в строці)
+					rows: '${ $.provider }:data.items' - (про цей синтаксис я писав в ES6 - цей змінна в строці)
 
 						- imports - затягує дані з регістрі у мій обєкт. ${ $.provider } - Ця змінна є у моєму обєкті. Обєкт це вю моделька по суті. Назву її можна взнати різними способами. Щоб не запутатись. По суті, компонентів через джейсон приходить не так багато. Наприклад на сторінці кастомерів їх 2 http://joxi.ru/gmvpgNwUqdK95A . І не думаю що на інших сторінках їх буде більше. Зі скріна можнна взяти мій компонент. requirejs(['uiRegistry'], function(reg) {
 							    dataSource = reg.get('customer_listing.customer_listing');
