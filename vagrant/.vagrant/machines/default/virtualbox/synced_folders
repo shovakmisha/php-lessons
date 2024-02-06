@@ -1,1 +1,0 @@
-{"virtualbox":{"/var/www":{"guestpath":"/var/www","hostpath":"/var/www/html/shovak/new_git/php-lessons/vagrant/projects","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/var/www/html/shovak/new_git/php-lessons/vagrant","disabled":false,"__vagrantfile":true}}}

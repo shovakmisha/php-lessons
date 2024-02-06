@@ -1,3 +1,0 @@
-Options Indexes FollowSymLinks
-RewriteEngine On
-RewriteRule ^(.*)$ put.php?url=$1 [L]
